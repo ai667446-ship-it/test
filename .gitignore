@@ -1,0 +1,6 @@
+__pycache__/
+mv/fonts/
+mv/songs/*/song.m4a
+mv/songs/*/cover.jpeg
+mv/songs/*/analysis.json
+*.mp4

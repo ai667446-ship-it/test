@@ -1,0 +1,46 @@
+{
+  "title": "笑うな、心臓！",
+  "artist": "れれれ",
+  "audio": "song.m4a",
+  "cover": "cover.jpeg",
+  "lyrics_timed": "lyrics_timed.json",
+  "fonts": "../../fonts",
+  "duration": 201.6,
+  "bpm": 144.09,
+  "sections": [
+    {"name": "intro",   "start": 0.0,   "end": 11.9},
+    {"name": "verse1",  "start": 11.9,  "end": 32.0},
+    {"name": "pre1",    "start": 32.0,  "end": 44.6},
+    {"name": "chorus1", "start": 44.6,  "end": 71.3},
+    {"name": "verse2",  "start": 71.3,  "end": 87.6},
+    {"name": "pre2",    "start": 87.6,  "end": 102.8},
+    {"name": "chorus2", "start": 102.8, "end": 129.3},
+    {"name": "bridge",  "start": 129.3, "end": 147.6},
+    {"name": "break",   "start": 147.6, "end": 151.9},
+    {"name": "build",   "start": 151.9, "end": 161.2},
+    {"name": "final",   "start": 161.2, "end": 188.0},
+    {"name": "outro",   "start": 188.0, "end": 201.6}
+  ],
+  "marks": {
+    "intro_shutter": 2.2,
+    "intro_band": 5.8,
+    "mirror": 82.0,
+    "bridge_lift": 136.3,
+    "break_shutter": 150.3,
+    "final_calm": 184.0,
+    "end_card": 195.5
+  },
+  "verse_layout": ["vr", "hl", "vl", "hr"],
+  "overrides": {
+    "22": {"start": 58.76,  "end": 60.4},
+    "24": {"start": 65.2,   "end": 66.9},
+    "46": {"start": 117.0,  "end": 118.7},
+    "48": {"start": 122.68, "end": 124.4},
+    "58": {"start": 148.46, "end": 150.24},
+    "59": {"start": 151.96, "end": 154.24},
+    "68": {"start": 175.52, "end": 177.2},
+    "70": {"start": 182.0,  "end": 183.8},
+    "72": {"start": 188.22, "end": 190.7},
+    "73": {"start": 191.2,  "end": 194.4}
+  }
+}
