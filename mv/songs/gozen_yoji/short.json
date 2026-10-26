@@ -1,0 +1,417 @@
+{
+ "title": "午前四時の逃避行",
+ "artist": "Heppoko39",
+ "audio": "clip.mp3",
+ "lyrics_timed": "lyrics_timed.json",
+ "beats": "clip_beats.json",
+ "fonts": "../../fonts",
+ "duration": 31.344,
+ "images": {
+  "couple": "img/img1.jpg",
+  "girl": "img/img2.jpg",
+  "green": "img/img3.jpg",
+  "purple": "img/img4.jpg",
+  "red": "img/img5.jpg"
+ },
+ "marks": {
+  "dawn": 20.8,
+  "end_card": 29.2
+ },
+ "lines": [
+  {
+   "layout": "title",
+   "en": "a getaway at 4 a.m."
+  },
+  {
+   "layout": "low",
+   "en": "take me away until the morning comes"
+  },
+  {
+   "layout": "vleft",
+   "en": "even if our tomorrow"
+  },
+  {
+   "layout": "low",
+   "en": "is nowhere to be found, that's alright"
+  },
+  {
+   "layout": "vleft",
+   "en": "flowing past beyond the window"
+  },
+  {
+   "layout": "low",
+   "en": "afterimages of a sleepless city"
+  },
+  {
+   "layout": "high",
+   "en": "with you, even a place with nothing"
+  },
+  {
+   "layout": "vleft",
+   "en": "felt like the edge of the world",
+   "hold": 0.6
+  }
+ ],
+ "shots": [
+  {
+   "image": "green",
+   "kind": "car",
+   "start": 0.0,
+   "from": [
+    0.62,
+    0.3,
+    1.35
+   ],
+   "to": [
+    0.55,
+    0.45,
+    1.06
+   ],
+   "window": [
+    0.5,
+    0.29,
+    1.0,
+    0.47
+   ],
+   "flow": 800,
+   "light_colors": [
+    [
+     120,
+     255,
+     230
+    ],
+    [
+     255,
+     170,
+     200
+    ],
+    [
+     255,
+     240,
+     200
+    ],
+    [
+     140,
+     200,
+     255
+    ]
+   ],
+   "sweep_color": [
+    150,
+    255,
+    205
+   ]
+  },
+  {
+   "image": "red",
+   "kind": "car",
+   "start": 3.47,
+   "trans_in": "whip",
+   "from": [
+    0.6,
+    0.42,
+    1.08
+   ],
+   "to": [
+    0.66,
+    0.36,
+    1.25
+   ],
+   "window": [
+    0.62,
+    0.24,
+    0.95,
+    0.55
+   ],
+   "flow": 1000,
+   "light_colors": [
+    [
+     255,
+     80,
+     160
+    ],
+    [
+     90,
+     160,
+     255
+    ],
+    [
+     255,
+     230,
+     240
+    ],
+    [
+     255,
+     140,
+     90
+    ]
+   ],
+   "sweep_color": [
+    255,
+    120,
+    200
+   ]
+  },
+  {
+   "image": "purple",
+   "kind": "car",
+   "start": 6.95,
+   "trans_in": "zoom",
+   "from": [
+    0.55,
+    0.4,
+    1.35
+   ],
+   "to": [
+    0.62,
+    0.3,
+    1.15
+   ],
+   "window": [
+    0.4,
+    0.3,
+    1.0,
+    0.54
+   ],
+   "flow": 900,
+   "light_colors": [
+    [
+     255,
+     120,
+     220
+    ],
+    [
+     120,
+     240,
+     255
+    ],
+    [
+     255,
+     255,
+     255
+    ],
+    [
+     200,
+     150,
+     255
+    ]
+   ],
+   "sweep_color": [
+    220,
+    160,
+    255
+   ]
+  },
+  {
+   "image": "green",
+   "kind": "car",
+   "start": 11.73,
+   "trans_in": "glitch",
+   "from": [
+    0.78,
+    0.33,
+    2.2
+   ],
+   "to": [
+    0.7,
+    0.33,
+    1.95
+   ],
+   "window": [
+    0.5,
+    0.29,
+    1.0,
+    0.47
+   ],
+   "flow": 1300,
+   "light_amt": 1.1,
+   "light_colors": [
+    [
+     120,
+     255,
+     230
+    ],
+    [
+     255,
+     170,
+     200
+    ],
+    [
+     255,
+     240,
+     200
+    ],
+    [
+     140,
+     200,
+     255
+    ]
+   ],
+   "sweep_color": [
+    150,
+    255,
+    205
+   ]
+  },
+  {
+   "image": "purple",
+   "kind": "car",
+   "start": 13.91,
+   "trans_in": "whip",
+   "from": [
+    0.8,
+    0.28,
+    1.9
+   ],
+   "to": [
+    0.62,
+    0.28,
+    1.7
+   ],
+   "window": [
+    0.4,
+    0.3,
+    1.0,
+    0.54
+   ],
+   "flow": 1500,
+   "light_amt": 1.1,
+   "light_colors": [
+    [
+     255,
+     120,
+     220
+    ],
+    [
+     120,
+     240,
+     255
+    ],
+    [
+     255,
+     255,
+     255
+    ],
+    [
+     200,
+     150,
+     255
+    ]
+   ],
+   "sweep_color": [
+    220,
+    160,
+    255
+   ]
+  },
+  {
+   "image": "red",
+   "kind": "car",
+   "start": 17.82,
+   "trans_in": "flash",
+   "from": [
+    0.7,
+    0.33,
+    1.9
+   ],
+   "to": [
+    0.68,
+    0.32,
+    1.6
+   ],
+   "window": [
+    0.62,
+    0.24,
+    0.95,
+    0.55
+   ],
+   "flow": 1100,
+   "light_colors": [
+    [
+     255,
+     80,
+     160
+    ],
+    [
+     90,
+     160,
+     255
+    ],
+    [
+     255,
+     230,
+     240
+    ],
+    [
+     255,
+     140,
+     90
+    ]
+   ],
+   "sweep_color": [
+    255,
+    120,
+    200
+   ]
+  },
+  {
+   "image": "couple",
+   "kind": "beach",
+   "start": 20.87,
+   "trans_in": "whiteout",
+   "trans_in_dur": 1.2,
+   "from": [
+    0.5,
+    0.22,
+    1.6
+   ],
+   "to": [
+    0.5,
+    0.52,
+    1.05
+   ],
+   "sun": [
+    0.5,
+    0.335
+   ],
+   "sea": [
+    0.0,
+    0.34,
+    1.0,
+    0.8
+   ]
+  },
+  {
+   "image": "girl",
+   "kind": "beach",
+   "start": 24.78,
+   "trans_in": "whiteout",
+   "trans_in_dur": 0.7,
+   "from": [
+    0.45,
+    0.35,
+    1.35
+   ],
+   "to": [
+    0.5,
+    0.5,
+    1.0
+   ],
+   "sun": [
+    0.41,
+    0.665
+   ],
+   "sea": [
+    0.0,
+    0.715,
+    1.0,
+    0.87
+   ],
+   "sun_color": [
+    255,
+    200,
+    170
+   ]
+  }
+ ]
+}

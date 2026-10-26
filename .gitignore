@@ -4,3 +4,5 @@ mv/songs/*/song.m4a
 mv/songs/*/cover.jpeg
 mv/songs/*/analysis.json
 *.mp4
+mv/songs/*/img/
+mv/songs/*/*.mp3
