@@ -491,7 +491,7 @@ def scene(ctx, A, cfg):
             post["ca"] = 3 + 12 * pulse
             post["flash"] = 0.9 * math.exp(-k / 0.12)
             draw_ecg(im, ctx, H * 0.72, 120, RED, 3)
-            title_card(im, A, ctx, k, band)
+            title_card(im, A, ctx, k, cfg)
             post["glitch"] = 3 if pulse > 0.7 else 0
         post["scan"] = True
         return im, post
@@ -575,7 +575,7 @@ def scene(ctx, A, cfg):
         if t < end_card:
             draw_hud(im, A, ctx, inset=post["letterbox"])
         else:
-            end_title(im, A, ctx, t - end_card)
+            end_title(im, A, cfg, t - end_card)
         post["fade"] = smooth((cfg["duration"] - t) / 1.2)
         post["scan"] = True
         return im, post
@@ -668,9 +668,9 @@ def lala(im, A, ctx):
         im.paste(strip, (int(x), int(y)), strip)
 
 
-def title_card(im, A, ctx, k, band):
+def title_card(im, A, ctx, k, cfg):
     """イントロのタイトル表示。"""
-    title = "笑うな、心臓！"
+    title = cfg["title"]
     f = A.font("dela", 190)
     total = sum(f.getlength(c) for c in title)
     x = W / 2 - total / 2
@@ -684,14 +684,14 @@ def title_card(im, A, ctx, k, band):
             paste_glyph(im, A.glyph(ch, "dela", 190, WHITE + (255,)), x + a / 2, H * 0.42, sc)
         x += a
     if k > 1.6:
-        sub = text_image(A, "れれれ", "dot", 52, WHITE + (255,))
+        sub = text_image(A, cfg["artist"], "dot", 52, WHITE + (255,))
         paste_glyph(im, sub, W / 2, H * 0.60, 1.0, smooth((k - 1.6) / 0.6))
 
 
-def end_title(im, A, ctx, k):
-    t1 = text_image(A, "笑うな、心臓！", "dela", 150, WHITE + (255,))
+def end_title(im, A, cfg, k):
+    t1 = text_image(A, cfg["title"], "dela", 150, WHITE + (255,))
     paste_glyph(im, t1, W / 2, H * 0.44, 1.0, smooth(k / 0.8))
-    t2 = text_image(A, "れれれ", "dot", 48, WHITE + (255,))
+    t2 = text_image(A, cfg["artist"], "dot", 48, WHITE + (255,))
     paste_glyph(im, t2, W / 2, H * 0.60, 1.0, smooth((k - 0.6) / 0.8))
 
 
