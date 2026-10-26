@@ -761,10 +761,8 @@ def chorus_line(im, A, ctx, ln):
         draw_line(im, A, ctx, ln, W / 2, H * 0.46, 230, "dela", white, "slam", align="center",
                   shadow=(red, 12, 9), jitter=4 * ctx["pulse"])
     elif "　" in txt and txt.split("　")[0] == txt.split("　")[1]:
+        # 「バレるだろ　バレるだろ」「ラララ　ラララ」など繰り返しの行
         stamps(im, A, ctx, ln, txt.split("　")[0])
-    elif "ラララ" in txt:
-        draw_line(im, A, ctx, ln, W / 2, H * 0.47, 210, "dela", white, "pop", align="center",
-                  stroke=8, stroke_color=(0, 0, 0, 255), spacing=0.05)
     else:
         big = len(txt) <= 11
         draw_line(im, A, ctx, ln, W / 2, H * 0.5, 120 if big else 100, "dela", white, "pop",
