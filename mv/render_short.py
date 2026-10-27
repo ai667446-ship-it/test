@@ -27,6 +27,9 @@ W, H, FPS = 1080, 1920, 30
 rm.W, rm.H = W, H  # 文字描画ヘルパーを縦型サイズで使う
 clamp, smooth, ease_out = rm.clamp, rm.smooth, rm.ease_out
 WHITE = (252, 250, 247)
+APPEAR, APPEAR_TITLE = 0.35, 0.45  # 1文字がぼかしから完全に出るまでの秒数
+FADE_OUT = 0.25                    # 行が消えるフェード (render_mv.draw_line と同じ値)
+MIN_FULL = 0.8                     # 全文がはっきり見えている最短の秒数
 
 
 def ease_io(p):
@@ -325,24 +328,24 @@ def draw_lyrics(layer, A, ctx, cfg):
         if lay == "title":
             rm.draw_line(layer, A, ctx, ln, W / 2, H * 0.40 + rise, 100, "serif", col, "fade",
                          weight=700, align="center", spacing=0.22, shadow=sh, alpha=alpha,
-                         appear=0.55)
+                         appear=ln["appear"])
         elif lay == "low":
             rm.draw_line(layer, A, ctx, ln, W / 2, H * 0.76 + rise, 72, "serif", col, "fade",
                          weight=600, align="center", spacing=0.12, shadow=sh, alpha=alpha,
-                         appear=0.45)
+                         appear=ln["appear"])
         elif lay == "high":
             rm.draw_line(layer, A, ctx, ln, W / 2, H * 0.17 + rise, 72, "serif", col, "fade",
                          weight=600, align="center", spacing=0.12, shadow=sh, alpha=alpha,
-                         appear=0.45)
+                         appear=ln["appear"])
         elif lay in ("vleft", "vright"):
             x = W * (0.14 if lay == "vleft" else 0.86)
             rm.draw_line(layer, A, ctx, ln, x, H * 0.16 + rise, 76, "serif", col, "fade",
                          vertical=True, weight=600, spacing=0.12, shadow=sh, alpha=alpha,
-                         appear=0.45)
+                         appear=ln["appear"])
         # 英訳のサブタイトル
         en = ln.get("en")
         if en:
-            p = clamp((t - ln["chars"][0] - 0.3) / 0.6) * alpha
+            p = clamp((t - ln["chars"][0] - 0.3) / 0.6) * clamp((ln["end"] - t) / FADE_OUT)
             g = rm.text_image(A, en, "sans", 34, (240, 240, 245, 255), weight=500)
             y = H * 0.40 + 92 if lay == "title" else H * 0.865
             rm.paste_glyph(layer, g, W / 2, y + rise * 0.5, 1.0, p * 0.85)
@@ -431,7 +434,17 @@ class Renderer:
             ln["index"] = i
             nxt = lines[i + 1]["chars"][0] if i + 1 < len(lines) else cfg["duration"]
             ln["start"] = ln["chars"][0]
-            ln["end"] = min(nxt - 0.35, max(ln["chars"]) + meta.get("hold", 1.6))
+            ln["appear"] = APPEAR_TITLE if meta["layout"] == "title" else APPEAR
+            last = max(ln["chars"])
+            hold = max(meta.get("hold", 1.6), MIN_FULL)
+            ln["end"] = min(nxt - 0.05, last + ln["appear"] + hold + FADE_OUT)
+            # 次の行が迫っていて最後の文字がはっきり出る前に消えてしまう場合は、
+            # この行の文字の出現を前に詰めて、全文が MIN_FULL 秒は完全に見えるようにする
+            deadline = ln["end"] - FADE_OUT - MIN_FULL - ln["appear"]
+            first = ln["chars"][0]
+            if last > deadline and last > first:
+                k = max(0.0, deadline - first) / (last - first)
+                ln["chars"] = [first + (c - first) * k for c in ln["chars"]]
         self.lines = lines
         # カットをビートに吸着させる
         shots = cfg["shots"]
