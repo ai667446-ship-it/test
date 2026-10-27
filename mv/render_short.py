@@ -421,6 +421,10 @@ class Renderer:
         b = json.load(open(cfg["beats"]))
         self.beats = np.array(b["beats"])
         lines = json.load(open(cfg["lyrics_timed"], encoding="utf-8"))
+        # 歌詞表示を拍単位で前後にずらす (-1 なら全体を1拍早く出す)
+        shift = cfg.get("lyric_offset_beats", 0) * float(np.median(np.diff(self.beats)))
+        for ln in lines:
+            ln["chars"] = [c + shift for c in ln["chars"]]
         for i, ln in enumerate(lines):
             meta = cfg["lines"][i]
             ln.update(meta)

@@ -6,6 +6,7 @@
  "beats": "clip_beats.json",
  "fonts": "../../fonts",
  "duration": 31.344,
+ "lyric_offset_beats": -1,
  "images": {
   "couple": "img/img1.jpg",
   "girl": "img/img2.jpg",
