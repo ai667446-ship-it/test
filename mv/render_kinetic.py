@@ -116,7 +116,9 @@ class Timeline:
         self.lines = []
         for i, (ln, meta) in enumerate(zip(lines, cfg["lines"])):
             ln = {**ln, **meta, "index": i}
-            ln["chars"] = [c - lead for c in ln["chars"]]
+            # 行ごとの微調整: offset_beats (+0.5 で半拍遅らせる)
+            shift = meta.get("offset_beats", 0) * self.period
+            ln["chars"] = [c - lead + shift for c in ln["chars"]]
             self.lines.append(ln)
         for i, ln in enumerate(self.lines):
             nxt = self.lines[i + 1]["chars"][0] if i + 1 < len(self.lines) else cfg["duration"]
