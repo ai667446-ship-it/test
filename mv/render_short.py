@@ -216,7 +216,9 @@ def render_shot(ctx, shot):
             a += sw
     elif kind == "beach":
         a += sea_sparkle(ctx, shot, geo, 11) * 0.8
-        a += sun_flare(ctx, shot, geo, 0.38 + 0.08 * ctx["bar_pulse"])
+        sun = shot.get("sun_amt", 0.38)
+        if sun > 0:
+            a += sun_flare(ctx, shot, geo, sun + 0.08 * ctx["bar_pulse"])
         a += dust(ctx, 5, 28) * 0.22
     return a
 
@@ -355,15 +357,21 @@ def draw_hud(layer, A, ctx, cfg):
     """左上の時計と、下部の曲名クレジット。"""
     t = ctx["t"]
     d = ImageDraw.Draw(layer)
-    dawn = cfg["marks"]["dawn"]
-    # 4:00 から少しずつ進み、夜明けで 4:58 に飛ぶ
-    if t < dawn:
-        mins = int(t / dawn * 12)
+    keys = cfg.get("clock")
+    if keys:
+        # [[秒, 分], ...] を直線でつないで時計を進める
+        mins = int(np.interp(t, [k[0] for k in keys], [k[1] for k in keys]))
     else:
-        mins = 58
+        # 4:00 から少しずつ進み、夜明けで 4:58 に飛ぶ
+        dawn = cfg["marks"]["dawn"]
+        mins = int(t / dawn * 12) if t < dawn else 58
     colon = ":" if (t % 1.0) < 0.6 else " "
     f = A.font("dot", 46)
-    a = int(220 * clamp(t / 0.8) * (1 - smooth((t - cfg["marks"]["end_card"]) / 0.6)))
+    a = 220 * clamp(t / 0.8) * (1 - smooth((t - cfg["marks"]["end_card"]) / 0.6))
+    oc = cfg["marks"].get("open_card")
+    if oc:  # オープニングのタイトル表示中は HUD を控えめに
+        a *= 1 - 0.7 * clamp((t - oc[0]) / 0.5) * clamp((oc[1] - t) / 0.5)
+    a = int(a)
     d.text((72, 120), f"AM 04{colon}{mins:02d}", font=f, fill=(255, 255, 255, a))
     fs = A.font("sans", 26, 400)
     d.text((72, 178), cfg["title"] + "  /  " + cfg["artist"], font=fs, fill=(255, 255, 255, int(a * 0.8)))
@@ -371,6 +379,22 @@ def draw_hud(layer, A, ctx, cfg):
     p = t / cfg["duration"]
     d.rectangle([72, H - 96, W - 72, H - 94], fill=(255, 255, 255, int(a * 0.25)))
     d.rectangle([72, H - 96, 72 + (W - 144) * p, H - 94], fill=(255, 255, 255, int(a * 0.85)))
+
+
+def open_card(layer, A, ctx, cfg):
+    """イントロ (歌が始まる前) の曲名表示。"""
+    oc = cfg["marks"].get("open_card")
+    if not oc:
+        return
+    t = ctx["t"]
+    if not oc[0] <= t < oc[1]:
+        return
+    k = t - oc[0]
+    out = clamp((oc[1] - t) / 0.6)
+    t1 = rm.text_image(A, cfg["title"], "serif", 96, WHITE + (255,), weight=700)
+    rm.paste_glyph(layer, t1, W / 2, H * 0.45, 1.0, smooth(k / 1.0) * out)
+    t2 = rm.text_image(A, cfg["artist"], "sans", 42, WHITE + (255,), weight=500)
+    rm.paste_glyph(layer, t2, W / 2, H * 0.45 + 110, 1.0, smooth((k - 0.5) / 1.0) * out)
 
 
 def end_card(layer, A, ctx, cfg):
@@ -479,6 +503,7 @@ class Renderer:
         layer = Image.new("RGBA", (W, H), (0, 0, 0, 0))
         draw_lyrics(layer, self.A, ctx, cfg)
         draw_hud(layer, self.A, ctx, cfg)
+        open_card(layer, self.A, ctx, cfg)
         end_card(layer, self.A, ctx, cfg)
         return post(a, self.A, ctx, layer)
 

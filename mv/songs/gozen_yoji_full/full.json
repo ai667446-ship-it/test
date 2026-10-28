@@ -1,0 +1,2578 @@
+{
+ "title": "午前四時の逃避行",
+ "artist": "Heppoko39",
+ "audio": "song.mp3",
+ "lyrics_timed": "lyrics_timed.json",
+ "beats": "beats.json",
+ "fonts": "../../fonts",
+ "duration": 247.2,
+ "lyric_offset_beats": -1,
+ "images": {
+  "couple": "img/img1.jpg",
+  "girl": "img/img2.jpg",
+  "green": "img/img3.jpg",
+  "purple": "img/img4.jpg",
+  "red": "img/img5.jpg"
+ },
+ "marks": {
+  "dawn": 197.9,
+  "end_card": 239.5,
+  "open_card": [
+   1.0,
+   7.8
+  ]
+ },
+ "clock": [
+  [
+   0,
+   0
+  ],
+  [
+   63,
+   10
+  ],
+  [
+   98,
+   20
+  ],
+  [
+   141,
+   32
+  ],
+  [
+   198,
+   46
+  ],
+  [
+   230,
+   55
+  ],
+  [
+   247,
+   59
+  ]
+ ],
+ "lines": [
+  {
+   "layout": "title",
+   "en": "4 a.m. — the city died"
+  },
+  {
+   "layout": "vleft",
+   "en": "only you were smiling"
+  },
+  {
+   "layout": "low",
+   "en": "slipping past the convenience store lights"
+  },
+  {
+   "layout": "vleft",
+   "en": "down a road whose name we don't even know"
+  },
+  {
+   "layout": "low",
+   "en": "“how far are we going?”"
+  },
+  {
+   "layout": "vleft",
+   "en": "we promised never to ask"
+  },
+  {
+   "layout": "low",
+   "en": "yesterday, tossed onto the passenger seat"
+  },
+  {
+   "layout": "vleft",
+   "en": "and a half-drunk, lukewarm coffee"
+  },
+  {
+   "layout": "low",
+   "en": "the right way to live"
+  },
+  {
+   "layout": "vleft",
+   "en": "I want to forget it, just for tonight"
+  },
+  {
+   "layout": "low",
+   "en": "an unfamiliar song on the radio"
+  },
+  {
+   "layout": "vleft",
+   "en": "you hum along under your breath"
+  },
+  {
+   "layout": "low",
+   "en": "watching your profile"
+  },
+  {
+   "layout": "vleft",
+   "en": "I feel like I could never go home"
+  },
+  {
+   "layout": "title",
+   "en": "a getaway at 4 a.m."
+  },
+  {
+   "layout": "vleft",
+   "en": "take me away until the morning comes"
+  },
+  {
+   "layout": "low",
+   "en": "even if our tomorrow"
+  },
+  {
+   "layout": "vleft",
+   "en": "is nowhere to be found, that's alright"
+  },
+  {
+   "layout": "low",
+   "en": "flowing past beyond the window"
+  },
+  {
+   "layout": "vleft",
+   "en": "afterimages of a sleepless city"
+  },
+  {
+   "layout": "high",
+   "en": "with you, even a place with nothing"
+  },
+  {
+   "layout": "vleft",
+   "en": "felt like the edge of the world"
+  },
+  {
+   "layout": "high",
+   "en": "a rusted guardrail along the sea"
+  },
+  {
+   "layout": "vleft",
+   "en": "the wind was strangely cold"
+  },
+  {
+   "layout": "high",
+   "en": "you, still barefoot,"
+  },
+  {
+   "layout": "vleft",
+   "en": "were gazing at the white waves"
+  },
+  {
+   "layout": "high",
+   "en": "“will we forget all of this someday?”"
+  },
+  {
+   "layout": "vleft",
+   "en": "you murmured, almost to yourself"
+  },
+  {
+   "layout": "high",
+   "en": "there were things I wanted to forget"
+  },
+  {
+   "layout": "vleft",
+   "en": "but this was a night I never wanted to"
+  },
+  {
+   "layout": "low",
+   "en": "come tomorrow, surely"
+  },
+  {
+   "layout": "vleft",
+   "en": "we'll go back to our everyday faces"
+  },
+  {
+   "layout": "low",
+   "en": "so just for now"
+  },
+  {
+   "layout": "vleft",
+   "en": "let's stay liars a little longer"
+  },
+  {
+   "layout": "title",
+   "en": "a getaway at 4 a.m."
+  },
+  {
+   "layout": "vleft",
+   "en": "I was afraid of the morning coming"
+  },
+  {
+   "layout": "low",
+   "en": "we couldn't give our yesterday"
+  },
+  {
+   "layout": "vleft",
+   "en": "a name"
+  },
+  {
+   "layout": "high",
+   "en": "the horizon turns pale"
+  },
+  {
+   "layout": "vleft",
+   "en": "light fills your eyes"
+  },
+  {
+   "layout": "low",
+   "en": "pretending to look for the way home"
+  },
+  {
+   "layout": "vleft",
+   "en": "we stayed here a little longer"
+  },
+  {
+   "layout": "low",
+   "en": "the truth is, I wanted to run"
+  },
+  {
+   "layout": "vleft",
+   "en": "not from you, but from myself"
+  },
+  {
+   "layout": "low",
+   "en": "but next to you"
+  },
+  {
+   "layout": "vleft",
+   "en": "I could breathe, just a little"
+  },
+  {
+   "layout": "low",
+   "en": "instead of asking “will I see you again?”"
+  },
+  {
+   "layout": "vleft",
+   "en": "I started the engine"
+  },
+  {
+   "layout": "low",
+   "en": "you smiled, a little troubled"
+  },
+  {
+   "layout": "vleft",
+   "en": "“let's meet in the daytime next time”"
+  },
+  {
+   "layout": "title",
+   "en": "a getaway at 4 a.m."
+  },
+  {
+   "layout": "vleft",
+   "en": "the sunrise dyes the city"
+  },
+  {
+   "layout": "high",
+   "en": "our tomorrow is beginning"
+  },
+  {
+   "layout": "vleft",
+   "en": "or so it felt"
+  },
+  {
+   "layout": "low",
+   "en": "flowing past beyond the window"
+  },
+  {
+   "layout": "vleft",
+   "en": "the shadow of who I was until yesterday"
+  },
+  {
+   "layout": "high",
+   "en": "that horizon we saw together"
+  },
+  {
+   "layout": "vleft",
+   "en": "I'll live on without forgetting it"
+  },
+  {
+   "layout": "title",
+   "en": "4 a.m. — the city woke up"
+  },
+  {
+   "layout": "vleft",
+   "en": "only you were still smiling",
+   "hold": 2.5
+  }
+ ],
+ "shots": [
+  {
+   "image": "green",
+   "kind": "car",
+   "start": 0.0,
+   "from": [
+    0.78,
+    0.33,
+    2.2
+   ],
+   "to": [
+    0.72,
+    0.33,
+    1.9
+   ],
+   "trans_in": "cut",
+   "window": [
+    0.5,
+    0.29,
+    1.0,
+    0.47
+   ],
+   "flow": 800,
+   "light_colors": [
+    [
+     120,
+     255,
+     230
+    ],
+    [
+     255,
+     170,
+     200
+    ],
+    [
+     255,
+     240,
+     200
+    ],
+    [
+     140,
+     200,
+     255
+    ]
+   ],
+   "sweep_color": [
+    150,
+    255,
+    205
+   ]
+  },
+  {
+   "image": "green",
+   "kind": "car",
+   "start": 8.7,
+   "from": [
+    0.62,
+    0.3,
+    1.35
+   ],
+   "to": [
+    0.55,
+    0.42,
+    1.1
+   ],
+   "trans_in": "zoom",
+   "window": [
+    0.5,
+    0.29,
+    1.0,
+    0.47
+   ],
+   "flow": 800,
+   "light_colors": [
+    [
+     120,
+     255,
+     230
+    ],
+    [
+     255,
+     170,
+     200
+    ],
+    [
+     255,
+     240,
+     200
+    ],
+    [
+     140,
+     200,
+     255
+    ]
+   ],
+   "sweep_color": [
+    150,
+    255,
+    205
+   ]
+  },
+  {
+   "image": "red",
+   "kind": "car",
+   "start": 15.6,
+   "from": [
+    0.66,
+    0.36,
+    1.25
+   ],
+   "to": [
+    0.62,
+    0.4,
+    1.08
+   ],
+   "trans_in": "whip",
+   "window": [
+    0.62,
+    0.24,
+    0.95,
+    0.55
+   ],
+   "flow": 1000,
+   "light_colors": [
+    [
+     255,
+     80,
+     160
+    ],
+    [
+     90,
+     160,
+     255
+    ],
+    [
+     255,
+     230,
+     240
+    ],
+    [
+     255,
+     140,
+     90
+    ]
+   ],
+   "sweep_color": [
+    255,
+    120,
+    200
+   ]
+  },
+  {
+   "image": "purple",
+   "kind": "car",
+   "start": 22.2,
+   "from": [
+    0.78,
+    0.3,
+    1.8
+   ],
+   "to": [
+    0.66,
+    0.3,
+    1.6
+   ],
+   "trans_in": "whip",
+   "window": [
+    0.4,
+    0.3,
+    1.0,
+    0.54
+   ],
+   "flow": 900,
+   "light_colors": [
+    [
+     255,
+     120,
+     220
+    ],
+    [
+     120,
+     240,
+     255
+    ],
+    [
+     255,
+     255,
+     255
+    ],
+    [
+     200,
+     150,
+     255
+    ]
+   ],
+   "sweep_color": [
+    220,
+    160,
+    255
+   ]
+  },
+  {
+   "image": "green",
+   "kind": "car",
+   "start": 28.5,
+   "from": [
+    0.55,
+    0.45,
+    1.1
+   ],
+   "to": [
+    0.6,
+    0.35,
+    1.3
+   ],
+   "trans_in": "zoom",
+   "window": [
+    0.5,
+    0.29,
+    1.0,
+    0.47
+   ],
+   "flow": 800,
+   "light_colors": [
+    [
+     120,
+     255,
+     230
+    ],
+    [
+     255,
+     170,
+     200
+    ],
+    [
+     255,
+     240,
+     200
+    ],
+    [
+     140,
+     200,
+     255
+    ]
+   ],
+   "sweep_color": [
+    150,
+    255,
+    205
+   ]
+  },
+  {
+   "image": "red",
+   "kind": "car",
+   "start": 35.1,
+   "from": [
+    0.6,
+    0.42,
+    1.08
+   ],
+   "to": [
+    0.64,
+    0.38,
+    1.22
+   ],
+   "trans_in": "flash",
+   "window": [
+    0.62,
+    0.24,
+    0.95,
+    0.55
+   ],
+   "flow": 1000,
+   "light_colors": [
+    [
+     255,
+     80,
+     160
+    ],
+    [
+     90,
+     160,
+     255
+    ],
+    [
+     255,
+     230,
+     240
+    ],
+    [
+     255,
+     140,
+     90
+    ]
+   ],
+   "sweep_color": [
+    255,
+    120,
+    200
+   ]
+  },
+  {
+   "image": "purple",
+   "kind": "car",
+   "start": 42.0,
+   "from": [
+    0.55,
+    0.4,
+    1.3
+   ],
+   "to": [
+    0.6,
+    0.32,
+    1.15
+   ],
+   "trans_in": "whip",
+   "window": [
+    0.4,
+    0.3,
+    1.0,
+    0.54
+   ],
+   "flow": 900,
+   "light_colors": [
+    [
+     255,
+     120,
+     220
+    ],
+    [
+     120,
+     240,
+     255
+    ],
+    [
+     255,
+     255,
+     255
+    ],
+    [
+     200,
+     150,
+     255
+    ]
+   ],
+   "sweep_color": [
+    220,
+    160,
+    255
+   ]
+  },
+  {
+   "image": "purple",
+   "kind": "car",
+   "start": 49.7,
+   "from": [
+    0.62,
+    0.3,
+    1.75
+   ],
+   "to": [
+    0.62,
+    0.3,
+    1.5
+   ],
+   "trans_in": "zoom",
+   "window": [
+    0.4,
+    0.3,
+    1.0,
+    0.54
+   ],
+   "flow": 900,
+   "light_colors": [
+    [
+     255,
+     120,
+     220
+    ],
+    [
+     120,
+     240,
+     255
+    ],
+    [
+     255,
+     255,
+     255
+    ],
+    [
+     200,
+     150,
+     255
+    ]
+   ],
+   "sweep_color": [
+    220,
+    160,
+    255
+   ]
+  },
+  {
+   "image": "red",
+   "kind": "car",
+   "start": 56.4,
+   "from": [
+    0.7,
+    0.33,
+    1.8
+   ],
+   "to": [
+    0.68,
+    0.32,
+    1.5
+   ],
+   "trans_in": "flash",
+   "window": [
+    0.62,
+    0.24,
+    0.95,
+    0.55
+   ],
+   "flow": 1000,
+   "light_colors": [
+    [
+     255,
+     80,
+     160
+    ],
+    [
+     90,
+     160,
+     255
+    ],
+    [
+     255,
+     230,
+     240
+    ],
+    [
+     255,
+     140,
+     90
+    ]
+   ],
+   "sweep_color": [
+    255,
+    120,
+    200
+   ]
+  },
+  {
+   "image": "green",
+   "kind": "car",
+   "start": 62.81,
+   "from": [
+    0.62,
+    0.3,
+    1.35
+   ],
+   "to": [
+    0.55,
+    0.45,
+    1.06
+   ],
+   "trans_in": "flash",
+   "window": [
+    0.5,
+    0.29,
+    1.0,
+    0.47
+   ],
+   "flow": 800,
+   "light_colors": [
+    [
+     120,
+     255,
+     230
+    ],
+    [
+     255,
+     170,
+     200
+    ],
+    [
+     255,
+     240,
+     200
+    ],
+    [
+     140,
+     200,
+     255
+    ]
+   ],
+   "sweep_color": [
+    150,
+    255,
+    205
+   ]
+  },
+  {
+   "image": "red",
+   "kind": "car",
+   "start": 66.28,
+   "from": [
+    0.6,
+    0.42,
+    1.08
+   ],
+   "to": [
+    0.66,
+    0.36,
+    1.25
+   ],
+   "trans_in": "whip",
+   "window": [
+    0.62,
+    0.24,
+    0.95,
+    0.55
+   ],
+   "flow": 1000,
+   "light_colors": [
+    [
+     255,
+     80,
+     160
+    ],
+    [
+     90,
+     160,
+     255
+    ],
+    [
+     255,
+     230,
+     240
+    ],
+    [
+     255,
+     140,
+     90
+    ]
+   ],
+   "sweep_color": [
+    255,
+    120,
+    200
+   ]
+  },
+  {
+   "image": "purple",
+   "kind": "car",
+   "start": 69.76,
+   "from": [
+    0.55,
+    0.4,
+    1.35
+   ],
+   "to": [
+    0.62,
+    0.3,
+    1.15
+   ],
+   "trans_in": "zoom",
+   "window": [
+    0.4,
+    0.3,
+    1.0,
+    0.54
+   ],
+   "flow": 900,
+   "light_colors": [
+    [
+     255,
+     120,
+     220
+    ],
+    [
+     120,
+     240,
+     255
+    ],
+    [
+     255,
+     255,
+     255
+    ],
+    [
+     200,
+     150,
+     255
+    ]
+   ],
+   "sweep_color": [
+    220,
+    160,
+    255
+   ]
+  },
+  {
+   "image": "green",
+   "kind": "car",
+   "start": 74.54,
+   "from": [
+    0.78,
+    0.33,
+    2.2
+   ],
+   "to": [
+    0.7,
+    0.33,
+    1.95
+   ],
+   "trans_in": "glitch",
+   "window": [
+    0.5,
+    0.29,
+    1.0,
+    0.47
+   ],
+   "flow": 1300,
+   "light_colors": [
+    [
+     120,
+     255,
+     230
+    ],
+    [
+     255,
+     170,
+     200
+    ],
+    [
+     255,
+     240,
+     200
+    ],
+    [
+     140,
+     200,
+     255
+    ]
+   ],
+   "sweep_color": [
+    150,
+    255,
+    205
+   ],
+   "light_amt": 1.1
+  },
+  {
+   "image": "purple",
+   "kind": "car",
+   "start": 76.72,
+   "from": [
+    0.8,
+    0.28,
+    1.9
+   ],
+   "to": [
+    0.62,
+    0.28,
+    1.7
+   ],
+   "trans_in": "whip",
+   "window": [
+    0.4,
+    0.3,
+    1.0,
+    0.54
+   ],
+   "flow": 1500,
+   "light_colors": [
+    [
+     255,
+     120,
+     220
+    ],
+    [
+     120,
+     240,
+     255
+    ],
+    [
+     255,
+     255,
+     255
+    ],
+    [
+     200,
+     150,
+     255
+    ]
+   ],
+   "sweep_color": [
+    220,
+    160,
+    255
+   ],
+   "light_amt": 1.1
+  },
+  {
+   "image": "red",
+   "kind": "car",
+   "start": 80.63,
+   "from": [
+    0.7,
+    0.33,
+    1.9
+   ],
+   "to": [
+    0.68,
+    0.32,
+    1.6
+   ],
+   "trans_in": "flash",
+   "window": [
+    0.62,
+    0.24,
+    0.95,
+    0.55
+   ],
+   "flow": 1000,
+   "light_colors": [
+    [
+     255,
+     80,
+     160
+    ],
+    [
+     90,
+     160,
+     255
+    ],
+    [
+     255,
+     230,
+     240
+    ],
+    [
+     255,
+     140,
+     90
+    ]
+   ],
+   "sweep_color": [
+    255,
+    120,
+    200
+   ]
+  },
+  {
+   "image": "couple",
+   "kind": "beach",
+   "start": 83.5,
+   "from": [
+    0.5,
+    0.25,
+    1.6
+   ],
+   "to": [
+    0.5,
+    0.52,
+    1.1
+   ],
+   "trans_in": "whiteout",
+   "sun": [
+    0.5,
+    0.335
+   ],
+   "sea": [
+    0.0,
+    0.34,
+    1.0,
+    0.8
+   ],
+   "trans_in_dur": 0.8,
+   "grade": {
+    "mul": [
+     0.38,
+     0.45,
+     0.75
+    ],
+    "add": [
+     0,
+     2,
+     10
+    ]
+   },
+   "sun_amt": 0.0
+  },
+  {
+   "image": "girl",
+   "kind": "beach",
+   "start": 87.6,
+   "from": [
+    0.45,
+    0.35,
+    1.35
+   ],
+   "to": [
+    0.5,
+    0.5,
+    1.05
+   ],
+   "trans_in": "zoom",
+   "sun": [
+    0.41,
+    0.665
+   ],
+   "sea": [
+    0.0,
+    0.715,
+    1.0,
+    0.87
+   ],
+   "sun_color": [
+    255,
+    200,
+    170
+   ],
+   "grade": {
+    "mul": [
+     0.38,
+     0.45,
+     0.75
+    ],
+    "add": [
+     0,
+     2,
+     10
+    ]
+   },
+   "sun_amt": 0.0
+  },
+  {
+   "image": "girl",
+   "kind": "beach",
+   "start": 92.6,
+   "from": [
+    0.5,
+    0.82,
+    1.9
+   ],
+   "to": [
+    0.5,
+    0.78,
+    1.6
+   ],
+   "trans_in": "whip",
+   "sun": [
+    0.41,
+    0.665
+   ],
+   "sea": [
+    0.0,
+    0.715,
+    1.0,
+    0.87
+   ],
+   "sun_color": [
+    255,
+    200,
+    170
+   ],
+   "grade": {
+    "mul": [
+     0.38,
+     0.45,
+     0.75
+    ],
+    "add": [
+     0,
+     2,
+     10
+    ]
+   },
+   "sun_amt": 0.0
+  },
+  {
+   "image": "couple",
+   "kind": "beach",
+   "start": 98.6,
+   "from": [
+    0.5,
+    0.55,
+    1.4
+   ],
+   "to": [
+    0.5,
+    0.48,
+    1.2
+   ],
+   "trans_in": "zoom",
+   "sun": [
+    0.5,
+    0.335
+   ],
+   "sea": [
+    0.0,
+    0.34,
+    1.0,
+    0.8
+   ],
+   "grade": {
+    "mul": [
+     0.38,
+     0.45,
+     0.75
+    ],
+    "add": [
+     0,
+     2,
+     10
+    ]
+   },
+   "sun_amt": 0.0
+  },
+  {
+   "image": "girl",
+   "kind": "beach",
+   "start": 104.6,
+   "from": [
+    0.5,
+    0.86,
+    1.9
+   ],
+   "to": [
+    0.5,
+    0.82,
+    1.6
+   ],
+   "trans_in": "whip",
+   "sun": [
+    0.41,
+    0.665
+   ],
+   "sea": [
+    0.0,
+    0.715,
+    1.0,
+    0.87
+   ],
+   "sun_color": [
+    255,
+    200,
+    170
+   ],
+   "grade": {
+    "mul": [
+     0.38,
+     0.45,
+     0.75
+    ],
+    "add": [
+     0,
+     2,
+     10
+    ]
+   },
+   "sun_amt": 0.0
+  },
+  {
+   "image": "girl",
+   "kind": "beach",
+   "start": 108.6,
+   "from": [
+    0.5,
+    0.72,
+    1.3
+   ],
+   "to": [
+    0.5,
+    0.62,
+    1.1
+   ],
+   "trans_in": "zoom",
+   "sun": [
+    0.41,
+    0.665
+   ],
+   "sea": [
+    0.0,
+    0.715,
+    1.0,
+    0.87
+   ],
+   "sun_color": [
+    255,
+    200,
+    170
+   ],
+   "grade": {
+    "mul": [
+     0.38,
+     0.45,
+     0.75
+    ],
+    "add": [
+     0,
+     2,
+     10
+    ]
+   },
+   "sun_amt": 0.0
+  },
+  {
+   "image": "couple",
+   "kind": "beach",
+   "start": 111.6,
+   "from": [
+    0.62,
+    0.36,
+    1.7
+   ],
+   "to": [
+    0.6,
+    0.4,
+    1.5
+   ],
+   "trans_in": "flash",
+   "sun": [
+    0.5,
+    0.335
+   ],
+   "sea": [
+    0.0,
+    0.34,
+    1.0,
+    0.8
+   ],
+   "grade": {
+    "mul": [
+     0.38,
+     0.45,
+     0.75
+    ],
+    "add": [
+     0,
+     2,
+     10
+    ]
+   },
+   "sun_amt": 0.0
+  },
+  {
+   "image": "girl",
+   "kind": "beach",
+   "start": 118.3,
+   "from": [
+    0.45,
+    0.28,
+    1.6
+   ],
+   "to": [
+    0.45,
+    0.3,
+    1.4
+   ],
+   "trans_in": "zoom",
+   "sun": [
+    0.41,
+    0.665
+   ],
+   "sea": [
+    0.0,
+    0.715,
+    1.0,
+    0.87
+   ],
+   "sun_color": [
+    255,
+    200,
+    170
+   ],
+   "grade": {
+    "mul": [
+     0.38,
+     0.45,
+     0.75
+    ],
+    "add": [
+     0,
+     2,
+     10
+    ]
+   },
+   "sun_amt": 0.0
+  },
+  {
+   "image": "red",
+   "kind": "car",
+   "start": 126.4,
+   "from": [
+    0.68,
+    0.32,
+    1.7
+   ],
+   "to": [
+    0.66,
+    0.34,
+    1.4
+   ],
+   "trans_in": "whip",
+   "window": [
+    0.62,
+    0.24,
+    0.95,
+    0.55
+   ],
+   "flow": 1000,
+   "light_colors": [
+    [
+     255,
+     80,
+     160
+    ],
+    [
+     90,
+     160,
+     255
+    ],
+    [
+     255,
+     230,
+     240
+    ],
+    [
+     255,
+     140,
+     90
+    ]
+   ],
+   "sweep_color": [
+    255,
+    120,
+    200
+   ]
+  },
+  {
+   "image": "purple",
+   "kind": "car",
+   "start": 133.0,
+   "from": [
+    0.62,
+    0.3,
+    1.5
+   ],
+   "to": [
+    0.6,
+    0.34,
+    1.3
+   ],
+   "trans_in": "zoom",
+   "window": [
+    0.4,
+    0.3,
+    1.0,
+    0.54
+   ],
+   "flow": 900,
+   "light_colors": [
+    [
+     255,
+     120,
+     220
+    ],
+    [
+     120,
+     240,
+     255
+    ],
+    [
+     255,
+     255,
+     255
+    ],
+    [
+     200,
+     150,
+     255
+    ]
+   ],
+   "sweep_color": [
+    220,
+    160,
+    255
+   ]
+  },
+  {
+   "image": "couple",
+   "kind": "beach",
+   "start": 141.6,
+   "from": [
+    0.5,
+    0.3,
+    1.5
+   ],
+   "to": [
+    0.5,
+    0.45,
+    1.2
+   ],
+   "trans_in": "flash",
+   "sun": [
+    0.5,
+    0.335
+   ],
+   "sea": [
+    0.0,
+    0.34,
+    1.0,
+    0.8
+   ],
+   "grade": {
+    "mul": [
+     0.72,
+     0.68,
+     0.9
+    ],
+    "add": [
+     12,
+     6,
+     28
+    ]
+   },
+   "sun_amt": 0.14
+  },
+  {
+   "image": "girl",
+   "kind": "beach",
+   "start": 144.9,
+   "from": [
+    0.45,
+    0.28,
+    1.6
+   ],
+   "to": [
+    0.47,
+    0.32,
+    1.4
+   ],
+   "trans_in": "whip",
+   "sun": [
+    0.41,
+    0.665
+   ],
+   "sea": [
+    0.0,
+    0.715,
+    1.0,
+    0.87
+   ],
+   "sun_color": [
+    255,
+    200,
+    170
+   ],
+   "grade": {
+    "mul": [
+     0.72,
+     0.68,
+     0.9
+    ],
+    "add": [
+     12,
+     6,
+     28
+    ]
+   },
+   "sun_amt": 0.14
+  },
+  {
+   "image": "green",
+   "kind": "car",
+   "start": 147.9,
+   "from": [
+    0.6,
+    0.32,
+    1.4
+   ],
+   "to": [
+    0.56,
+    0.4,
+    1.15
+   ],
+   "trans_in": "zoom",
+   "window": [
+    0.5,
+    0.29,
+    1.0,
+    0.47
+   ],
+   "flow": 800,
+   "light_colors": [
+    [
+     120,
+     255,
+     230
+    ],
+    [
+     255,
+     170,
+     200
+    ],
+    [
+     255,
+     240,
+     200
+    ],
+    [
+     140,
+     200,
+     255
+    ]
+   ],
+   "sweep_color": [
+    150,
+    255,
+    205
+   ],
+   "grade": {
+    "mul": [
+     0.72,
+     0.68,
+     0.9
+    ],
+    "add": [
+     12,
+     6,
+     28
+    ]
+   }
+  },
+  {
+   "image": "couple",
+   "kind": "beach",
+   "start": 152.5,
+   "from": [
+    0.5,
+    0.2,
+    1.7
+   ],
+   "to": [
+    0.5,
+    0.3,
+    1.45
+   ],
+   "trans_in": "glitch",
+   "sun": [
+    0.5,
+    0.335
+   ],
+   "sea": [
+    0.0,
+    0.34,
+    1.0,
+    0.8
+   ],
+   "grade": {
+    "mul": [
+     0.72,
+     0.68,
+     0.9
+    ],
+    "add": [
+     12,
+     6,
+     28
+    ]
+   },
+   "sun_amt": 0.14
+  },
+  {
+   "image": "couple",
+   "kind": "beach",
+   "start": 155.4,
+   "from": [
+    0.5,
+    0.33,
+    1.8
+   ],
+   "to": [
+    0.5,
+    0.38,
+    1.4
+   ],
+   "trans_in": "flash",
+   "sun": [
+    0.5,
+    0.335
+   ],
+   "sea": [
+    0.0,
+    0.34,
+    1.0,
+    0.8
+   ],
+   "sun_amt": 0.14,
+   "grade": {
+    "mul": [
+     0.72,
+     0.68,
+     0.9
+    ],
+    "add": [
+     12,
+     6,
+     28
+    ]
+   }
+  },
+  {
+   "image": "girl",
+   "kind": "beach",
+   "start": 158.9,
+   "from": [
+    0.45,
+    0.24,
+    2.0
+   ],
+   "to": [
+    0.45,
+    0.25,
+    1.75
+   ],
+   "trans_in": "zoom",
+   "sun": [
+    0.41,
+    0.665
+   ],
+   "sea": [
+    0.0,
+    0.715,
+    1.0,
+    0.87
+   ],
+   "sun_color": [
+    255,
+    200,
+    170
+   ],
+   "sun_amt": 0.14,
+   "grade": {
+    "mul": [
+     0.72,
+     0.68,
+     0.9
+    ],
+    "add": [
+     12,
+     6,
+     28
+    ]
+   }
+  },
+  {
+   "image": "purple",
+   "kind": "car",
+   "start": 162.1,
+   "from": [
+    0.75,
+    0.3,
+    1.7
+   ],
+   "to": [
+    0.62,
+    0.3,
+    1.5
+   ],
+   "trans_in": "whip",
+   "window": [
+    0.4,
+    0.3,
+    1.0,
+    0.54
+   ],
+   "flow": 900,
+   "light_colors": [
+    [
+     255,
+     120,
+     220
+    ],
+    [
+     120,
+     240,
+     255
+    ],
+    [
+     255,
+     255,
+     255
+    ],
+    [
+     200,
+     150,
+     255
+    ]
+   ],
+   "sweep_color": [
+    220,
+    160,
+    255
+   ],
+   "grade": {
+    "mul": [
+     0.72,
+     0.68,
+     0.9
+    ],
+    "add": [
+     12,
+     6,
+     28
+    ]
+   }
+  },
+  {
+   "image": "couple",
+   "kind": "beach",
+   "start": 166.3,
+   "from": [
+    0.5,
+    0.5,
+    1.15
+   ],
+   "to": [
+    0.5,
+    0.5,
+    1.02
+   ],
+   "trans_in": "zoom",
+   "sun": [
+    0.5,
+    0.335
+   ],
+   "sea": [
+    0.0,
+    0.34,
+    1.0,
+    0.8
+   ],
+   "sun_amt": 0.14,
+   "grade": {
+    "mul": [
+     0.72,
+     0.68,
+     0.9
+    ],
+    "add": [
+     12,
+     6,
+     28
+    ]
+   }
+  },
+  {
+   "image": "green",
+   "kind": "car",
+   "start": 170.3,
+   "from": [
+    0.6,
+    0.3,
+    1.5
+   ],
+   "to": [
+    0.58,
+    0.36,
+    1.25
+   ],
+   "trans_in": "flash",
+   "window": [
+    0.5,
+    0.29,
+    1.0,
+    0.47
+   ],
+   "flow": 800,
+   "light_colors": [
+    [
+     120,
+     255,
+     230
+    ],
+    [
+     255,
+     170,
+     200
+    ],
+    [
+     255,
+     240,
+     200
+    ],
+    [
+     140,
+     200,
+     255
+    ]
+   ],
+   "sweep_color": [
+    150,
+    255,
+    205
+   ]
+  },
+  {
+   "image": "purple",
+   "kind": "car",
+   "start": 177.0,
+   "from": [
+    0.58,
+    0.36,
+    1.4
+   ],
+   "to": [
+    0.62,
+    0.3,
+    1.2
+   ],
+   "trans_in": "whip",
+   "window": [
+    0.4,
+    0.3,
+    1.0,
+    0.54
+   ],
+   "flow": 900,
+   "light_colors": [
+    [
+     255,
+     120,
+     220
+    ],
+    [
+     120,
+     240,
+     255
+    ],
+    [
+     255,
+     255,
+     255
+    ],
+    [
+     200,
+     150,
+     255
+    ]
+   ],
+   "sweep_color": [
+    220,
+    160,
+    255
+   ]
+  },
+  {
+   "image": "red",
+   "kind": "car",
+   "start": 184.1,
+   "from": [
+    0.62,
+    0.42,
+    1.15
+   ],
+   "to": [
+    0.66,
+    0.36,
+    1.3
+   ],
+   "trans_in": "zoom",
+   "window": [
+    0.62,
+    0.24,
+    0.95,
+    0.55
+   ],
+   "flow": 1000,
+   "light_colors": [
+    [
+     255,
+     80,
+     160
+    ],
+    [
+     90,
+     160,
+     255
+    ],
+    [
+     255,
+     230,
+     240
+    ],
+    [
+     255,
+     140,
+     90
+    ]
+   ],
+   "sweep_color": [
+    255,
+    120,
+    200
+   ]
+  },
+  {
+   "image": "red",
+   "kind": "car",
+   "start": 187.8,
+   "from": [
+    0.78,
+    0.4,
+    1.9
+   ],
+   "to": [
+    0.74,
+    0.4,
+    1.7
+   ],
+   "trans_in": "glitch",
+   "window": [
+    0.62,
+    0.24,
+    0.95,
+    0.55
+   ],
+   "flow": 1000,
+   "light_colors": [
+    [
+     255,
+     80,
+     160
+    ],
+    [
+     90,
+     160,
+     255
+    ],
+    [
+     255,
+     230,
+     240
+    ],
+    [
+     255,
+     140,
+     90
+    ]
+   ],
+   "sweep_color": [
+    255,
+    120,
+    200
+   ]
+  },
+  {
+   "image": "green",
+   "kind": "car",
+   "start": 190.6,
+   "from": [
+    0.62,
+    0.28,
+    1.7
+   ],
+   "to": [
+    0.6,
+    0.3,
+    1.45
+   ],
+   "trans_in": "whip",
+   "window": [
+    0.5,
+    0.29,
+    1.0,
+    0.47
+   ],
+   "flow": 800,
+   "light_colors": [
+    [
+     120,
+     255,
+     230
+    ],
+    [
+     255,
+     170,
+     200
+    ],
+    [
+     255,
+     240,
+     200
+    ],
+    [
+     140,
+     200,
+     255
+    ]
+   ],
+   "sweep_color": [
+    150,
+    255,
+    205
+   ]
+  },
+  {
+   "image": "girl",
+   "kind": "beach",
+   "start": 194.5,
+   "from": [
+    0.45,
+    0.3,
+    1.5
+   ],
+   "to": [
+    0.45,
+    0.32,
+    1.3
+   ],
+   "trans_in": "flash",
+   "sun": [
+    0.41,
+    0.665
+   ],
+   "sea": [
+    0.0,
+    0.715,
+    1.0,
+    0.87
+   ],
+   "sun_color": [
+    255,
+    200,
+    170
+   ],
+   "sun_amt": 0.14,
+   "grade": {
+    "mul": [
+     0.72,
+     0.68,
+     0.9
+    ],
+    "add": [
+     12,
+     6,
+     28
+    ]
+   }
+  },
+  {
+   "image": "couple",
+   "kind": "beach",
+   "start": 197.9,
+   "from": [
+    0.5,
+    0.25,
+    1.6
+   ],
+   "to": [
+    0.5,
+    0.5,
+    1.08
+   ],
+   "trans_in": "whiteout",
+   "sun": [
+    0.5,
+    0.335
+   ],
+   "sea": [
+    0.0,
+    0.34,
+    1.0,
+    0.8
+   ],
+   "trans_in_dur": 1.2
+  },
+  {
+   "image": "green",
+   "kind": "car",
+   "start": 202.3,
+   "from": [
+    0.78,
+    0.36,
+    2.0
+   ],
+   "to": [
+    0.72,
+    0.36,
+    1.75
+   ],
+   "trans_in": "whip",
+   "window": [
+    0.5,
+    0.29,
+    1.0,
+    0.47
+   ],
+   "flow": 800,
+   "light_colors": [
+    [
+     120,
+     255,
+     230
+    ],
+    [
+     255,
+     170,
+     200
+    ],
+    [
+     255,
+     240,
+     200
+    ],
+    [
+     140,
+     200,
+     255
+    ]
+   ],
+   "sweep_color": [
+    150,
+    255,
+    205
+   ],
+   "grade": {
+    "mul": [
+     1.12,
+     0.88,
+     0.7
+    ],
+    "add": [
+     30,
+     10,
+     0
+    ]
+   },
+   "light_amt": 0.35
+  },
+  {
+   "image": "couple",
+   "kind": "beach",
+   "start": 205.4,
+   "from": [
+    0.5,
+    0.33,
+    1.9
+   ],
+   "to": [
+    0.5,
+    0.36,
+    1.5
+   ],
+   "trans_in": "flash",
+   "sun": [
+    0.5,
+    0.335
+   ],
+   "sea": [
+    0.0,
+    0.34,
+    1.0,
+    0.8
+   ]
+  },
+  {
+   "image": "girl",
+   "kind": "beach",
+   "start": 209.8,
+   "from": [
+    0.45,
+    0.35,
+    1.4
+   ],
+   "to": [
+    0.48,
+    0.42,
+    1.15
+   ],
+   "trans_in": "zoom",
+   "sun": [
+    0.41,
+    0.665
+   ],
+   "sea": [
+    0.0,
+    0.715,
+    1.0,
+    0.87
+   ],
+   "sun_color": [
+    255,
+    200,
+    170
+   ]
+  },
+  {
+   "image": "purple",
+   "kind": "car",
+   "start": 212.2,
+   "from": [
+    0.8,
+    0.3,
+    1.8
+   ],
+   "to": [
+    0.64,
+    0.3,
+    1.6
+   ],
+   "trans_in": "whip",
+   "window": [
+    0.4,
+    0.3,
+    1.0,
+    0.54
+   ],
+   "flow": 900,
+   "light_colors": [
+    [
+     255,
+     120,
+     220
+    ],
+    [
+     120,
+     240,
+     255
+    ],
+    [
+     255,
+     255,
+     255
+    ],
+    [
+     200,
+     150,
+     255
+    ]
+   ],
+   "sweep_color": [
+    220,
+    160,
+    255
+   ],
+   "grade": {
+    "mul": [
+     1.12,
+     0.88,
+     0.7
+    ],
+    "add": [
+     30,
+     10,
+     0
+    ]
+   },
+   "light_amt": 0.35
+  },
+  {
+   "image": "red",
+   "kind": "car",
+   "start": 216.2,
+   "from": [
+    0.66,
+    0.36,
+    1.4
+   ],
+   "to": [
+    0.62,
+    0.4,
+    1.15
+   ],
+   "trans_in": "zoom",
+   "window": [
+    0.62,
+    0.24,
+    0.95,
+    0.55
+   ],
+   "flow": 1000,
+   "light_colors": [
+    [
+     255,
+     80,
+     160
+    ],
+    [
+     90,
+     160,
+     255
+    ],
+    [
+     255,
+     230,
+     240
+    ],
+    [
+     255,
+     140,
+     90
+    ]
+   ],
+   "sweep_color": [
+    255,
+    120,
+    200
+   ],
+   "grade": {
+    "mul": [
+     1.12,
+     0.88,
+     0.7
+    ],
+    "add": [
+     30,
+     10,
+     0
+    ]
+   },
+   "light_amt": 0.35
+  },
+  {
+   "image": "couple",
+   "kind": "beach",
+   "start": 219.2,
+   "from": [
+    0.5,
+    0.45,
+    1.3
+   ],
+   "to": [
+    0.5,
+    0.5,
+    1.02
+   ],
+   "trans_in": "whiteout",
+   "sun": [
+    0.5,
+    0.335
+   ],
+   "sea": [
+    0.0,
+    0.34,
+    1.0,
+    0.8
+   ],
+   "trans_in_dur": 0.6
+  },
+  {
+   "image": "girl",
+   "kind": "beach",
+   "start": 223.4,
+   "from": [
+    0.45,
+    0.4,
+    1.3
+   ],
+   "to": [
+    0.5,
+    0.5,
+    1.0
+   ],
+   "trans_in": "zoom",
+   "sun": [
+    0.41,
+    0.665
+   ],
+   "sea": [
+    0.0,
+    0.715,
+    1.0,
+    0.87
+   ],
+   "sun_color": [
+    255,
+    200,
+    170
+   ]
+  },
+  {
+   "image": "green",
+   "kind": "car",
+   "start": 229.6,
+   "from": [
+    0.72,
+    0.35,
+    1.8
+   ],
+   "to": [
+    0.62,
+    0.36,
+    1.3
+   ],
+   "trans_in": "whiteout",
+   "window": [
+    0.5,
+    0.29,
+    1.0,
+    0.47
+   ],
+   "flow": 800,
+   "light_colors": [
+    [
+     120,
+     255,
+     230
+    ],
+    [
+     255,
+     170,
+     200
+    ],
+    [
+     255,
+     240,
+     200
+    ],
+    [
+     140,
+     200,
+     255
+    ]
+   ],
+   "sweep_color": [
+    150,
+    255,
+    205
+   ],
+   "trans_in_dur": 0.8,
+   "grade": {
+    "mul": [
+     1.12,
+     0.88,
+     0.7
+    ],
+    "add": [
+     30,
+     10,
+     0
+    ]
+   },
+   "light_amt": 0.35
+  },
+  {
+   "image": "girl",
+   "kind": "beach",
+   "start": 233.1,
+   "from": [
+    0.45,
+    0.35,
+    1.35
+   ],
+   "to": [
+    0.5,
+    0.5,
+    1.0
+   ],
+   "trans_in": "zoom",
+   "sun": [
+    0.41,
+    0.665
+   ],
+   "sea": [
+    0.0,
+    0.715,
+    1.0,
+    0.87
+   ],
+   "sun_color": [
+    255,
+    200,
+    170
+   ]
+  }
+ ]
+}
