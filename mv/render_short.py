@@ -54,6 +54,7 @@ class Assets(rm.Assets):
             im = im.resize((im.width * 2, im.height * 2), Image.LANCZOS)
             im = im.filter(ImageFilter.UnsharpMask(2.2, 70, 2))
             self.img[key] = im
+        self.depth = {key: DepthRig(self.img[key], spec) for key, spec in cfg.get("depth", {}).items()}
         yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
         r = np.sqrt(((xx - W / 2) / (W / 2)) ** 2 + ((yy - H / 2) / (H / 2)) ** 2)
         self.vig = np.clip(1 - 0.32 * (r / 1.3) ** 2.4, 0, 1)[..., None].astype(np.float32)
@@ -62,6 +63,121 @@ class Assets(rm.Assets):
         self.xx, self.yy = xx, yy
         # 歌詞・字幕の可読性のため下部をほんのり暗くするグラデーション
         self.shade = (1 - 0.38 * np.clip((yy - H * 0.62) / (H * 0.3), 0, 1))[..., None]
+
+
+# ====================================================================== 一枚絵の 2.5D
+
+def region_mask(size, k, regions, blur):
+    """多角形・楕円で塗った領域をぼかしたマスク (0〜1) を作る。座標は元画像基準。"""
+    m = Image.new("L", size, 0)
+    d = ImageDraw.Draw(m)
+    for r in regions:
+        v = int(255 * r.get("v", 1.0))
+        if "ellipse" in r:
+            cx, cy, rx, ry = (c * k for c in r["ellipse"])
+            d.ellipse([cx - rx, cy - ry, cx + rx, cy + ry], fill=v)
+        else:
+            d.polygon([(x * k, y * k) for x, y in r["poly"]], fill=v)
+    return np.asarray(m.filter(ImageFilter.GaussianBlur(blur * k))).astype(np.float32) / 255
+
+
+class DepthRig:
+    """1枚の絵を奥行き (視差)・髪の揺れ・花の揺れで動かすためのマップ一式。"""
+
+    def __init__(self, im, spec):
+        self.arr = np.asarray(im)
+        sw, sh = im.size
+        k = sw / spec["src_w"]
+        self.k = k
+        self.depth = np.zeros((sh, sw), np.float32)
+        for layer in spec["layers"]:  # 奥から順に、手前の層で上書きする
+            m = region_mask(im.size, k, [{**r, "v": 1.0} for r in layer["regions"]], spec.get("blur", 18))
+            self.depth = self.depth * (1 - m) + layer["depth"] * m
+        self.hair = region_mask(im.size, k, spec.get("hair", []), 14)
+        self.hair_top = spec.get("hair_top", 400) * k
+        self.flower = region_mask(im.size, k, spec.get("flower", []), 10)
+        self.pivot = [c * k for c in spec.get("pivot", [0, 0])]
+        self.glow = spec.get("glow")
+
+
+def sample(arr, sx, sy):
+    """画像 arr を浮動小数点座標で双一次補間して取り出す。"""
+    h, w = arr.shape[:2]
+    sx = np.clip(sx, 0, w - 1.001)
+    sy = np.clip(sy, 0, h - 1.001)
+    x0 = sx.astype(np.int32)
+    y0 = sy.astype(np.int32)
+    fx = (sx - x0)[..., None]
+    fy = (sy - y0)[..., None]
+    flat = arr.reshape(-1, arr.shape[2])
+    i = y0 * w + x0
+    a00 = flat[i].astype(np.float32)
+    a01 = flat[i + 1].astype(np.float32)
+    a10 = flat[i + w].astype(np.float32)
+    a11 = flat[i + w + 1].astype(np.float32)
+    return (a00 * (1 - fx) + a01 * fx) * (1 - fy) + (a10 * (1 - fx) + a11 * fx) * fy
+
+
+def camera_warp(A, shot, cx, cy, zoom, rot, t, p):
+    """奥行きマップで視差をつけ、髪と花を揺らしながら一枚絵を切り出す。"""
+    rig = A.depth[shot["image"]]
+    sh, sw = rig.arr.shape[:2]
+    base = max(W / sw, H / sh) * 1.05
+    s = 1 / (base * zoom)
+    vw, vh = W * s, H * s
+    pcx = clamp(cx * sw, vw / 2, sw - vw / 2)
+    pcy = clamp(cy * sh, vh / 2, sh - vh / 2)
+    co, si = math.cos(math.radians(rot)), math.sin(math.radians(rot))
+    X, Y = A.xx - W / 2, A.yy - H / 2
+    sx = pcx + s * (co * X - si * Y)
+    sy = pcy + s * (si * X + co * Y)
+    iy = np.clip(sy.astype(np.int32), 0, sh - 1)
+    ix = np.clip(sx.astype(np.int32), 0, sw - 1)
+    d = rig.depth[iy, ix]
+    # カメラが横に動くと、手前のものほど大きくずれる (視差)
+    par = shot.get("par", [40, 0])
+    k = (2 * p - 1)
+    ox, oy = par[0] * k * rig.k, par[1] * k * rig.k
+    sx = sx - d * ox
+    sy = sy - d * oy
+    # 髪: 毛先ほど大きく、ゆっくり揺れる
+    hm = rig.hair[iy, ix]
+    reach = np.clip((sy - rig.hair_top) / (600 * rig.k), 0, 1)
+    sx = sx + hm * reach * 6 * rig.k * np.sin(2 * math.pi * 0.32 * t + sy / (90 * rig.k))
+    # 花: 手元を支点に小さく揺れる
+    fm = rig.flower[iy, ix]
+    th = math.radians(2.2 * math.sin(2 * math.pi * 0.27 * t))
+    px, py = rig.pivot
+    dx, dy = sx - px, sy - py
+    sx = sx + fm * (dx * (math.cos(th) - 1) - dy * math.sin(th))
+    sy = sy + fm * (dx * math.sin(th) + dy * (math.cos(th) - 1))
+    a = sample(rig.arr, sx, sy)
+    return a, (pcx, pcy, s, sw, sh), d
+
+
+def light_rays(A, depth, t, origin, strength, color=(215, 228, 255)):
+    """背景 (奥行きの浅い所) にだけ差す、ゆっくり回る光の筋。"""
+    ang = np.arctan2(A.yy - origin[1], A.xx - origin[0])
+    dist = np.sqrt((A.xx - origin[0]) ** 2 + (A.yy - origin[1]) ** 2)
+    rays = (0.5 + 0.5 * np.sin(ang * 23 + t * 0.35)) ** 5 * (0.5 + 0.5 * np.sin(ang * 9 - t * 0.2))
+    g = rays * np.exp(-dist / 1500) * np.clip(1 - depth * 1.6, 0, 1) * strength
+    return g[..., None] * np.array(color, np.float32)
+
+
+def bokeh(t, seed, n=9):
+    """手前を漂う大きなボケ。"""
+    rng = np.random.default_rng(seed)
+    layer = Image.new("RGB", (W // 4, H // 4), (0, 0, 0))
+    d = ImageDraw.Draw(layer)
+    for _ in range(n):
+        x0, y0, vx, vy, s, ph = rng.uniform(0, 1, 6)
+        x = (x0 * W / 4 + (vx - 0.5) * 6 * t) % (W / 4)
+        y = (y0 * H / 4 - (0.2 + vy) * 5 * t) % (H / 4)
+        r = 8 + s * 22
+        b = int(70 + 60 * (0.5 + 0.5 * math.sin(t * 0.8 + ph * 6)))
+        d.ellipse([x - r, y - r, x + r, y + r], fill=(int(b * 0.9), int(b * 0.95), b))
+    layer = layer.filter(ImageFilter.GaussianBlur(4)).resize((W, H), Image.BILINEAR)
+    return np.asarray(layer).astype(np.float32)
 
 
 # ====================================================================== カメラ
@@ -202,6 +318,17 @@ def render_shot(ctx, shot):
     t = ctx["t"]
     A = ctx["A"]
     cx, cy, z, rot = shot_state(shot, t, ctx)
+    if shot["kind"] == "single":
+        p = ease_io((t - shot["start"]) / (shot["end"] - shot["start"]))
+        a, geo, depth = camera_warp(A, shot, cx, cy, z, rot, t, p)
+        rig = A.depth[shot["image"]]
+        a += light_rays(A, depth, t, shot.get("ray_origin", [-200, -300]), shot.get("rays", 0.22))
+        if rig.glow:  # 花のほのかな発光 (小節頭で少し強く)
+            a += sun_flare(ctx, {"sun": rig.glow, "sun_color": (235, 240, 255)}, geo,
+                           0.07 + 0.08 * ctx["bar_pulse"])
+        a += dust(ctx, 5, 45, color=(235, 242, 255)) * 0.35
+        a += bokeh(t, 21) * 0.35
+        return a
     im, geo = camera(A, shot["image"], cx, cy, z, rot)
     a = np.asarray(im).astype(np.float32)
     g = shot.get("grade")
@@ -290,7 +417,19 @@ def transition_tail(a, shot, since):
             a[..., 2] = np.roll(a[..., 2], -sh, axis=1)
     elif kind == "whiteout":
         a = a + (255 - a) * (1 - ease_io(p))
+    elif kind == "focus":
+        a = defocus(a, 16 * (1 - ease_out(p)))
     return a
+
+
+def defocus(a, radius):
+    """ピント送り用のぼかし (縮小してからぼかすので速い)。"""
+    if radius < 0.5:
+        return a
+    im = Image.fromarray(np.clip(a, 0, 255).astype(np.uint8)).resize((W // 4, H // 4), Image.BILINEAR)
+    im = im.filter(ImageFilter.GaussianBlur(radius / 4)).resize((W, H), Image.BILINEAR)
+    k = clamp(radius / 4)
+    return a * (1 - k) + np.asarray(im).astype(np.float32) * k
 
 
 def transition_head(a, nxt, t):
@@ -311,6 +450,8 @@ def transition_head(a, nxt, t):
         a = a + (255 - a) * p ** 3 * 0.9
     elif kind == "whiteout":
         a = a + (255 - a) * ease_io(p)
+    elif kind == "focus":
+        a = defocus(a, 16 * p ** 2)
     return a
 
 
@@ -502,7 +643,8 @@ class Renderer:
                 a = transition_head(a, shots[k + 1], t)
         layer = Image.new("RGBA", (W, H), (0, 0, 0, 0))
         draw_lyrics(layer, self.A, ctx, cfg)
-        draw_hud(layer, self.A, ctx, cfg)
+        if cfg.get("hud", True):
+            draw_hud(layer, self.A, ctx, cfg)
         open_card(layer, self.A, ctx, cfg)
         end_card(layer, self.A, ctx, cfg)
         return post(a, self.A, ctx, layer)

@@ -1,0 +1,53 @@
+{
+ "title": "今さら会いたい",
+ "artist": "Heppoko39",
+ "audio": "clip.mp3",
+ "lyrics_timed": "lyrics_timed.json",
+ "beats": "clip_beats.json",
+ "fonts": "../../fonts",
+ "duration": 27.168,
+ "lyric_offset_beats": -1,
+ "hud": false,
+ "images": {"elf": "elf.jpg"},
+ "marks": {"dawn": 0, "end_card": 999},
+ "depth": {
+  "elf": {
+   "src_w": 768, "blur": 16,
+   "layers": [
+    {"depth": 0.55, "regions": [{"poly": [[150,70],[330,55],[470,90],[560,200],[600,300],[690,330],[640,420],[620,520],[700,600],[745,700],[768,820],[768,1152],[40,1152],[60,800],[80,600],[110,520],[140,400],[130,250]]}]},
+    {"depth": 0.72, "regions": [{"ellipse": [360, 330, 165, 175]}]},
+    {"depth": 1.0, "regions": [
+      {"poly": [[380,640],[470,600],[560,575],[675,650],[645,745],[560,775],[450,745]]},
+      {"poly": [[515,760],[585,760],[612,880],[645,945],[605,1110],[495,1110],[470,905],[525,860]]}]}
+   ],
+   "hair": [
+    {"poly": [[110,450],[260,420],[335,780],[335,960],[250,905],[175,780],[80,640]]},
+    {"poly": [[560,480],[645,500],[725,700],[765,905],[700,965],[615,800],[580,620]]}
+   ],
+   "hair_top": 420,
+   "flower": [{"poly": [[380,640],[470,600],[560,575],[675,650],[645,745],[560,775],[450,745]]}],
+   "pivot": [560, 905],
+   "glow": [0.703, 0.592]
+  }
+ },
+ "lines": [
+  {"layout": "low", "en": "“I want to see you” — after all this time"},
+  {"layout": "low", "en": "how could I ever say that"},
+  {"layout": "vleft", "en": "“I'm fine without you”"},
+  {"layout": "low", "en": "I told myself, over and over"},
+  {"layout": "low", "en": "it's not that I want to forget"},
+  {"layout": "vleft", "en": "and it's not just that I want to go back"},
+  {"layout": "low", "en": "it's only that the days I spent with you"},
+  {"layout": "low", "en": "I don't want to pretend they never happened", "hold": 1.2}
+ ],
+ "shots": [
+  {"image": "elf", "kind": "single", "start": 0.0,  "from": [0.50, 0.50, 1.0], "to": [0.48, 0.42, 1.12], "par": [30, 0], "rays": 0.26},
+  {"image": "elf", "kind": "single", "start": 2.55, "from": [0.45, 0.25, 2.3], "to": [0.46, 0.26, 2.5], "par": [18, 6], "trans_in": "focus", "trans_in_dur": 0.5},
+  {"image": "elf", "kind": "single", "start": 6.0,  "from": [0.72, 0.62, 2.2], "to": [0.62, 0.50, 1.8], "par": [-30, 0], "trans_in": "focus", "trans_in_dur": 0.5},
+  {"image": "elf", "kind": "single", "start": 9.5,  "from": [0.74, 0.30, 2.4], "to": [0.66, 0.32, 2.1], "par": [25, 0], "trans_in": "focus", "trans_in_dur": 0.5},
+  {"image": "elf", "kind": "single", "start": 12.8, "from": [0.85, 0.18, 2.0], "to": [0.55, 0.26, 1.7], "par": [40, 0], "trans_in": "whiteout", "trans_in_dur": 0.6, "rays": 0.32},
+  {"image": "elf", "kind": "single", "start": 15.6, "from": [0.72, 0.82, 2.2], "to": [0.68, 0.66, 1.9], "par": [-20, -10], "trans_in": "focus", "trans_in_dur": 0.5},
+  {"image": "elf", "kind": "single", "start": 19.2, "from": [0.46, 0.26, 2.6], "to": [0.48, 0.40, 1.15], "par": [30, 0], "trans_in": "focus", "trans_in_dur": 0.5},
+  {"image": "elf", "kind": "single", "start": 23.6, "from": [0.50, 0.45, 1.05], "to": [0.50, 0.48, 1.0], "par": [-25, 0], "trans_in": "whiteout", "trans_in_dur": 0.8, "rays": 0.3}
+ ]
+}
