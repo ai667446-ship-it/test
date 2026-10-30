@@ -46,6 +46,7 @@ class Assets(rm.Assets):
             "serif": fdir / "NotoSerifJP%5Bwght%5D.ttf",
             "sans": fdir / "NotoSansJP%5Bwght%5D.ttf",
             "dot": fdir / "DotGothic16-Regular.ttf",
+            "klee": fdir / "KleeOne-SemiBold.ttf",  # 手書き風
         }
         self._fonts, self._glyphs, self._misc = {}, {}, {}
         self.img = {}
@@ -98,6 +99,19 @@ class DepthRig:
         self.flower = region_mask(im.size, k, spec.get("flower", []), 10)
         self.pivot = [c * k for c in spec.get("pivot", [0, 0])]
         self.glow = spec.get("glow")
+        dr = spec.get("drift")
+        self.drift = region_mask(im.size, k, dr["regions"], 30) if dr else None
+        self.drift_speed = (dr or {}).get("speed", 0) * k
+        self.twinkles = []
+        tw = spec.get("twinkle")
+        if tw:
+            # 領域内の明るい画素 (窓の灯り) を拾い、ひとつずつ明滅させる
+            m = region_mask(im.size, k, tw["regions"], 0) > 0.5
+            lum = self.arr.astype(np.float32) @ np.array([0.299, 0.587, 0.114], np.float32) / 255
+            ys, xs = np.nonzero(m & (lum > tw.get("threshold", 0.6)))
+            rng = np.random.default_rng(31)
+            pick = rng.choice(len(xs), size=min(tw.get("count", 120), len(xs)), replace=False) if len(xs) else []
+            self.twinkles = [(xs[i] / sw, ys[i] / sh, rng.uniform(0, 6.28), rng.uniform(0.6, 2.2)) for i in pick]
 
 
 def sample(arr, sx, sy):
@@ -140,6 +154,9 @@ def camera_warp(A, shot, cx, cy, zoom, rot, t, p):
     ox, oy = par[0] * k * rig.k, par[1] * k * rig.k
     sx = sx - d * ox
     sy = sy - d * oy
+    # 雲: 領域内だけゆっくり横に流れる
+    if rig.drift is not None:
+        sx = sx - rig.drift[iy, ix] * rig.drift_speed * t
     # 髪: 毛先ほど大きく、ゆっくり揺れる
     hm = rig.hair[iy, ix]
     reach = np.clip((sy - rig.hair_top) / (600 * rig.k), 0, 1)
@@ -162,6 +179,39 @@ def light_rays(A, depth, t, origin, strength, color=(215, 228, 255)):
     rays = (0.5 + 0.5 * np.sin(ang * 23 + t * 0.35)) ** 5 * (0.5 + 0.5 * np.sin(ang * 9 - t * 0.2))
     g = rays * np.exp(-dist / 1500) * np.clip(1 - depth * 1.6, 0, 1) * strength
     return g[..., None] * np.array(color, np.float32)
+
+
+def twinkle_layer(rig, geo, t):
+    """街の灯りのまたたき (小さな光の点)。"""
+    layer = Image.new("RGB", (W, H), (0, 0, 0))
+    d = ImageDraw.Draw(layer)
+    for nx, ny, ph, fr in rig.twinkles:
+        b = (0.5 + 0.5 * math.sin(t * fr * 2.2 + ph)) ** 4
+        if b < 0.08:
+            continue
+        x, y = to_screen(geo, nx, ny)
+        if not (-10 < x < W + 10 and -10 < y < H + 10):
+            continue
+        r = 2 + 4 * b
+        c = int(255 * b)
+        d.ellipse([x - r, y - r, x + r, y + r], fill=(c, int(c * 0.92), int(c * 0.78)))
+    return np.asarray(layer.filter(ImageFilter.GaussianBlur(2.5))).astype(np.float32) * 0.9
+
+
+def film(a, fi):
+    """古い写真・フィルムの質感: 明るさのゆらぎ、ちり、細い傷。"""
+    rng = np.random.default_rng(fi * 977 + 3)
+    a = a * (1 + rng.uniform(-0.035, 0.035))
+    layer = Image.new("L", (W, H), 0)
+    d = ImageDraw.Draw(layer)
+    for _ in range(int(rng.integers(3, 9))):
+        x, y, r = rng.uniform(0, W), rng.uniform(0, H), rng.uniform(1, 3.5)
+        d.ellipse([x - r, y - r, x + r, y + r], fill=int(rng.uniform(90, 200)))
+    if rng.random() < 0.35:
+        x = rng.uniform(0, W)
+        d.line([(x, 0), (x + rng.uniform(-20, 20), H)], fill=int(rng.uniform(40, 110)), width=1)
+    m = np.asarray(layer).astype(np.float32)[..., None] / 255
+    return a * (1 - m) + 235 * m
 
 
 def bokeh(t, seed, n=9):
@@ -322,12 +372,21 @@ def render_shot(ctx, shot):
         p = ease_io((t - shot["start"]) / (shot["end"] - shot["start"]))
         a, geo, depth = camera_warp(A, shot, cx, cy, z, rot, t, p)
         rig = A.depth[shot["image"]]
-        a += light_rays(A, depth, t, shot.get("ray_origin", [-200, -300]), shot.get("rays", 0.22))
-        if rig.glow:  # 花のほのかな発光 (小節頭で少し強く)
-            a += sun_flare(ctx, {"sun": rig.glow, "sun_color": (235, 240, 255)}, geo,
-                           0.07 + 0.08 * ctx["bar_pulse"])
-        a += dust(ctx, 5, 45, color=(235, 242, 255)) * 0.35
-        a += bokeh(t, 21) * 0.35
+        if shot.get("rays", 0.22) > 0:
+            a += light_rays(A, depth, t, shot.get("ray_origin", [-200, -300]), shot.get("rays", 0.22))
+        if rig.glow:  # 花や月のほのかな発光 (小節頭で少し強く)
+            a += sun_flare(ctx, {"sun": rig.glow, "sun_color": tuple(shot.get("glow_color", (235, 240, 255)))},
+                           geo, shot.get("glow_amt", 0.07) + 0.08 * ctx["bar_pulse"])
+        lift = shot.get("lights_up")
+        boost = 1.0
+        if lift:  # 街の灯りがふわっと明るくなる
+            k = smooth((t - lift[0]) / (lift[1] - lift[0]))
+            boost = 1 + 2.5 * k
+            a = a + (a * a / 255) * 0.6 * k
+        if rig.twinkles:
+            a += twinkle_layer(rig, geo, t) * boost
+        a += dust(ctx, 5, 45, color=(235, 242, 255)) * shot.get("dust", 0.35)
+        a += bokeh(t, 21) * shot.get("bokeh", 0.35)
         return a
     im, geo = camera(A, shot["image"], cx, cy, z, rot)
     a = np.asarray(im).astype(np.float32)
@@ -469,20 +528,20 @@ def draw_lyrics(layer, A, ctx, cfg):
         col = WHITE + (255,)
         sh = ((10, 12, 30, 150), 3, 4)
         if lay == "title":
-            rm.draw_line(layer, A, ctx, ln, W / 2, H * 0.40 + rise, 100, "serif", col, "fade",
+            rm.draw_line(layer, A, ctx, ln, W / 2, H * 0.40 + rise, 100, cfg.get("lyric_font", "serif"), col, "fade",
                          weight=700, align="center", spacing=0.22, shadow=sh, alpha=alpha,
                          appear=ln["appear"])
         elif lay == "low":
-            rm.draw_line(layer, A, ctx, ln, W / 2, H * 0.76 + rise, 72, "serif", col, "fade",
+            rm.draw_line(layer, A, ctx, ln, W / 2, H * 0.76 + rise, 72, cfg.get("lyric_font", "serif"), col, "fade",
                          weight=600, align="center", spacing=0.12, shadow=sh, alpha=alpha,
                          appear=ln["appear"])
         elif lay == "high":
-            rm.draw_line(layer, A, ctx, ln, W / 2, H * 0.17 + rise, 72, "serif", col, "fade",
+            rm.draw_line(layer, A, ctx, ln, W / 2, H * 0.17 + rise, 72, cfg.get("lyric_font", "serif"), col, "fade",
                          weight=600, align="center", spacing=0.12, shadow=sh, alpha=alpha,
                          appear=ln["appear"])
         elif lay in ("vleft", "vright"):
             x = W * (0.14 if lay == "vleft" else 0.86)
-            rm.draw_line(layer, A, ctx, ln, x, H * 0.16 + rise, 76, "serif", col, "fade",
+            rm.draw_line(layer, A, ctx, ln, x, H * 0.16 + rise, 76, cfg.get("lyric_font", "serif"), col, "fade",
                          vertical=True, weight=600, spacing=0.12, shadow=sh, alpha=alpha,
                          appear=ln["appear"])
         # 英訳のサブタイトル
@@ -498,6 +557,15 @@ def draw_hud(layer, A, ctx, cfg):
     """左上の時計と、下部の曲名クレジット。"""
     t = ctx["t"]
     d = ImageDraw.Draw(layer)
+    labels = cfg.get("clock_labels")
+    if labels:
+        # 時計だけを出す: [[秒, "23:59"], [秒, "00:00"]] の切り替え
+        lab = [l for s, l in labels if s <= t]
+        lab = lab[-1] if lab else labels[0][1]
+        colon = ":" if (t % 1.0) < 0.6 else " "
+        a = int(225 * clamp(t / 0.8) * clamp((cfg["duration"] - t) / 0.6))
+        d.text((72, 120), lab.replace(":", colon), font=A.font("dot", 54), fill=(255, 255, 255, a))
+        return
     keys = cfg.get("clock")
     if keys:
         # [[秒, 分], ...] を直線でつないで時計を進める
@@ -641,6 +709,11 @@ class Renderer:
         for k, s in enumerate(shots[:-1]):
             if s["start"] <= t < s["end"]:
                 a = transition_head(a, shots[k + 1], t)
+        if cfg.get("film"):
+            a = film(a, fi)
+        for f0, dur in cfg.get("flashes", []):  # 指定時刻の白いフラッシュ
+            if f0 <= t < f0 + dur:
+                a = a + (255 - a) * 0.75 * (1 - (t - f0) / dur)
         layer = Image.new("RGBA", (W, H), (0, 0, 0, 0))
         draw_lyrics(layer, self.A, ctx, cfg)
         if cfg.get("hud", True):

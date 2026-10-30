@@ -162,7 +162,10 @@ class Assets:
         if k not in self._fonts:
             f = ImageFont.truetype(str(self.font_paths[key]), size)
             if weight:
-                f.set_variation_by_axes([weight])
+                try:
+                    f.set_variation_by_axes([weight])
+                except OSError:  # 可変フォントでなければ太さ指定は無視する
+                    pass
             self._fonts[k] = f
         return self._fonts[k]
 

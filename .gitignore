@@ -7,3 +7,4 @@ mv/songs/*/analysis.json
 mv/songs/*/img/
 mv/songs/*/*.mp3
 mv/songs/*/*.jpg
+mv/songs/*/*.png

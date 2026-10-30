@@ -1,0 +1,685 @@
+{
+ "title": "午前零時を越えて",
+ "artist": "Heppoko39",
+ "audio": "clip.mp3",
+ "lyrics_timed": "lyrics_timed.json",
+ "beats": "clip_beats.json",
+ "fonts": "../../fonts",
+ "duration": 21.144,
+ "lyric_offset_beats": -1,
+ "lyric_font": "klee",
+ "film": true,
+ "clock_labels": [
+  [
+   0,
+   "23:59"
+  ],
+  [
+   19.7,
+   "00:00"
+  ]
+ ],
+ "flashes": [
+  [
+   19.7,
+   0.35
+  ]
+ ],
+ "images": {
+  "board": "board.png",
+  "photo": "photo.png"
+ },
+ "marks": {
+  "dawn": 0,
+  "end_card": 999
+ },
+ "depth": {
+  "board": {
+   "src_w": 1080,
+   "blur": 14,
+   "layers": [
+    {
+     "depth": 0.35,
+     "regions": [
+      {
+       "poly": [
+        [
+         42,
+         416
+        ],
+        [
+         1037,
+         416
+        ],
+        [
+         1037,
+         1504
+        ],
+        [
+         42,
+         1504
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "depth": 0.6,
+     "regions": [
+      {
+       "ellipse": [
+        756,
+        964,
+        58,
+        64
+       ]
+      },
+      {
+       "poly": [
+        [
+         655,
+         995
+        ],
+        [
+         790,
+         985
+        ],
+        [
+         860,
+         1080
+        ],
+        [
+         880,
+         1290
+        ],
+        [
+         640,
+         1295
+        ],
+        [
+         650,
+         1090
+        ]
+       ]
+      }
+     ]
+    }
+   ],
+   "drift": {
+    "speed": 4,
+    "regions": [
+     {
+      "poly": [
+       [
+        92,
+        507
+       ],
+       [
+        1005,
+        507
+       ],
+       [
+        1005,
+        997
+       ],
+       [
+        92,
+        997
+       ]
+      ]
+     },
+     {
+      "poly": [
+       [
+        115,
+        790
+       ],
+       [
+        630,
+        790
+       ],
+       [
+        630,
+        940
+       ],
+       [
+        115,
+        940
+       ]
+      ],
+      "v": 0
+     },
+     {
+      "ellipse": [
+       357,
+       618,
+       52,
+       52
+      ],
+      "v": 0
+     }
+    ]
+   },
+   "twinkle": {
+    "count": 110,
+    "threshold": 0.55,
+    "regions": [
+     {
+      "poly": [
+       [
+        92,
+        1097
+       ],
+       [
+        640,
+        1097
+       ],
+       [
+        640,
+        1312
+       ],
+       [
+        92,
+        1312
+       ]
+      ]
+     },
+     {
+      "poly": [
+       [
+        880,
+        1097
+       ],
+       [
+        1005,
+        1097
+       ],
+       [
+        1005,
+        1312
+       ],
+       [
+        880,
+        1312
+       ]
+      ]
+     }
+    ]
+   },
+   "glow": [
+    0.331,
+    0.322
+   ]
+  },
+  "photo": {
+   "src_w": 1100,
+   "blur": 16,
+   "layers": [
+    {
+     "depth": 0.35,
+     "regions": [
+      {
+       "poly": [
+        [
+         0,
+         640
+        ],
+        [
+         1100,
+         640
+        ],
+        [
+         1100,
+         1110
+        ],
+        [
+         0,
+         1110
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "depth": 0.8,
+     "regions": [
+      {
+       "poly": [
+        [
+         0,
+         930
+        ],
+        [
+         1100,
+         890
+        ],
+        [
+         1100,
+         1110
+        ],
+        [
+         0,
+         1110
+        ]
+       ]
+      }
+     ]
+    },
+    {
+     "depth": 0.85,
+     "regions": [
+      {
+       "ellipse": [
+        800,
+        550,
+        72,
+        80
+       ]
+      },
+      {
+       "poly": [
+        [
+         680,
+         590
+        ],
+        [
+         820,
+         565
+        ],
+        [
+         900,
+         620
+        ],
+        [
+         950,
+         760
+        ],
+        [
+         960,
+         940
+        ],
+        [
+         650,
+         950
+        ],
+        [
+         660,
+         760
+        ]
+       ]
+      }
+     ]
+    }
+   ],
+   "drift": {
+    "speed": 5,
+    "regions": [
+     {
+      "poly": [
+       [
+        0,
+        0
+       ],
+       [
+        1100,
+        0
+       ],
+       [
+        1100,
+        600
+       ],
+       [
+        0,
+        600
+       ]
+      ]
+     },
+     {
+      "poly": [
+       [
+        40,
+        350
+       ],
+       [
+        640,
+        350
+       ],
+       [
+        640,
+        510
+       ],
+       [
+        40,
+        510
+       ]
+      ],
+      "v": 0
+     },
+     {
+      "ellipse": [
+       320,
+       134,
+       65,
+       65
+      ],
+      "v": 0
+     }
+    ]
+   },
+   "twinkle": {
+    "count": 150,
+    "threshold": 0.55,
+    "regions": [
+     {
+      "poly": [
+       [
+        0,
+        700
+       ],
+       [
+        650,
+        700
+       ],
+       [
+        650,
+        960
+       ],
+       [
+        0,
+        960
+       ]
+      ]
+     },
+     {
+      "poly": [
+       [
+        960,
+        700
+       ],
+       [
+        1100,
+        700
+       ],
+       [
+        1100,
+        960
+       ],
+       [
+        960,
+        960
+       ]
+      ]
+     }
+    ]
+   },
+   "glow": [
+    0.291,
+    0.121
+   ]
+  }
+ },
+ "lines": [
+  {
+   "layout": "high",
+   "en": "there's nothing here, yet there's something"
+  },
+  {
+   "layout": "vright",
+   "en": "I keep walking with that feeling"
+  },
+  {
+   "layout": "high",
+   "en": "even these nameless days"
+  },
+  {
+   "layout": "vleft",
+   "en": "aren't so bad after all, are they"
+  },
+  {
+   "layout": "high",
+   "en": "no money, and my dreams are vague"
+  },
+  {
+   "layout": "high",
+   "en": "but I still get hungry, it seems"
+  },
+  {
+   "layout": "high",
+   "en": "laughing through the days I can't laugh"
+  },
+  {
+   "layout": "high",
+   "en": "I cross over midnight",
+   "hold": 1.0
+  }
+ ],
+ "shots": [
+  {
+   "image": "board",
+   "kind": "single",
+   "start": 0.0,
+   "from": [
+    0.5,
+    0.5,
+    1.0
+   ],
+   "to": [
+    0.5,
+    0.47,
+    1.18
+   ],
+   "par": [
+    20,
+    0
+   ],
+   "rays": 0,
+   "glow_amt": 0.05,
+   "glow_color": [
+    255,
+    245,
+    220
+   ],
+   "dust": 0.25,
+   "bokeh": 0.2
+  },
+  {
+   "image": "photo",
+   "kind": "single",
+   "start": 2.4,
+   "from": [
+    0.3,
+    0.14,
+    2.4
+   ],
+   "to": [
+    0.33,
+    0.17,
+    2.1
+   ],
+   "par": [
+    30,
+    0
+   ],
+   "trans_in": "zoom",
+   "trans_in_dur": 0.5,
+   "rays": 0,
+   "glow_amt": 0.1,
+   "glow_color": [
+    255,
+    245,
+    220
+   ],
+   "dust": 0.25,
+   "bokeh": 0.2
+  },
+  {
+   "image": "photo",
+   "kind": "single",
+   "start": 5.0,
+   "from": [
+    0.22,
+    0.7,
+    2.0
+   ],
+   "to": [
+    0.38,
+    0.7,
+    1.9
+   ],
+   "par": [
+    -40,
+    0
+   ],
+   "trans_in": "focus",
+   "trans_in_dur": 0.5,
+   "rays": 0,
+   "glow_amt": 0.05,
+   "dust": 0.25,
+   "bokeh": 0.25
+  },
+  {
+   "image": "photo",
+   "kind": "single",
+   "start": 7.5,
+   "from": [
+    0.74,
+    0.6,
+    1.9
+   ],
+   "to": [
+    0.73,
+    0.58,
+    2.2
+   ],
+   "par": [
+    25,
+    0
+   ],
+   "trans_in": "focus",
+   "trans_in_dur": 0.5,
+   "rays": 0,
+   "glow_amt": 0.05,
+   "dust": 0.25,
+   "bokeh": 0.2
+  },
+  {
+   "image": "photo",
+   "kind": "single",
+   "start": 9.95,
+   "from": [
+    0.5,
+    0.55,
+    1.05
+   ],
+   "to": [
+    0.5,
+    0.5,
+    1.15
+   ],
+   "par": [
+    35,
+    0
+   ],
+   "trans_in": "focus",
+   "trans_in_dur": 0.5,
+   "rays": 0,
+   "glow_amt": 0.08,
+   "glow_color": [
+    255,
+    245,
+    220
+   ],
+   "dust": 0.25,
+   "bokeh": 0.2
+  },
+  {
+   "image": "photo",
+   "kind": "single",
+   "start": 12.75,
+   "from": [
+    0.85,
+    0.72,
+    2.0
+   ],
+   "to": [
+    0.78,
+    0.7,
+    1.8
+   ],
+   "par": [
+    -30,
+    0
+   ],
+   "trans_in": "focus",
+   "trans_in_dur": 0.5,
+   "rays": 0,
+   "glow_amt": 0.05,
+   "dust": 0.25,
+   "bokeh": 0.3
+  },
+  {
+   "image": "photo",
+   "kind": "single",
+   "start": 15.1,
+   "from": [
+    0.72,
+    0.62,
+    1.6
+   ],
+   "to": [
+    0.45,
+    0.25,
+    1.35
+   ],
+   "par": [
+    20,
+    10
+   ],
+   "trans_in": "focus",
+   "trans_in_dur": 0.5,
+   "rays": 0,
+   "glow_amt": 0.1,
+   "glow_color": [
+    255,
+    245,
+    220
+   ],
+   "dust": 0.25,
+   "bokeh": 0.08
+  },
+  {
+   "image": "board",
+   "kind": "single",
+   "start": 17.6,
+   "from": [
+    0.5,
+    0.47,
+    1.5
+   ],
+   "to": [
+    0.5,
+    0.5,
+    1.0
+   ],
+   "par": [
+    -20,
+    0
+   ],
+   "trans_in": "whiteout",
+   "trans_in_dur": 0.5,
+   "rays": 0,
+   "glow_amt": 0.08,
+   "glow_color": [
+    255,
+    245,
+    220
+   ],
+   "lights_up": [
+    18.3,
+    20.2
+   ],
+   "dust": 0.3,
+   "bokeh": 0.3
+  }
+ ]
+}

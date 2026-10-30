@@ -8,7 +8,8 @@ for p in ofl/delagothicone/DelaGothicOne-Regular.ttf \
          "ofl/notoserifjp/NotoSerifJP%5Bwght%5D.ttf" \
          ofl/dotgothic16/DotGothic16-Regular.ttf \
          ofl/rampartone/RampartOne-Regular.ttf \
-         ofl/reggaeone/ReggaeOne-Regular.ttf; do
+         ofl/reggaeone/ReggaeOne-Regular.ttf \
+         ofl/kleeone/KleeOne-SemiBold.ttf; do
   f="fonts/$(basename "$p")"
   [ -f "$f" ] || curl -sSfL -o "$f" "https://raw.githubusercontent.com/google/fonts/main/$p"
 done
