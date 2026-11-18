@@ -133,6 +133,31 @@ const SCENES = {
     return s;
   },
 
+  // いいね＆保存のお願い（途中に挟む）
+  save(lt, t) {
+    const heart = 'M0 40 C-80 -10 -70 -90 0 -50 C70 -90 80 -10 0 40 Z';
+    const mark = 'M-48 -70 L48 -70 L48 70 L0 35 L-48 70 Z';
+    const tapH = 1.0, tapS = 2.0;
+    const hOn = lt > tapH, sOn = lt > tapS;
+    const beat = (on, at0) => on ? 1 + 0.25 * Math.sin(prog(lt, at0, at0 + 0.35) * Math.PI) : 1;
+    let s = g(`translate(540 150) scale(${pop(lt, 0)}) rotate(-2)`, marker(0, 0, 640, 110, C.pink) + hand(0, 4, 'あとで見返せる！', 72));
+    s += g(`translate(310 470) scale(${pop(lt, 0.15) * 2.3 * beat(hOn, tapH)})`, path(heart, hOn ? C.red : C.white, 4));
+    s += g(`translate(770 470) scale(${pop(lt, 0.4) * 2.1 * beat(sOn, tapS)})`, path(mark, sOn ? C.yellow : C.white, 4));
+    s += g(`translate(310 740) scale(${pop(lt, 0.3)})`, hand(0, 0, 'いいね', 72, hOn ? C.red : INK));
+    s += g(`translate(770 740) scale(${pop(lt, 0.55)})`, hand(0, 0, '保存', 72, sOn ? '#c99a12' : INK));
+    if (hOn) s += sparkle(170, 330, 0.7 * pop(lt, tapH)) + sparkle(450, 360, 0.5 * pop(lt, tapH + 0.1));
+    if (sOn) s += sparkle(640, 330, 0.6 * pop(lt, tapS)) + sparkle(910, 360, 0.7 * pop(lt, tapS + 0.1));
+    // タップする指
+    if (lt > 0.6 && lt < 3.0) {
+      const x = lt < 1.5 ? 310 : lerp(310, 770, easeInOut(prog(lt, 1.3, 1.85)));
+      const press = (a) => Math.max(0, 1 - Math.abs(lt - a) / 0.15) * 25;
+      const y = 560 + press(tapH) + press(tapS);
+      s += g(at(x + 40, y, 1, -15),
+        rect(-24, 0, 48, 120, C.skin, 24, 5) + rect(-60, 90, 120, 130, C.skin, 40, 5) + path('M-24 40 L24 40', 'none', 3));
+    }
+    return s;
+  },
+
   cta(lt, t) {
     let s = g(`translate(540 330) scale(${pop(lt, 0)}) rotate(-3)`,
       hand(0, -60, 'フォローして', 96, INK) + hand(0, 70, '用語をスッキリ！', 110, C.red));

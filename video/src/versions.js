@@ -58,6 +58,21 @@ const VERSIONS = {
   },
 };
 
+// 指定時刻に「いいね＆保存」の場面を差し込み、以降を後ろへずらす
+function insertBeat(V, at0, dur, caption) {
+  V.duration += dur;
+  V.scenes.forEach((sc) => { if (sc.from >= at0) sc.from += dur; if (sc.to >= at0) sc.to += dur; });
+  const prev = V.scenes.find((sc) => sc.to === at0 + dur);
+  if (prev) prev.to = at0;
+  V.scenes.push({ from: at0, to: at0 + dur, draw: SCENES.save, name: 'save' });
+  V.scenes.sort((a, b) => a.from - b.from);
+  V.captions.forEach((c) => { if (c[0] >= at0) { c[0] += dur; c[1] += dur; } });
+  V.captions.push([at0, at0 + dur, ...caption]);
+  V.captions.sort((a, b) => a[0] - b[0]);
+}
+insertBeat(VERSIONS.a, 24, 3.5, ['あとで見返せるように\n{p:いいね}と{y:保存}を忘れずに！']);
+insertBeat(VERSIONS.b, 26, 3.5, ['あとで見返せるように\n{p:いいね}と{y:保存}を忘れずにね！', 'b', 'point']);
+
 const NAMES = { g: ['ばあちゃん', '#a487c9'], b: ['ソラ', '#5fa8d8'] };
 
 function renderAt(v, t) {
