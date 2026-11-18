@@ -70,15 +70,34 @@ function insertBeat(V, at0, dur, caption) {
   V.captions.push([at0, at0 + dur, ...caption]);
   V.captions.sort((a, b) => a[0] - b[0]);
 }
-insertBeat(VERSIONS.a, 9.5, 3.5, ['あとで見返せるように\n{p:いいね}と{y:保存}を忘れずに！']);
-insertBeat(VERSIONS.b, 11, 3.5, ['あとで見返せるように\n{p:いいね}と{y:保存}を忘れずにね！', 'b', 'point']);
+// 直前のシーンを延長して字幕を足す（RAM / ROM の補足用）
+function extendBeat(V, at0, dur, caps) {
+  V.duration += dur;
+  V.scenes.forEach((sc) => { if (sc.from >= at0) sc.from += dur; if (sc.to >= at0) sc.to += dur; });
+  V.captions.forEach((c) => { if (c[0] >= at0) { c[0] += dur; c[1] += dur; } });
+  let tt = at0;
+  caps.forEach(([d, ...rest]) => { V.captions.push([tt, tt + d, ...rest]); tt += d; });
+  V.captions.sort((a, b) => a[0] - b[0]);
+}
+extendBeat(VERSIONS.a, 9.5, 3.5, [[3.5, 'スペック表では\n{y:RAM}・{c:ROM}と書かれることも']]);
+VERSIONS.a.noteAt = 5.0;
+extendBeat(VERSIONS.b, 11, 7, [
+  [3.0, 'スマホ屋さんで見た\n{y:RAM}と{c:ROM}ってこれかい？', 'g', 'q'],
+  [4.0, 'そう！お店ではストレージを\n{c:ROM}って書くことが多いんだ', 'b', 'point'],
+]);
+VERSIONS.b.noteAt = 5.4;
+
+insertBeat(VERSIONS.a, 13, 3.5, ['あとで見返せるように\n{p:いいね}と{y:保存}を忘れずに！']);
+insertBeat(VERSIONS.b, 18, 3.5, ['あとで見返せるように\n{p:いいね}と{y:保存}を忘れずにね！', 'b', 'point']);
 
 let HAND = null;
+let NOTE_AT = 99;
 const NAMES = { g: ['ばあちゃん', '#a487c9'], b: ['ソラ', '#5fa8d8'] };
 
 function renderAt(v, t) {
   const V = VERSIONS[v];
   HAND = null;
+  NOTE_AT = V.noteAt;
   const st = V.stage;
   let ill = g(`translate(${st.tx} ${st.ty}) scale(${st.s})`, sceneTransition(V.scenes, t));
   // 手の素材の位置（舞台座標 → 画面座標）

@@ -30,6 +30,12 @@ const SCENES = {
       g('translate(-160 -330)', bookshelf(0, 0, 320, 400, 3, 1)) +
       marker(0, 210, 330, 80, '#9be3e8') + hand(0, 212, 'ストレージ', 64) + hand(0, 310, '＝ 本棚', 64));
     s += g(`translate(540 470) scale(${pop(lt, 1.8)})`, hand(0, 0, '＆', 80, C.gray));
+    // スペック表での呼び名（RAM / ROM）
+    if (lt > NOTE_AT) {
+      s += g(`translate(270 880) scale(${pop(lt, NOTE_AT)}) rotate(-3)`, rect(-120, -45, 240, 90, '#fff3c4', 45) + hand(0, 4, 'RAM', 60));
+      s += g(`translate(810 880) scale(${pop(lt, NOTE_AT + 0.3)}) rotate(3)`, rect(-120, -45, 240, 90, '#d9f4f6', 45) + hand(0, 4, 'ROM', 60));
+      s += g(`translate(810 965) scale(${pop(lt, NOTE_AT + 0.8)})`, hand(0, 0, '※ ROMの本来の意味は別物', 40, '#6b5d52'));
+    }
     return s;
   },
 
