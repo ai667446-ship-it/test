@@ -1,0 +1,3 @@
+node_modules/
+video/out/*
+!video/out/memory_storage_*.mp4

@@ -1,0 +1,30 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="../node_modules/@fontsource/yusei-magic/index.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/zen-maru-gothic/900.css">
+<style>html,body{margin:0;background:#000}#stage{width:1080px;height:1920px}#pre{position:absolute;left:-99999px;top:0;width:4000px}</style>
+</head><body>
+<div id="stage"></div>
+<div id="pre"><span id="p1" style="font-family:'Yusei Magic'"></span><span id="p2" style="font-family:'Zen Maru Gothic';font-weight:900"></span></div>
+<script src="engine.js"></script>
+<script src="scenes.js"></script>
+<script src="versions.js"></script>
+<script>
+  const params = new URLSearchParams(location.search);
+  const V = params.get('v') || 'a';
+  window.draw = (t) => { document.getElementById('stage').innerHTML = renderAt(V, t); };
+  window.prepareFonts = async () => {
+    let txt = allText();
+    const D = VERSIONS[V].duration;
+    for (let t = 0; t < D; t += 0.5) { draw(t); txt += document.querySelector('#stage svg').textContent; }
+    document.getElementById('p1').textContent = txt;
+    document.getElementById('p2').textContent = txt;
+    await document.fonts.ready;
+    await new Promise(r => setTimeout(r, 300));
+    await document.fonts.ready;
+    return [...document.fonts].filter(f => f.status === 'loaded').length;
+  };
+  window.meta = () => ({ duration: VERSIONS[V].duration, cues: VERSIONS[V].captions.map(c => c[0]), scenes: VERSIONS[V].scenes.map(s => s.from) });
+  draw(Number(params.get('t') || 0));
+</script>
+</body></html>
