@@ -25,7 +25,7 @@ const VERSIONS = {
       [37.5, 41.0, '{y:メモリ}＝作業の{y:サクサク}さ\n{c:ストレージ}＝保存できる{c:量}'],
       [41.0, 44.0, 'これで店員さんの話も\n{g:こわくない！}'],
     ],
-    stage: 'translate(0 150)',
+    stage: { tx: 0, ty: 150, s: 1 },
     capY: 1420,
   },
 
@@ -53,7 +53,7 @@ const VERSIONS = {
       [40.0, 44.0, '机は{y:広さ}、本棚は{c:大きさ}\nってことだね', 'g', 'happy'],
       [44.0, 46.5, '{g:ばっちり！}', 'b'],
     ],
-    stage: 'translate(97 70) scale(0.82)',
+    stage: { tx: 97, ty: 70, s: 0.82 },
     capY: 1555,
   },
 };
@@ -70,14 +70,19 @@ function insertBeat(V, at0, dur, caption) {
   V.captions.push([at0, at0 + dur, ...caption]);
   V.captions.sort((a, b) => a[0] - b[0]);
 }
-insertBeat(VERSIONS.a, 24, 3.5, ['あとで見返せるように\n{p:いいね}と{y:保存}を忘れずに！']);
-insertBeat(VERSIONS.b, 26, 3.5, ['あとで見返せるように\n{p:いいね}と{y:保存}を忘れずにね！', 'b', 'point']);
+insertBeat(VERSIONS.a, 9.5, 3.5, ['あとで見返せるように\n{p:いいね}と{y:保存}を忘れずに！']);
+insertBeat(VERSIONS.b, 11, 3.5, ['あとで見返せるように\n{p:いいね}と{y:保存}を忘れずにね！', 'b', 'point']);
 
+let HAND = null;
 const NAMES = { g: ['ばあちゃん', '#a487c9'], b: ['ソラ', '#5fa8d8'] };
 
 function renderAt(v, t) {
   const V = VERSIONS[v];
-  let ill = g(V.stage, sceneTransition(V.scenes, t));
+  HAND = null;
+  const st = V.stage;
+  let ill = g(`translate(${st.tx} ${st.ty}) scale(${st.s})`, sceneTransition(V.scenes, t));
+  // 手の素材の位置（舞台座標 → 画面座標）
+  if (HAND) HAND = { ...HAND, x: st.tx + HAND.x * st.s, y: st.ty + HAND.y * st.s, s: HAND.s * st.s };
   let overlay = '';
   const cap = V.captions.find((c) => t >= c[0] && t < c[1]);
 

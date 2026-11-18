@@ -147,13 +147,16 @@ const SCENES = {
     s += g(`translate(770 740) scale(${pop(lt, 0.55)})`, hand(0, 0, '保存', 72, sOn ? '#c99a12' : INK));
     if (hOn) s += sparkle(170, 330, 0.7 * pop(lt, tapH)) + sparkle(450, 360, 0.5 * pop(lt, tapH + 0.1));
     if (sOn) s += sparkle(640, 330, 0.6 * pop(lt, tapS)) + sparkle(910, 360, 0.7 * pop(lt, tapS + 0.1));
-    // タップする指
-    if (lt > 0.6 && lt < 3.0) {
-      const x = lt < 1.5 ? 310 : lerp(310, 770, easeInOut(prog(lt, 1.3, 1.85)));
-      const press = (a) => Math.max(0, 1 - Math.abs(lt - a) / 0.15) * 25;
-      const y = 560 + press(tapH) + press(tapS);
-      s += g(at(x + 40, y, 1, -15),
-        rect(-24, 0, 48, 120, C.skin, 24, 5) + rect(-60, 90, 120, 130, C.skin, 40, 5) + path('M-24 40 L24 40', 'none', 3));
+    // タップする手（素材画像は HTML 側で重ねる。ここでは位置だけ決める）
+    if (lt > 0.5 && lt < 3.2) {
+      const enter = easeOut(prog(lt, 0.5, 0.9));
+      const x = lt < 1.5 ? lerp(520, 310, enter) : lerp(310, 770, easeInOut(prog(lt, 1.3, 1.85)));
+      const yBase = lt < 1.5 ? lerp(780, 500, enter) : 500;
+      const press = (a) => Math.max(0, 1 - Math.abs(lt - a) / 0.15);
+      const pr = Math.max(press(tapH), press(tapS));
+      HAND = { x, y: yBase + pr * 18, s: 0.42 * (1 - pr * 0.08), rot: -8,
+        opacity: clamp(prog(lt, 0.5, 0.7)) * (1 - prog(lt, 2.9, 3.2)),
+        marks: (lt > tapH && lt < tapH + 0.45) || (lt > tapS && lt < tapS + 0.45) };
     }
     return s;
   },

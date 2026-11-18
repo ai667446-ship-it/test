@@ -5,6 +5,7 @@
 <style>html,body{margin:0;background:#000}#stage{width:1080px;height:1920px}#pre{position:absolute;left:-99999px;top:0;width:4000px}</style>
 </head><body>
 <div id="stage"></div>
+<img id="hand" src="../assets/hand_point.png" style="position:absolute;left:0;top:0;transform-origin:255px 222px;display:none">
 <div id="pre"><span id="p1" style="font-family:'Yusei Magic'"></span><span id="p2" style="font-family:'Zen Maru Gothic';font-weight:900"></span></div>
 <script src="engine.js"></script>
 <script src="scenes.js"></script>
@@ -12,7 +13,17 @@
 <script>
   const params = new URLSearchParams(location.search);
   const V = params.get('v') || 'a';
-  window.draw = (t) => { document.getElementById('stage').innerHTML = renderAt(V, t); };
+  const handEl = document.getElementById('hand');
+  window.draw = (t) => {
+    document.getElementById('stage').innerHTML = renderAt(V, t);
+    if (HAND && HAND.opacity > 0) {
+      handEl.style.display = 'block';
+      handEl.style.opacity = HAND.opacity;
+      // 指先 (255,222) を (x,y) に合わせる。タップの瞬間だけ上のオレンジの印を見せる
+      handEl.style.transform = `translate(${HAND.x - 255}px, ${HAND.y - 222}px) rotate(${HAND.rot}deg) scale(${HAND.s})`;
+      handEl.style.clipPath = HAND.marks ? 'none' : 'inset(180px 0 0 0)';
+    } else handEl.style.display = 'none';
+  };
   window.prepareFonts = async () => {
     let txt = allText();
     const D = VERSIONS[V].duration;
@@ -21,6 +32,7 @@
     document.getElementById('p2').textContent = txt;
     await document.fonts.ready;
     await new Promise(r => setTimeout(r, 300));
+    await handEl.decode();
     await document.fonts.ready;
     return [...document.fonts].filter(f => f.status === 'loaded').length;
   };
