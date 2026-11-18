@@ -124,7 +124,7 @@ const SCENES = {
   summary(lt, t) {
     let s = g(`translate(540 500) scale(${pop(lt, 0)})`,
       rect(-470, -440, 940, 900, C.white, 36) +
-      marker(0, -360, 300, 100, C.yellow) + hand(0, -356, 'まとめ', 76) +
+      rect(-330, -408, 660, 100, C.blue, 50) + hand(0, -356, 'No.001 メモリとストレージ', 52, C.white) +
       // 1 行目
       g(`translate(-300 -150) scale(0.55)`, desk(-190, 40, 380, 100) + appWindow(-150, -100, 150, 140, C.red, 'ブラウザ') + appWindow(20, -90, 140, 130, C.green, 'LINE')) +
       hand(-120, -200, 'メモリ（机）', 60, INK, 'start') +
@@ -169,12 +169,13 @@ const SCENES = {
 
   cta(lt, t) {
     let s = g(`translate(540 330) scale(${pop(lt, 0)}) rotate(-3)`,
-      hand(0, -60, 'フォローして', 96, INK) + hand(0, 70, '用語をスッキリ！', 110, C.red));
+      hand(0, -60, 'フォローして', 96, INK) + hand(0, 70, '図鑑を集めよう！', 110, C.red));
     s += g(`translate(540 720) scale(${pop(lt, 0.6)})`,
       rect(-380, -130, 760, 260, C.white, 30) +
-      rect(-340, -165, 180, 70, C.blue, 35) + hand(-250, -128, '次回', 46, C.white) +
+      rect(-340, -165, 320, 70, C.blue, 35) + hand(-180, -128, '次回 No.002', 46, C.white) +
       hand(0, 20, 'キャッシュってなに？', 70));
     s += sparkle(170, 200, 0.8 * pop(lt, 0.9)) + sparkle(920, 470, 0.6 * pop(lt, 1.1));
+    s += g(`translate(0 0) scale(${pop(lt, 1.0)})`, '', '');
     return s;
   },
 };

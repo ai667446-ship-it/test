@@ -52,6 +52,7 @@ const VERSIONS = {
       [36.0, 40.0, '机の上は{r:片づく（消える）}けど\n本棚は{c:そのまま}', 'b', 'point'],
       [40.0, 44.0, '机は{y:広さ}、本棚は{c:大きさ}\nってことだね', 'g', 'happy'],
       [44.0, 46.5, '{g:ばっちり！}', 'b'],
+      [46.5, 50.0, '次は{c:キャッシュ}！\nフォローして図鑑を集めてね', 'b', 'point'],
     ],
     stage: { tx: 97, ty: 70, s: 0.82 },
     capY: 1555,
@@ -113,6 +114,8 @@ function renderAt(v, t) {
     ill += boy(850 + (1 - enter) * 300, 1060, 0.9, sp === 'b', t, sp === 'b' ? mood : 'normal');
     // 床の線
     ill += path('M40 1305 Q540 1290 1040 1305', 'none', 5);
+    // 2人の間に図鑑（シリーズ番号）
+    ill += zukanBook(540, 1300, 0.95 * enter);
     if (cap && cap[3]) {
       const [nm, col] = NAMES[cap[3]];
       const x = cap[3] === 'g' ? 230 : 850;

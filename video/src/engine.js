@@ -119,6 +119,19 @@ function poof(x, y, p) {
   return `<g opacity="${1 - p}">${s}</g>`;
 }
 
+// アイコンと同じ青い図鑑（x,y = 底辺の中央）
+function zukanBook(x, y, s, no = 'No.001') {
+  return g(at(x, y, s),
+    rect(-85, -255, 190, 250, '#fffdf7', 16, 6) +
+    rect(-100, -265, 190, 250, C.blue, 16, 6) +
+    rect(-100, -265, 26, 250, '#3f86b8', 10, 6) +
+    text(0, 0, 1, '', INK) +
+    `<text x="8" y="-190" font-family="Yusei Magic" font-size="44" fill="#fff" text-anchor="middle" dominant-baseline="middle">ことば</text>` +
+    `<text x="8" y="-128" font-family="Yusei Magic" font-size="54" fill="#fff" text-anchor="middle" dominant-baseline="middle">図鑑</text>` +
+    rect(-55, -80, 130, 44, C.yellow, 22, 5) +
+    `<text x="10" y="-57" font-family="Yusei Magic" font-size="30" fill="${INK}" text-anchor="middle" dominant-baseline="middle">${no}</text>`);
+}
+
 // ---------- キャラクター（B版） ----------
 // talk: 話している最中か / t: 時刻
 function mouth(talking, t, w = 26) {
