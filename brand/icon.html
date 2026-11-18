@@ -1,0 +1,70 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="../video/node_modules/@fontsource/yusei-magic/index.css">
+<link rel="stylesheet" href="../video/node_modules/@fontsource/zen-maru-gothic/900.css">
+<style>html,body{margin:0}#s{width:1024px;height:1024px}</style></head><body>
+<div id="s"></div>
+<script src="../video/src/engine.js"></script>
+<script>
+const S = 1024;
+const defs = `<defs>
+  <filter id="crayon" x="-5%" y="-5%" width="110%" height="110%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="3" result="warp"/>
+    <feDisplacementMap in="SourceGraphic" in2="warp" scale="8" xChannelSelector="R" yChannelSelector="G" result="wob"/>
+    <feTurbulence type="fractalNoise" baseFrequency="0.75" numOctaves="2" seed="7" result="grain"/>
+    <feColorMatrix in="grain" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  3.2 0 0 0 -0.75" result="grainA"/>
+    <feComposite in="wob" in2="grainA" operator="in"/>
+  </filter>
+  <filter id="paper"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="2"/>
+    <feColorMatrix type="matrix" values="0 0 0 0 0.45  0 0 0 0 0.38  0 0 0 0 0.3  0 0 0 0.10 0"/></filter>
+</defs>`;
+const T = (x, y, str, size, fill = INK, font = 'Yusei Magic', w = 400) =>
+  `<text x="${x}" y="${y}" font-family="${font}" font-weight="${w}" font-size="${size}" fill="${fill}" text-anchor="middle" dominant-baseline="middle">${str}</text>`;
+const phone = (x, y, s) => g(at(x, y, s), rect(-55, -95, 110, 190, '#5a6070', 22, 6) + rect(-42, -75, 84, 140, '#dff1fb', 8, 4) + circle(0, 80, 6, '#dff1fb', 3));
+
+// 案1：図鑑の表紙
+function cover() {
+  return `<rect width="${S}" height="${S}" fill="#bfe3f2"/>` + `<rect width="${S}" height="${S}" filter="url(#paper)"/>` +
+  `<g filter="url(#crayon)">` + g('rotate(-6 512 512)',
+    rect(250, 190, 560, 690, '#fffdf7', 30, 7) +                       // ページの厚み
+    path('M800 230 L800 860 M780 230 L780 870', 'none', 3) +
+    rect(215, 160, 560, 690, C.blue, 30, 8) +                           // 表紙
+    rect(215, 160, 70, 690, '#3f86b8', 20, 8) +                         // 背
+    rect(320, 230, 380, 90, C.yellow, 45, 6) + T(510, 278, 'デジタル', 64) +
+    T(510, 430, 'ことば', 150, C.white) +
+    path('M330 520 L690 520', 'none', 5) +
+    T(510, 640, '図鑑', 190, C.white) +
+    phone(690, 760, 0.6)
+  ) + sparkle(820, 190, 1.1) + sparkle(190, 860, 0.8, C.pink) + `</g>`;
+}
+// 案2：飛び出す図鑑（開いた本からスマホとPC）
+function popup() {
+  return `<rect width="${S}" height="${S}" fill="#f8e7b5"/>` + `<rect width="${S}" height="${S}" filter="url(#paper)"/>` +
+  `<g filter="url(#crayon)">` +
+    laptop(600, 470, 0.85, T(0, -30, 'GB', 90, C.blue, 'Zen Maru Gothic', 900)) +
+    phone(350, 430, 1.25) +
+    path('M200 700 Q350 640 512 700 Q674 640 824 700 L824 800 Q674 740 512 800 Q350 740 200 800 Z', '#fffdf7', 8) +
+    path('M512 700 L512 800', 'none', 6) +
+    path('M180 720 Q350 670 512 730 Q674 670 844 720 L844 830 Q674 780 512 840 Q350 780 180 830 Z', C.red, 8) +
+    path('M512 700 L512 800', 'none', 6) +
+    rect(330, 850, 364, 86, C.white, 43, 6) + T(512, 895, 'ことば図鑑', 60) +
+    sparkle(220, 230, 1) + sparkle(820, 250, 0.8, C.blue) + sparkle(860, 560, 0.6, C.pink) + `</g>`;
+}
+// 案3：虫めがね × 図鑑（シンプル、小さくても判別しやすい）
+function lens() {
+  return `<rect width="${S}" height="${S}" fill="#cdeccf"/>` + `<rect width="${S}" height="${S}" filter="url(#paper)"/>` +
+  `<g filter="url(#crayon)">` + g('rotate(-4 512 512)',
+    rect(260, 210, 470, 600, '#fffdf7', 26, 7) +
+    rect(230, 185, 470, 600, C.orange, 26, 8) +
+    rect(230, 185, 60, 600, '#d97a2c', 18, 8) +
+    T(495, 300, 'ことば', 96, C.white) + T(495, 420, '図鑑', 120, C.white)) +
+    // 虫めがね
+    g(at(560, 610, 1), `<line x1="120" y1="120" x2="230" y2="230" stroke="${INK}" stroke-width="56" stroke-linecap="round"/><line x1="120" y1="120" x2="230" y2="230" stroke="#8b5a35" stroke-width="40" stroke-linecap="round"/>` +
+      circle(0, 0, 165, '#e9f6fc', 14) + T(0, 0, 'GB', 120, C.blue, 'Zen Maru Gothic', 900) +
+      path('M-100 -60 Q-80 -110 -30 -125', 'none', 10)) +
+    sparkle(830, 200, 0.9) + sparkle(180, 880, 0.7, C.pink) + `</g>`;
+}
+const V = { cover, popup, lens };
+window.show = (k) => { document.getElementById('s').innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="${S}" height="${S}">${defs}${V[k]()}</svg>`; };
+window.prep = async () => { for (const k in V) { show(k); } document.body.insertAdjacentHTML('beforeend', `<div style="position:absolute;left:-9999px"><span style="font-family:'Yusei Magic'">デジタルことば図鑑GB</span><span style="font-family:'Zen Maru Gothic';font-weight:900">GB</span></div>`); await document.fonts.ready; await new Promise(r => setTimeout(r, 300)); };
+</script></body></html>
