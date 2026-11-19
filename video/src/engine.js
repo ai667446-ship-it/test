@@ -191,7 +191,7 @@ function captionSVG(str, cx, cy, size, t0, t, opts = {}) {
   const lines = str.split('\n');
   // 一番長い行が幅 1000px に収まるよう自動縮小
   const em = (line) => { let w = 0; line.replace(/\{(\w):([^}]*)\}|([^{]+)/g, (m, k, hl, pl) => { const f = (x) => [...x].reduce((a, ch) => a + (ch.charCodeAt(0) < 256 ? 0.6 : 1), 0); w += hl ? f(hl) * 1.22 : f(pl); return ''; }); return w; };
-  size = Math.min(size, 1000 / Math.max(...lines.map(em)) / 1.05);
+  size = Math.min(size, (opts.maxW || 1000) / Math.max(...lines.map(em)) / 1.05);
   const lh = size * 1.32;
   const sc = 0.86 + 0.14 * easeBack(prog(t, t0, t0 + 0.28));
   let out = '';
