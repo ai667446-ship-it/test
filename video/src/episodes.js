@@ -578,3 +578,199 @@ VERSIONS.g4v = Object.assign({}, VERSIONS.g4, {
 VERSIONS.w5v = Object.assign({}, VERSIONS.w5, {
   captions: VERSIONS.w5.captions.map((c, i) => i === 1 ? [c[0], c[1], 'この動画で{c:Wi-Fi}と{y:モバイル通信}の\n違いがわかります'] : c),
 });
+
+// ======================================================================
+// No.006 クラウド / No.007 二段階認証（ナレーション前提のショート形式）
+// ======================================================================
+const warehouse = (x, y, s) => g(at(x, y, s),
+  rect(-170, -60, 340, 200, '#e9edf2', 10) + path('M-195 -50 L0 -170 L195 -50 Z', '#9aa6b1', 8) +
+  rect(-110, 10, 220, 130, '#c9d1d9', 6, 6) + [0, 1, 2, 3].map((i) => path(`M-110 ${40 + i * 28} L110 ${40 + i * 28}`, 'none', 4)).join('') +
+  rect(-70, -120, 140, 44, C.white, 10, 5) + hand(0, -97, '倉庫', 32));
+const photo = (x, y, s, col = C.blue, r = 0) => g(at(x, y, s, r),
+  rect(-50, -40, 100, 80, C.white, 6, 5) + path('M-38 26 L-12 -2 L8 16 L22 4 L38 26 Z', col, 4) + circle(24, -18, 8, C.yellow, 3));
+const gauge = (x, y, w, fill, label) => g(`translate(${x} ${y})`,
+  rect(-w / 2, -32, w, 64, C.white, 32) + `<rect x="${-w / 2 + 8}" y="-24" width="${(w - 16) * fill}" height="48" rx="24" fill="${fill > 0.8 ? C.red : C.green}"/>` +
+  rect(-w / 2, -32, w, 64, 'none', 32) + (label ? hand(-w / 2 - 20, 2, label, 40, INK, 'end') : ''));
+const door = (x, y, s, open = 0) => g(at(x, y, s),
+  rect(-130, -230, 260, 460, '#e9d8bf', 12) + g(`translate(-110 0) scale(${1 - open * 0.7} 1) translate(110 0)`,
+    rect(-110, -210, 220, 420, '#a8723f', 10) + circle(70, 20, 14, C.yellow, 5) + rect(55, 50, 30, 50, '#5a4030', 6, 4)));
+const keyIcon = (x, y, s, r = 0, col = C.yellow) => g(at(x, y, s, r),
+  circle(-40, 0, 30, col, 7) + circle(-40, 0, 10, C.paper, 4) + rect(-12, -10, 100, 20, col, 6, 6) + rect(55, 8, 14, 22, col, 3, 5) + rect(75, 8, 12, 16, col, 3, 5));
+const thief = (x, y, s) => g(at(x, y, s),
+  path('M-90 200 Q-90 70 0 62 Q90 70 90 200 Z', '#4a4f5c') + circle(0, -10, 72, C.skin) +
+  `<path d="M-74 -18 L74 -18 L74 10 L-74 10 Z" fill="${INK}"/>` + `<circle cx="-28" cy="-4" r="7" fill="#fff"/><circle cx="28" cy="-4" r="7" fill="#fff"/>` +
+  path('M-75 -40 Q0 -110 75 -40 Z', '#4a4f5c', 6));
+const codeBoxes = (x, y, s, code, shown = 6) => g(at(x, y, s),
+  [...code].map((ch, i) => rect(-165 + i * 56, -34, 48, 68, C.white, 8, 5) + (i < shown ? hand(-141 + i * 56, 4, ch, 46) : '')).join(''));
+
+Object.assign(SCENES, {
+  // ---------- No.006 クラウド ----------
+  cl_hook(lt, t) {
+    let s = phoneBig(400, 480, 1.25,
+      rect(-95, -170, 190, 130, '#ffe1dc', 16, 4) + hand(0, -135, 'ストレージが', 28, C.red) + hand(0, -95, 'いっぱいです', 28, C.red) +
+      [0, 1, 2, 3, 4, 5].map((i) => photo(-60 + (i % 3) * 60, 10 + Math.floor(i / 3) * 70, 0.45, BOOK_COLORS[i])).join(''));
+    s += cloud(820, 300, 0.95, 'クラウド') + hand(820, 470, '？', 110, C.red);
+    s += arrow(560, 420, 690, 360, C.gray, 8);
+    return s;
+  },
+  cl_def(lt, t) {
+    let s = g(`translate(540 90) scale(${pop(lt, 0)})`, marker(0, 0, 760, 100, '#9be3e8') + hand(0, 4, 'クラウド ＝ ネットの貸し倉庫', 58));
+    s += g(`translate(540 520) scale(${pop(lt, 0.3)})`, cloud(0, 120, 2.0, '') + warehouse(0, 40, 1.05));
+    return s;
+  },
+  cl_store(lt, t) {
+    let s = cloud(760, 450, 1.4, '') + warehouse(760, 430, 0.65) + phoneBig(260, 640, 0.95, [0, 1, 2, 3].map((i) => photo(-45 + (i % 2) * 90, -90 + Math.floor(i / 2) * 100, 0.7, BOOK_COLORS[i])).join(''));
+    for (let i = 0; i < 4; i++) {
+      const p = ((lt * 0.55 + i * 0.25) % 1);
+      s += photo(lerp(300, 740, p), lerp(560, 470, p) - Math.sin(p * Math.PI) * 100, 0.8, BOOK_COLORS[i], p * 20);
+    }
+    if (lt > 2.4) s += g(`translate(760 740) scale(${pop(lt, 2.4)})`,
+      rect(-200, -55, 400, 110, C.white, 30) + hand(0, -14, 'iCloud', 38, '#2f8fb0') + hand(0, 30, 'Googleドライブ など', 34, '#2f8fb0'));
+    return s;
+  },
+  cl_merit(lt, t) {
+    let s = cloud(540, 230, 1.5, '') + warehouse(540, 210, 0.7);
+    s += phoneBig(220, 700, 0.75, path('M-80 -150 L-10 -60 L-50 0 L30 90 L-20 170', 'none', 6) + hand(0, 40, '', 10));
+    s += g(`translate(220 430) scale(${pop(lt, 0.3)})`, hand(0, 0, 'こわれた…', 44, C.red));
+    s += g(`translate(540 470) scale(${pop(lt, 0.9)})`, check(-110, 0, 1) + hand(-60, 4, '写真は無事', 50, '#2f8f4e', 'start'));
+    if (lt > 2.4) {
+      s += laptop(820, 760, 0.6, photo(0, -20, 1.4, C.green));
+      s += arrow(620, 360, 790, 620, C.green, 8);
+      s += g(`translate(820 940) scale(${pop(lt, 2.6)})`, hand(0, 0, 'パソコンからも', 46, '#2f8f4e'));
+    }
+    return s;
+  },
+  cl_space(lt, t) {
+    const f = lerp(0.95, 0.45, easeInOut(prog(lt, 0.4, 3.2)));
+    let s = gauge(560, 140, 620, f, 'スマホ');
+    s += phoneBig(300, 620, 0.95, [0, 1, 2, 3, 4, 5].map((i) => (i < Math.round(f * 6) ? photo(-50 + (i % 2) * 100, -120 + Math.floor(i / 2) * 95, 0.65, BOOK_COLORS[i]) : '')).join(''));
+    s += cloud(800, 560, 1.2, '') + warehouse(800, 540, 0.55);
+    s += arrow(470, 560, 650, 520, C.blue, 9);
+    if (lt > 2.6) s += g(`translate(560 290) scale(${pop(lt, 2.6)})`, hand(0, 0, 'スッキリ！', 56, '#2f8f4e'));
+    return s;
+  },
+  cl_care(lt, t) {
+    let s = cloud(320, 330, 1.4, '') + warehouse(320, 310, 0.65);
+    s += gauge(320, 620, 440, 0.95, '');
+    s += g('translate(320 700)', hand(0, 0, '無料分には上限', 44, C.red));
+    if (lt > 2.4) {
+      s += g(`translate(800 450) scale(${pop(lt, 2.4)})`, keyIcon(0, 0, 1.6, -20) + hand(0, 160, 'パスワード', 50, INK));
+      s += g(`translate(800 720) scale(${pop(lt, 2.8)})`, rect(-170, -50, 340, 100, '#fff3c4', 30) + hand(0, 4, 'しっかり守る', 46, '#c97a20'));
+    }
+    return s;
+  },
+  cl_summary(lt, t) {
+    return summaryPage(lt, '006', 'クラウド', [
+      [() => cloud(0, 0, 0.42, ''), 'クラウド＝ネットの貸し倉庫', 'iCloud・Googleドライブなど', '#2f8fb0'],
+      [() => check(0, 0, 1.3), '壊れても写真は無事', 'パソコンからも見られる', '#2f8f4e'],
+      [() => keyIcon(0, 0, 0.8, -20), '無料分には上限がある', 'パスワードはしっかり守る', '#c97a20'],
+    ]);
+  },
+  cl_cta(lt, t) { return ctaPage(lt, '007', '二段階認証ってなに？'); },
+
+  // ---------- No.007 二段階認証 ----------
+  tf_hook(lt, t) {
+    let s = phoneBig(540, 470, 1.35,
+      hand(0, -160, 'ログイン', 34, '#6b5d52') + hand(0, -105, '確認コードを入力', 26) +
+      [0, 1, 2, 3, 4, 5].map((i) => rect(-90 + i * 31, -70, 25, 36, C.white, 5, 3)).join('') +
+      rect(-95, 20, 190, 110, '#e6f4e8', 16, 4) + hand(0, 50, 'SMS', 26, '#2f8f4e') + hand(0, 95, '123456', 40));
+    s += hand(870, 260, '？', 130, C.red) + hand(220, 330, '？', 100, C.orange);
+    return s;
+  },
+  tf_def(lt, t) {
+    let s = g(`translate(540 90) scale(${pop(lt, 0)})`, marker(0, 0, 680, 100, C.yellow) + hand(0, 4, '二段階認証 ＝ 鍵＋合言葉', 60));
+    s += door(540, 560, 1.0);
+    s += g(`translate(250 520) scale(${pop(lt, 0.5)})`, keyIcon(0, 0, 1.2, -25) + hand(0, 140, '① 鍵', 50));
+    s += g(`translate(840 430) scale(${pop(lt, 1.2)})`, bubble(0, 0, 1, '合言葉は？', 320) + hand(0, 250, '② 合言葉', 50));
+    return s;
+  },
+  tf_steal(lt, t) {
+    let s = door(760, 560, 1.0) + thief(330, 600, 1.05) + keyIcon(470, 640, 0.9, -10);
+    s += g(`translate(330 400) scale(${pop(lt, 0.3)})`, hand(0, 0, 'パスワードを盗んだ！', 44, C.red));
+    if (lt > 2.4) {
+      s += g(`translate(680 310) scale(${pop(lt, 2.4)})`, bubble(0, 0, 1, '合言葉は？', 320));
+      s += g(`translate(540 560) scale(${pop(lt, 2.9) * 1.6})`, cross(0, 0, 1));
+      s += g(`translate(560 940) scale(${pop(lt, 3.1)})`, hand(0, 0, '入れない！', 60, '#2f8f4e'));
+    }
+    return s;
+  },
+  tf_code(lt, t) {
+    const shown = Math.floor(clamp(prog(lt, 0.6, 2.0)) * 6);
+    let s = phoneBig(300, 560, 1.05, rect(-95, -160, 190, 100, '#e6f4e8', 16, 4) + hand(0, -130, '確認コード', 26, '#2f8f4e') + hand(0, -85, '483920', 36) +
+      circle(0, 60, 50, C.skin, 5) + path('M-60 170 Q0 110 60 170', C.blue, 5) + hand(0, 200, 'あなた', 26));
+    s += codeBoxes(760, 360, 0.9, '483920', shown);
+    s += g(`translate(760 250) scale(${pop(lt, 0.4)})`, hand(0, 0, 'あなたのスマホだけに届く', 38, '#2f8fb0'));
+    if (lt > 2.4) s += g(`translate(760 620) scale(${pop(lt, 2.4)})`,
+      rect(-210, -90, 420, 180, '#fff3c4', 30) + hand(0, -30, '使えるのは1回だけ', 40) + hand(0, 30, 'しばらくすると無効', 40, '#c97a20'));
+    return s;
+  },
+  tf_scam(lt, t) {
+    let s = phoneBig(320, 560, 1.05, rect(-95, -150, 190, 170, '#ffe1dc', 16, 4) + hand(0, -115, '【重要】', 28, C.red) + hand(0, -70, 'コードを', 30) + hand(0, -30, '教えてください', 26));
+    s += g(`translate(320 560) scale(${pop(lt, 0.8) * 2.2})`, cross(0, 0, 1), 'opacity="0.9"');
+    s += g(`translate(780 330) scale(${pop(lt, 0.5)})`, warnSign(0, 0, 1.2) + hand(0, 140, 'サギ！', 70, C.red));
+    if (lt > 2.4) s += g(`translate(780 720) scale(${pop(lt, 2.4)})`,
+      rect(-210, -70, 420, 140, C.white, 30) + hand(0, -18, 'コードは', 42) + hand(0, 32, 'だれにも教えない', 42, C.red));
+    return s;
+  },
+  tf_setup(lt, t) {
+    let s = g(`translate(540 470) scale(${pop(lt, 0) * 0.94})`,
+      rect(-430, -380, 860, 760, C.white, 30) + hand(0, -310, '2段階認証の設定', 56) + path('M-380 -260 L380 -260', 'none', 3) +
+      [['LINE', 0.6], ['Google', 1.1], ['Apple ID', 1.6]].map(([nm, at0], i) =>
+        hand(-370, -160 + i * 150, nm, 50, INK, 'start') + toggle(290, -160 + i * 150, lt > at0)).join('') +
+      hand(0, 300, '※ 各アプリの「設定」から', 34, '#6b5d52'));
+    return s;
+  },
+  tf_summary(lt, t) {
+    return summaryPage(lt, '007', '二段階認証', [
+      [() => keyIcon(0, 0, 0.8, -20), '二段階認証＝鍵＋合言葉', 'パスワードが盗まれても安心', '#2f8fb0'],
+      [() => codeBoxes(0, 0, 0.32, '483920'), '合言葉はあなたのスマホに', '1回だけ・しばらくで無効', '#c97a20'],
+      [() => warnSign(0, 0, 0.6), 'コードはだれにも教えない', '「教えて」はサギ', '#c4553f'],
+    ]);
+  },
+  tf_cta(lt, t) { return ctaPage(lt, '008', 'アップデートって必要？'); },
+});
+
+VERSIONS.c6 = {
+  no: '006', narration: true, stage: { tx: 0, ty: 150, s: 1 }, capY: 1420, duration: 32,
+  bigFirst: true, sticker: [7.6, 11.8],
+  scenes: seq([
+    [0, 4, 'cl_hook'], [4, 7, 'cl_def'], [7, 12, 'cl_store'], [12, 17, 'cl_merit', 1.1], [17, 21, 'cl_space'],
+    [21, 26, 'cl_care', 1.1], [26, 29, 'cl_summary', 1.2], [29, 32, 'cl_cta'],
+  ]),
+  captions: [
+    [0.0, 1.9, '「クラウドに保存」って\nどこに保存してるか知ってる？'],
+    [1.9, 4.0, 'この動画で{c:クラウド}が\nわかるようになります'],
+    [4.0, 7.0, '{c:クラウド}は\nネットの向こうの{y:貸し倉庫}'],
+    [7.0, 9.5, '写真やファイルを\nネットの倉庫に{y:預けておく}'],
+    [9.5, 12.0, '{c:iCloud}や{c:Googleドライブ}が\nその代表'],
+    [12.0, 14.5, 'スマホが{r:壊れても}\n写真は{g:無事}'],
+    [14.5, 17.0, '{g:別のスマホやパソコン}からも\n見られる'],
+    [17.0, 21.0, 'スマホの中を空けて\n{g:容量の節約}にもなる'],
+    [21.0, 23.5, '無料で使える量には\n{r:上限}がある'],
+    [23.5, 26.0, '倉庫の鍵＝{r:パスワード}は\nしっかり守ろう'],
+    [26.0, 29.0, '{c:クラウド}＝ネットの貸し倉庫\n{g:預けておけば安心}'],
+    [29.0, 32.0, '{y:保存}して\nスマホを買い替えるとき見返してね'],
+  ],
+};
+VERSIONS.t7 = {
+  no: '007', narration: true, stage: { tx: 0, ty: 150, s: 1 }, capY: 1420, duration: 32,
+  bigFirst: true, sticker: [7.6, 11.8],
+  scenes: seq([
+    [0, 4, 'tf_hook'], [4, 7, 'tf_def'], [7, 12, 'tf_steal'], [12, 17, 'tf_code', 1.1], [17, 22, 'tf_scam', 1.1],
+    [22, 26, 'tf_setup'], [26, 29, 'tf_summary', 1.2], [29, 32, 'tf_cta'],
+  ]),
+  captions: [
+    [0.0, 1.9, '「確認コード」が届くアレ\nなんのためか知ってる？'],
+    [1.9, 4.0, 'この動画で{y:二段階認証}が\nわかるようになります'],
+    [4.0, 7.0, '{y:二段階認証}は\n{c:鍵}と{p:合言葉}の二重ロック'],
+    [7.0, 9.5, 'もしパスワードが\n{r:盗まれても}'],
+    [9.5, 12.0, '合言葉がないので\n{g:入れない}'],
+    [12.0, 14.5, '合言葉は\n{y:あなたのスマホだけ}に届く'],
+    [14.5, 17.0, '使えるのは1回だけ\n{y:しばらくすると無効}'],
+    [17.0, 19.5, '「コードを教えて」は\n{r:サギ}'],
+    [19.5, 22.0, '確認コードは\n{r:だれにも教えない}'],
+    [22.0, 26.0, '大事なアカウントは\n{g:設定でオン}にしておこう'],
+    [26.0, 29.0, '{y:二段階認証}＝鍵＋合言葉\nコードは{r:だれにも教えない}'],
+    [29.0, 32.0, '{y:保存}して\n家族にも教えてあげてね'],
+  ],
+};

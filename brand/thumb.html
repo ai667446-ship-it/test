@@ -16,6 +16,8 @@ const THUMBS = {
   '002': { title: '{c:キャッシュ}', question: 'ってなに？', answer: '手元の控えでわかる！', art: 'cache' },
   '003': { title: '{p:Cookie}', question: 'ってなに？', answer: '会員カードでわかる！', art: 'card' },
   '004': { title: '{y:ギガ}', question: '何が減ってる？', answer: '水のタンクでわかる！', art: 'giga' },
+  '006': { title: '{c:クラウド}', question: 'どこにあるの？', answer: '貸し倉庫でわかる！', art: 'cloud6' },
+  '007': { title: '{y:二段階認証}', question: 'ってなに？', answer: '鍵と合言葉でわかる！', art: 'tfa7' },
   '005': { titleSize: 128, title: '{c:Wi-Fi}と\n{y:モバイル通信}', question: 'なにが違う？', answer: '水道と水筒でわかる！', art: 'wifi' },
 };
 
@@ -38,6 +40,12 @@ const ART = {
   wifi: () =>
     house(280, 60, 0.95) + waves(280, -40, 0.8, 0.3, '#2f8fb0') + wifiIcon(280, -60, 0.7, '#2f8fb0') +
     hand(540, 60, 'vs', 70, C.gray) + bottle(800, 60, 1.25, 0.7) + barsIcon(940, -80, 0.9, C.orange),
+  cloud6: () =>
+    phoneBig(250, 120, 0.62, [0, 1, 2, 3].map((i) => photo(-45 + (i % 2) * 90, -80 + Math.floor(i / 2) * 100, 0.7, BOOK_COLORS[i])).join('')) +
+    arrow(400, 60, 560, 0, C.blue, 9) + cloud(740, 40, 1.12, '') + warehouse(740, 20, 0.55),
+  tfa7: () =>
+    keyIcon(250, 60, 1.4, -20) + hand(250, 200, '① 鍵', 50) + hand(450, 60, '＋', 80, C.gray) +
+    door(780, 90, 0.62) + g('translate(780 -150)', bubble(0, 0, 0.85, '合言葉は？', 320)) + hand(780, 260, '② 合言葉', 46),
   card: () =>
     g(at(330, 80, 1, -6), rect(-220, -140, 440, 280, C.white, 26, 7) + rect(-220, -140, 440, 70, C.orange, 20, 7) +
       hand(0, -104, '会員カード', 44, C.white) + [0, 1, 2, 3, 4].map((i) => circle(-160 + i * 80, 30, 28, i < 3 ? C.red : C.white, 5)).join('') +
