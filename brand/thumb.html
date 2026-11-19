@@ -1,0 +1,63 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="../video/node_modules/@fontsource/yusei-magic/index.css">
+<link rel="stylesheet" href="../video/node_modules/@fontsource/zen-maru-gothic/900.css">
+<style>html,body{margin:0}#s{width:1080px;height:1920px}</style></head><body>
+<div id="s"></div>
+<script src="../video/src/engine.js"></script>
+<script src="../video/src/scenes.js"></script>
+<script>
+// ===== サムネイルのテンプレート（毎回変えるのは THUMBS の中身だけ）=====
+// title: 字幕と同じ記法 {y:黄}{c:水色}{p:ピンク}{r:赤}{g:緑}、\n で改行
+const THUMBS = {
+  '001': { title: '{y:メモリ}と\n{c:ストレージ}', question: 'なにが違う？', answer: '机と本棚でわかる！', art: 'deskShelf' },
+  // ↓ 統一感の確認用の仮データ（No.002 / No.003）
+  '002': { title: '{c:キャッシュ}', question: 'ってなに？', answer: '手元のメモでわかる！', art: 'memo' },
+  '003': { title: '{p:Cookie}', question: 'ってなに？', answer: 'ポイントカードでわかる！', art: 'card' },
+};
+
+const ART = {
+  deskShelf: () =>
+    g('translate(90 140)', desk(0, 0, 400, 140) + appWindow(30, -190, 170, 180, C.red, 'ブラウザ') + appWindow(215, -165, 160, 155, C.green, 'LINE')) +
+    bookshelf(600, -90, 330, 380, 3, 1) + hand(540, 120, '＆', 70, C.gray),
+  memo: () =>
+    bookshelf(640, -90, 290, 380, 3, 1) + desk(80, 140, 440, 140) +
+    g(at(230, 60, 1, -8), rect(-80, -90, 160, 180, '#fff3a6', 8, 6) + path('M-50 -40 L50 -40 M-50 0 L50 0 M-50 40 L20 40', 'none', 5)) +
+    g(at(390, 70, 1, 6), rect(-75, -80, 150, 160, '#ffd1dc', 8, 6) + path('M-45 -30 L45 -30 M-45 10 L45 10', 'none', 5)) +
+    arrow(640, 60, 470, 20, C.red, 8) + hand(560, -70, 'サッと!', 52, C.red),
+  card: () =>
+    g(at(330, 80, 1, -6), rect(-220, -140, 440, 280, C.white, 26, 7) + rect(-220, -140, 440, 70, C.orange, 20, 7) +
+      hand(0, -104, 'ポイントカード', 44, C.white) + [0, 1, 2, 3, 4].map((i) => circle(-160 + i * 80, 30, 28, i < 3 ? C.red : C.white, 5)).join('') +
+      hand(0, 100, 'いつもの お客さん', 40)) +
+    g(at(800, 90, 1.1), circle(0, 0, 120, '#d9a35f', 7) + [[-50, -40], [30, -60], [50, 20], [-20, 50], [-60, 20]].map(([x, y]) => circle(x, y, 14, '#6b4423', 4)).join('')),
+};
+
+function thumb(no) {
+  const d = THUMBS[no];
+  const ill =
+    // 図鑑のページ
+    rect(60, 250, 960, 1420, '#fffdf7', 40, 8) +
+    path('M100 1560 L980 1560', 'none', 3) +
+    // 上の帯（シリーズ名と番号）
+    `<path d="M64 290 Q64 254 100 254 L980 254 Q1016 254 1016 290 L1016 390 L64 390 Z" fill="${C.blue}"/>` +
+    path('M60 390 L1020 390', 'none', 7) +
+    zukanBook(150, 375, 0.42, '') +
+    `<text x="225" y="325" font-family="Yusei Magic" font-size="58" fill="#fff" dominant-baseline="middle">デジタルことば図鑑</text>` +
+    rect(800, 285, 180, 80, C.yellow, 40, 6) + hand(890, 327, 'No.' + no, 46) +
+    // 絵
+    g('translate(0 1090)', ART[d.art]()) +
+    // たとえの帯
+    marker(540, 1612, 640, 92, C.yellow) + hand(540, 1614, d.answer, 60);
+  const lines = d.title.split('\n').length;
+  const overlay =
+    captionSVG(d.title, 540, lines > 1 ? 640 : 610, lines > 1 ? 150 : 190, 0, 10) +
+    g(`translate(540 ${lines > 1 ? 880 : 800}) rotate(-3)`, hand(0, 0, d.question, 110, C.red));
+  return frameSVG(0, ill, overlay).replace(/<rect x="0" y="1906"[^>]*\/>/, '');
+}
+window.show = (no) => { document.getElementById('s').innerHTML = thumb(no); };
+window.prep = async () => {
+  for (const k in THUMBS) show(k);
+  document.body.insertAdjacentHTML('beforeend', `<div style="position:absolute;left:-9999px"><span style="font-family:'Yusei Magic'">${document.getElementById('s').textContent}デジタルことば図鑑No.0123456789なにが違うってでわかる！机と本棚手元のメモポイントカードサッと!いつものお客さんブラウザLINE＆</span><span style="font-family:'Zen Maru Gothic';font-weight:900">メモリとストレージキャッシュCookie</span></div>`);
+  await document.fonts.ready; await new Promise(r => setTimeout(r, 400));
+};
+</script></body></html>
