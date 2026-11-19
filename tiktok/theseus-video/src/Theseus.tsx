@@ -82,6 +82,7 @@ const LyricText: React.FC<{ lyric: Lyric; t: number; theme: Theme }> = ({ lyric,
           <div
             key={i}
             style={{
+              opacity: lyric.lineTimes ? interpolate(t, [lyric.lineTimes[i], lyric.lineTimes[i] + 0.08], [0, 1], clamp) : 1,
               fontSize: isHook ? 84 : 104,
               color: isHook ? theme.accent : theme.ink,
               scale: isHook ? String(1 + beatPulse(t) * 0.07) : "1",

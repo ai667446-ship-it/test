@@ -6,7 +6,7 @@ export const SONG_DURATION = 71.95;
 // Section boundaries (where the key changes in the edited song)
 export const SECTIONS = {
   intro: 0,
-  chorus1: 13.3, // vocals start
+  chorus1: 15.2, // vocals start
   key1: 15.4, // +1 semitone
   key2: 31.26, // +2 semitones
   key3: 44.85, // +3 semitones (final chorus)
@@ -20,31 +20,31 @@ export type Lyric = {
   end: number;
   text: string; // "/" = line break
   kind: LyricKind;
+  lineTimes?: number[]; // optional per-line reveal times
 };
 
 export const LYRICS: Lyric[] = [
-  // Intro chant
-  { start: 13.3, end: 15.4, text: "トン・カン・トン・カン/ヘイ！", kind: "lead" },
-  // Chorus 1 (planks 1 → 100)
-  { start: 15.4, end: 18.0, text: "トンカン トンカン/いちまい かえて", kind: "lead" },
-  { start: 18.0, end: 20.6, text: "トンカン トンカン/まだ おなじ？", kind: "lead" },
-  { start: 20.6, end: 23.2, text: "おなじ！ おなじ！", kind: "crowd" },
-  { start: 23.2, end: 25.8, text: "トンカン トンカン/ひゃくまい かえて", kind: "lead" },
-  { start: 25.8, end: 28.4, text: "トンカン トンカン/まだ おなじ？", kind: "lead" },
-  { start: 28.4, end: 31.2, text: "おなじ！ ……おなじ？", kind: "crowd" },
-  // Chorus 2 (planks → 300)
-  { start: 31.6, end: 34.6, text: "トンカン トンカン/さんびゃくまい", kind: "lead" },
-  { start: 34.6, end: 37.8, text: "トンカン トンカン/ぜんぶ かえた", kind: "lead" },
+  // Chorus 1 — times from the user's listening notes
+  { start: 15.2, end: 18.1, text: "トンカン トンカン/いちまい かえて", kind: "lead", lineTimes: [15.2, 17.0] },
+  { start: 18.1, end: 19.2, text: "トンカン トンカン/まだ おなじ？", kind: "lead" },
+  { start: 19.2, end: 22.5, text: "おなじ？ おなじ？", kind: "crowd" },
+  { start: 22.5, end: 24.4, text: "トンカン トンカン/にまい かえて", kind: "lead" },
+  { start: 24.4, end: 26.3, text: "トンカン トンカン/まだ おなじ？", kind: "lead" },
+  { start: 26.3, end: 30.0, text: "おなじ？ おなじ？", kind: "crowd" },
+  // Verse
+  { start: 30.0, end: 31.6, text: "ひゃくまい/かえたら？", kind: "lead" },
+  { start: 31.6, end: 33.4, text: "にひゃくまい/かえたら？", kind: "lead" },
+  { start: 33.4, end: 37.8, text: "さんびゃくまい/ぜんぶ かえたら？", kind: "lead" },
   // Break (instrumental)
-  { start: 37.8, end: 46.4, text: "これって まだ/テセウスの船？", kind: "whisper" },
-  // Final chorus (two ships)
-  { start: 46.5, end: 48.67, text: "トンカン トンカン/すてた いたで", kind: "lead" },
-  { start: 48.67, end: 50.83, text: "トンカン トンカン/もう いっせき", kind: "lead" },
-  { start: 50.83, end: 53.0, text: "どっち！ どっち！", kind: "crowd" },
-  { start: 53.0, end: 55.17, text: "トンカン トンカン/ほんもの どっち？", kind: "lead" },
-  { start: 55.17, end: 57.33, text: "トンカン トンカン/わからん わからん", kind: "lead" },
-  { start: 57.33, end: 59.6, text: "わからん！ わからん！", kind: "crowd" },
-  // Outro
+  { start: 37.8, end: 44.4, text: "これって まだ/テセウスの船？", kind: "whisper" },
+  // Final chorus — only the first start time is confirmed; the rest are estimates
+  { start: 44.5, end: 47.0, text: "トンカン トンカン/すてた いたで", kind: "lead" },
+  { start: 47.0, end: 49.5, text: "トンカン トンカン/もう いっせき", kind: "lead" },
+  { start: 49.5, end: 52.0, text: "どっち！ どっち！", kind: "crowd" },
+  { start: 52.0, end: 54.5, text: "トンカン トンカン/ほんもの どっち？", kind: "lead" },
+  { start: 54.5, end: 57.0, text: "トンカン トンカン/わからん わからん", kind: "lead" },
+  { start: 57.0, end: 59.6, text: "わからん！ わからん！", kind: "crowd" },
+  // Outro (estimated)
   { start: 63.0, end: 66.0, text: "きのうの きみと/きょうの きみ", kind: "whisper" },
   { start: 66.0, end: 69.0, text: "……まだ おなじ？", kind: "whisper" },
   { start: 69.0, end: 71.95, text: "トン・カン", kind: "lead" },
@@ -52,11 +52,15 @@ export const LYRICS: Lyric[] = [
 
 // Plank counter keyframes: [time, planks replaced] (out of 300)
 export const PLANK_KEYS: [number, number][] = [
-  [15.4, 1],
-  [20.6, 2],
-  [23.2, 100],
-  [31.6, 150],
-  [36.5, 300],
+  [15.2, 1],
+  [22.4, 1],
+  [22.5, 2],
+  [29.9, 2],
+  [30.0, 100],
+  [31.5, 100],
+  [31.6, 200],
+  [33.3, 200],
+  [33.4, 300],
 ];
 export const TOTAL_PLANKS = 300;
 
