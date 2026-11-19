@@ -15,6 +15,8 @@ const THUMBS = {
   '001': { title: '{y:メモリ}と\n{c:ストレージ}', question: 'なにが違う？', answer: '机と本棚でわかる！', art: 'deskShelf' },
   '002': { title: '{c:キャッシュ}', question: 'ってなに？', answer: '手元の控えでわかる！', art: 'cache' },
   '003': { title: '{p:Cookie}', question: 'ってなに？', answer: '会員カードでわかる！', art: 'card' },
+  '004': { title: '{y:ギガ}', question: '何が減ってる？', answer: '水のタンクでわかる！', art: 'giga' },
+  '005': { title: '{c:Wi-Fi}と\n{y:モバイル通信}', question: 'なにが違う？', answer: '水道と水筒でわかる！', art: 'wifi' },
 };
 
 const ART = {
@@ -30,6 +32,12 @@ const ART = {
     cloud(290, -70, 1.0) + phoneBig(250, 200, 0.8, doc(0, -10, 1.4, C.blue)) +
     cacheBox(740, 230, 1.25, 8, '控え') + arrow(600, 150, 400, 150, C.green, 10) +
     g(at(820, -60, 1.3, -8), path('M0 -80 L22 -26 L80 -35 L36 5 L62 62 L0 27 L-62 62 L-36 5 L-80 -35 L-22 -26 Z', C.yellow, 6) + hand(0, 4, '一瞬!', 34)),
+  giga: () =>
+    faucet(150, -40, 1.1, 0.4) + faucet(400, -40, 1.1, 1) + hand(150, 220, '文字', 46, '#2f8f4e') + hand(440, 220, '動画', 46, C.red) +
+    tank(800, 100, 1.0, 0.3) + g(at(800, -150, 1), hand(0, 0, '残りわずか', 40, C.red)),
+  wifi: () =>
+    house(280, 60, 0.95) + waves(280, -40, 0.8, 0.3, '#2f8fb0') + wifiIcon(280, -60, 0.7, '#2f8fb0') +
+    hand(540, 60, 'vs', 70, C.gray) + bottle(800, 60, 1.25, 0.7) + barsIcon(940, -80, 0.9, C.orange),
   card: () =>
     g(at(330, 80, 1, -6), rect(-220, -140, 440, 280, C.white, 26, 7) + rect(-220, -140, 440, 70, C.orange, 20, 7) +
       hand(0, -104, '会員カード', 44, C.white) + [0, 1, 2, 3, 4].map((i) => circle(-160 + i * 80, 30, 28, i < 3 ? C.red : C.white, 5)).join('') +

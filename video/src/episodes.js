@@ -348,3 +348,220 @@ VERSIONS.k3s = {
     [29.0, 32.0, '{y:保存}して 次に聞かれたとき\n見返してね'],
   ],
 };
+
+// ======================================================================
+// No.004 ギガ / No.005 Wi-Fiとモバイル通信（ショート形式：冒頭につかみ＋目的）
+// ======================================================================
+const WATER = '#7cc4ea';
+// 水のタンク（level 0..1）
+const tank = (x, y, s, level, label = 'ギガ') => g(at(x, y, s),
+  `<clipPath id="tk${Math.round(x)}${Math.round(y)}"><rect x="-120" y="-170" width="240" height="320" rx="30"/></clipPath>` +
+  `<g clip-path="url(#tk${Math.round(x)}${Math.round(y)})"><rect x="-120" y="${150 - 320 * level}" width="240" height="${320 * level}" fill="${WATER}"/>` +
+  `<path d="M-120 ${150 - 320 * level} Q-60 ${140 - 320 * level} 0 ${150 - 320 * level} T120 ${150 - 320 * level}" fill="none" stroke="#fff" stroke-width="6" opacity="0.7"/></g>` +
+  rect(-120, -170, 240, 320, 'none', 30, 8) + rect(-70, -205, 140, 40, '#cfd6dd', 10, 6) +
+  (label ? rect(-80, -60, 160, 70, C.white, 35, 5) + hand(0, -24, label, 44) : ''));
+// 蛇口と水
+const faucet = (x, y, s, flow) => g(at(x, y, s),
+  path('M-90 -40 L30 -40 Q60 -40 60 -10 L60 20 L30 20 L30 0 L-90 0 Z', '#b9c3cc', 7) + rect(-30, -75, 40, 40, '#9aa6b1', 8, 6) +
+  (flow > 0 ? `<rect x="${45 - 8 * flow}" y="22" width="${16 * flow}" height="${170}" rx="${8 * flow}" fill="${WATER}" stroke="${INK}" stroke-width="4"/>` : ''));
+const house = (x, y, s, col = C.orange) => g(at(x, y, s),
+  rect(-150, -40, 300, 210, '#f7ead2', 10) + path('M-185 -30 L0 -190 L185 -30 Z', col, 8) + rect(-35, 70, 70, 100, '#a8723f', 6) + rect(-115, 10, 70, 60, '#dff1fb', 6, 5) + rect(45, 10, 70, 60, '#dff1fb', 6, 5));
+const wifiIcon = (x, y, s, col = INK) => g(at(x, y, s),
+  [70, 46, 22].map((r) => `<path d="M${-r} ${-r * 0.3} A${r} ${r} 0 0 1 ${r} ${-r * 0.3}" fill="none" stroke="${col}" stroke-width="11" stroke-linecap="round" transform="translate(0 ${r * 0.55})"/>`).join('') + `<circle cx="0" cy="${22 * 0.55 + 14}" r="9" fill="${col}"/>`);
+const barsIcon = (x, y, s, col = INK) => g(at(x, y, s), [0, 1, 2, 3].map((i) => `<rect x="${-50 + i * 28}" y="${30 - i * 22}" width="18" height="${20 + i * 22}" rx="4" fill="${col}"/>`).join(''));
+const waves = (x, y, s, t, col = C.blue) => g(at(x, y, s), [0, 1, 2].map((i) => {
+  const p = ((t * 0.8 + i / 3) % 1);
+  return `<circle cx="0" cy="0" r="${40 + p * 160}" fill="none" stroke="${col}" stroke-width="7" opacity="${1 - p}"/>`;
+}).join(''));
+const tower = (x, y, s) => g(at(x, y, s),
+  path('M-60 160 L0 -150 L60 160 M-40 60 L40 60 M-25 -20 L25 -20 M-50 110 L50 110', 'none', 9) + circle(0, -160, 16, C.red, 5));
+const snail = (x, y, s) => g(at(x, y, s),
+  path('M-90 40 Q-110 40 -100 20 L60 20 Q90 20 90 40 Z', '#e7c7a0', 6) + circle(-10, -10, 50, '#d9a35f', 6) +
+  path('M-10 -10 m-30 0 a30 30 0 1 0 30 -30 a18 18 0 1 0 -18 18', 'none', 5) + path('M70 20 L80 -30 M85 20 L100 -25', 'none', 5));
+const bottle = (x, y, s, level) => g(at(x, y, s),
+  `<rect x="-55" y="${100 - 190 * level}" width="110" height="${190 * level}" rx="12" fill="${WATER}"/>` +
+  rect(-60, -90, 120, 195, 'none', 24, 7) + rect(-30, -130, 60, 42, C.green, 8, 6));
+const lockIcon = (x, y, s, open) => g(at(x, y, s),
+  rect(-45, -10, 90, 75, open ? '#ffe1dc' : C.yellow, 12, 6) +
+  path(open ? 'M-28 -10 L-28 -45 Q-28 -75 0 -75 Q28 -75 28 -45 L28 -55' : 'M-28 -10 L-28 -45 Q-28 -75 0 -75 Q28 -75 28 -45 L28 -10', 'none', 8));
+
+Object.assign(SCENES, {
+  // ---------- No.004 ギガ ----------
+  g_hook(lt, t) {
+    let s = phoneBig(540, 470, 1.35,
+      hand(0, -150, '残りデータ', 34, '#6b5d52') + hand(0, -85, '0.3GB', 70, C.red) +
+      rect(-85, -30, 170, 36, '#eee', 18, 4) + `<rect x="-82" y="-27" width="${18 + Math.sin(t * 4) * 3}" height="30" rx="15" fill="${C.red}"/>` +
+      rect(-90, 40, 180, 60, '#ffe1dc', 30, 4) + hand(0, 72, '速度制限中', 32, C.red) + spinner(0, 150, t));
+    return s + sweat(760, 210, 1.2) + sweat(330, 260, 0.9);
+  },
+  g_def(lt, t) {
+    let s = g(`translate(540 90) scale(${pop(lt, 0)})`, marker(0, 0, 760, 100, C.yellow) + hand(0, 4, 'ギガ ＝ 毎月のデータの量', 60));
+    s += g(`translate(540 560) scale(${pop(lt, 0.25) * 1.25})`, tank(0, 0, 1, 0.85 - 0.05 * Math.sin(t * 2)));
+    s += g(`translate(830 330) scale(${pop(lt, 0.9)}) rotate(6)`, rect(-120, -45, 240, 90, C.white, 24) + hand(0, 4, '例：20GB', 46));
+    return s;
+  },
+  g_use(lt, t) {
+    const level = lerp(0.9, 0.35, easeInOut(prog(lt, 0.5, 4.5)));
+    let s = tank(820, 660, 0.95, level);
+    const items = [['LINEの文字', 0.15, C.green], ['写真', 0.45, C.yellow], ['動画', 1.0, C.red]];
+    items.forEach(([lb, f, col], i) => {
+      const on = lt > 0.3 + i * 0.5;
+      const x = 150 + i * 200;
+      s += g(`translate(0 0) scale(1)`, faucet(x, 560, 1, on ? f * (0.85 + 0.15 * Math.sin(t * 9 + i)) : 0));
+      s += g(`translate(${x + 20} 860) scale(${pop(lt, 0.3 + i * 0.5)})`, rect(-95, -40, 190, 80, col, 40, 5) + hand(0, 3, lb, lb.length > 3 ? 32 : 44));
+    });
+    s += g(`translate(${lt > 2.8 ? 560 : 160} 380) scale(${pop(lt, lt > 2.8 ? 2.8 : 1.2)})`,
+      hand(0, 0, lt > 2.8 ? 'ドバドバ！' : 'ちょろっと', 50, lt > 2.8 ? C.red : '#2f8f4e'));
+    return s;
+  },
+  g_empty(lt, t) {
+    const level = lerp(0.3, 0, easeOut(prog(lt, 0.2, 1.8)));
+    let s = tank(300, 560, 1.05, level);
+    if (lt > 1.6) s += g(`translate(300 200) scale(${pop(lt, 1.6)})`, hand(0, 0, 'からっぽ…', 56, C.red));
+    if (lt > 2.3) {
+      s += g(`translate(${760 + Math.sin(t) * 6} 640) scale(${pop(lt, 2.3) * 1.2})`, snail(0, 0, 1));
+      s += g(`translate(760 380) scale(${pop(lt, 2.6)})`, rect(-150, -50, 300, 100, '#ffe1dc', 50, 6) + hand(0, 4, '速度制限', 52, C.red));
+      s += g(`translate(760 860) scale(${pop(lt, 2.9)})`, hand(0, 0, '読みこみ…', 46, '#6b5d52'));
+    }
+    return s;
+  },
+  g_wifi(lt, t) {
+    let s = house(330, 620, 1.3) + waves(330, 470, 1, t, '#2f8fb0') + wifiIcon(330, 440, 0.8, '#2f8fb0');
+    s += phoneBig(330, 700, 0.42, hand(0, 0, '動画', 60));
+    s += tank(820, 640, 0.9, 0.6);
+    if (lt > 2.2) {
+      s += g(`translate(820 330) scale(${pop(lt, 2.2)})`, check(-120, 0, 1) + hand(-65, 4, '減らない', 54, '#2f8f4e', 'start'));
+      s += arrow(560, 520, 700, 520, C.gray, 7);
+      s += g(`translate(630 440) scale(${pop(lt, 2.4)})`, cross(0, 0, 0.7));
+    }
+    return s;
+  },
+  g_tips(lt, t) {
+    let s = g(`translate(540 470) scale(${pop(lt, 0)})`, rect(-420, -380, 840, 760, C.white, 30) + hand(0, -310, 'ギガの節約', 64) + path('M-370 -260 L370 -260', 'none', 3));
+    const rows = [['動画はWi-Fiのときに', C.blue], ['アプリの更新もWi-Fiで', C.blue], ['残りは「設定」で確認', C.orange]];
+    rows.forEach(([lb, col], i) => {
+      s += g(`translate(540 ${330 + i * 190}) scale(${pop(lt, [0.4, 1.0, 2.3][i])})`,
+        check(-330, 0, 1, i < 2 ? C.green : C.yellow) + hand(-270, 4, lb, 50, INK, 'start'));
+    });
+    s += g(`translate(540 890) scale(${pop(lt, 3.4)})`, hand(0, 0, '※ 携帯会社のアプリでも見られる', 36, '#6b5d52'));
+    return s;
+  },
+  g_summary(lt, t) {
+    return summaryPage(lt, '004', 'ギガ', [
+      [() => tank(0, 10, 0.32, 0.7, ''), 'ギガ＝毎月のデータの量', '水のタンクのイメージ', '#2f8fb0'],
+      [() => faucet(0, -20, 0.7, 1), '動画はたくさん使う', '文字はほんの少し', '#c4553f'],
+      [() => wifiIcon(0, 0, 0.8, '#2f8fb0'), 'Wi-Fi中は減らない', '空になると速度制限', '#2f8f4e'],
+    ]);
+  },
+  g_cta(lt, t) { return ctaPage(lt, '005', 'Wi-Fiってなに？'); },
+
+  // ---------- No.005 Wi-Fiとモバイル通信 ----------
+  w_hook(lt, t) {
+    let s = g('translate(540 430)',
+      rect(-430, -150, 860, 300, C.white, 40) +
+      hand(-300, 0, '9:41', 72) + wifiIcon(90, -10, 1.15) + barsIcon(290, 0, 1.25) + hand(390, 0, '5G', 50));
+    const b = Math.sin(t * 5) * 8;
+    s += g(`translate(630 ${640 + b})`, path('M0 -40 L-25 0 L25 0 Z', C.red, 5));
+    s += g(`translate(830 ${640 - b})`, path('M0 -40 L-25 0 L25 0 Z', C.red, 5));
+    s += g('translate(630 760)', hand(-160, 0, '？', 120, C.red) + hand(160, 0, '？', 120, C.orange));
+    return s;
+  },
+  w_def(lt, t) {
+    let s = g(`translate(290 470) scale(${pop(lt, 0.1)})`, house(0, -40, 0.9) + faucet(-10, 230, 0.8, 0.9) +
+      marker(0, 340, 280, 80, '#9be3e8') + hand(0, 342, 'Wi-Fi', 60) + hand(0, 420, '＝ 家の水道', 50));
+    s += g(`translate(790 470) scale(${pop(lt, 0.9)})`, bottle(0, 40, 1.3, 0.75) +
+      marker(0, 340, 330, 80, C.yellow) + hand(0, 342, 'モバイル通信', 54) + hand(0, 420, '＝ 持ち歩く水筒', 50));
+    return s;
+  },
+  w_wifi(lt, t) {
+    let s = `<circle cx="420" cy="560" r="${300 + Math.sin(t * 2) * 6}" fill="#e3f3fa" stroke="#7cc4ea" stroke-width="6" stroke-dasharray="18 14"/>`;
+    s += house(420, 600, 1.2);
+    s += g('translate(420 520)', rect(-60, -25, 120, 50, '#5a6070', 12, 5) + path('M-35 -25 L-45 -70 M35 -25 L45 -70', 'none', 6)) + waves(420, 500, 0.8, t, '#2f8fb0');
+    s += path('M280 760 Q150 860 90 940', 'none', 9) + g('translate(110 970)', rect(-80, -32, 160, 64, C.white, 32, 5) + hand(0, 3, '光回線', 36));
+    s += g('translate(420 500)', hand(0, -130, 'ルーター', 34, '#2f8fb0'));
+    if (lt > 2.4) s += g(`translate(870 760) scale(${pop(lt, 2.4)})`, rect(-150, -60, 300, 120, C.white, 30) + hand(0, -15, '届くのは', 38) + hand(0, 30, '家の中くらい', 38, '#2f8fb0'));
+    return s;
+  },
+  w_mobile(lt, t) {
+    let s = tower(830, 380, 1.1) + waves(830, 230, 0.9, t, C.orange);
+    s += g('translate(830 600)', rect(-110, -32, 220, 64, C.white, 32, 5) + hand(0, 3, '基地局', 38));
+    const walk = Math.sin(t * 3) * 10;
+    s += phoneBig(300 + walk, 560, 0.75, hand(0, -60, '外でも', 40) + hand(0, 10, 'OK', 60, '#2f8f4e'));
+    if (lt > 2.4) {
+      s += g(`translate(560 820) scale(${pop(lt, 2.4)})`, tank(0, 0, 0.55, lerp(0.8, 0.55, prog(lt, 2.4, 4.5))));
+      s += g(`translate(560 590) scale(${pop(lt, 2.6)})`, hand(0, 0, 'ギガを使う', 46, C.red));
+    }
+    return s;
+  },
+  w_icons(lt, t) {
+    let s = g(`translate(290 470) scale(${pop(lt, 0)})`, rect(-220, -260, 440, 520, C.white, 30) +
+      wifiIcon(0, -90, 1.9, '#2f8fb0') + hand(0, 90, 'Wi-Fi', 64) + hand(0, 170, '扇形のマーク', 40, '#2f8fb0'));
+    s += g(`translate(790 470) scale(${pop(lt, 0.6)})`, rect(-220, -260, 440, 520, C.white, 30) +
+      barsIcon(0, -80, 2.0, C.orange) + hand(0, 90, 'モバイル通信', 54) + hand(0, 170, '棒のマーク', 40, '#c97a20'));
+    s += g(`translate(540 900) scale(${pop(lt, 1.6)})`, hand(0, 0, '※ 両方出ているときは Wi-Fi が優先', 38, '#6b5d52'));
+    return s;
+  },
+  w_free(lt, t) {
+    let s = g('translate(330 560)', rect(-220, -150, 440, 330, '#f7ead2', 12) + path('M-250 -150 L250 -150 L220 -230 L-220 -230 Z', C.green, 8) +
+      rect(-90, 60, 180, 120, '#a8723f', 6) + rect(-180, -110, 140, 100, '#dff1fb', 6, 5) + rect(40, -110, 140, 100, '#dff1fb', 6, 5) +
+      rect(-150, -320, 300, 80, C.white, 16, 6) + hand(0, -280, 'FREE Wi-Fi', 44, '#2f8fb0'));
+    s += g(`translate(800 420) scale(${pop(lt, 0.8)})`, lockIcon(0, 0, 1.4, true) + hand(0, 150, '鍵なしのことも', 44, C.red));
+    if (lt > 2.4) s += g(`translate(800 800) scale(${pop(lt, 2.4)})`, rect(-200, -70, 400, 140, '#ffe1dc', 30) +
+      hand(0, -18, 'パスワード入力は', 40) + hand(0, 32, 'さけると安心', 44, C.red));
+    return s;
+  },
+  w_summary(lt, t) {
+    return summaryPage(lt, '005', 'Wi-Fiとモバイル通信', [
+      [() => wifiIcon(0, 0, 0.8, '#2f8fb0'), 'Wi-Fi＝家の水道', 'ギガを使わない', '#2f8fb0'],
+      [() => barsIcon(0, 0, 0.9, C.orange), 'モバイル通信＝水筒', 'どこでも使えるがギガを使う', '#c97a20'],
+      [() => lockIcon(0, 0, 0.6, true), 'フリーWi-Fiは注意', '大事な入力はさけよう', '#c4553f'],
+    ]);
+  },
+  w_cta(lt, t) { return ctaPage(lt, '006', 'クラウドってなに？'); },
+});
+
+VERSIONS.g4 = {
+  no: '004', narration: true, stage: { tx: 0, ty: 150, s: 1 }, capY: 1420, duration: 33,
+  bigFirst: true, sticker: [7.6, 11.8],
+  scenes: seq([
+    [0, 4, 'g_hook'], [4, 7, 'g_def'], [7, 12, 'g_use'], [12, 17, 'g_empty', 1.1], [17, 22, 'g_wifi', 1.1],
+    [22, 27, 'g_tips', 1.15], [27, 30, 'g_summary', 1.2], [30, 33, 'g_cta'],
+  ]),
+  captions: [
+    [0.0, 1.9, '「ギガが減る」って\n何が減ってるか知ってる？'],
+    [1.9, 4.0, '30秒で{y:ギガの節約}が\nわかるようになります'],
+    [4.0, 7.0, '{y:ギガ}は 毎月使える\n{c:データの量}のこと'],
+    [7.0, 9.5, 'LINEの文字なら\n{g:ちょろっと}しか減らない'],
+    [9.5, 12.0, 'でも動画は\n{r:ドバドバ}使う'],
+    [12.0, 14.5, 'タンクが{r:空になる}と…'],
+    [14.5, 17.0, '通信が{r:とても遅くなる}\n（速度制限）'],
+    [17.0, 19.5, 'でも{c:Wi-Fi}に\nつないでいる間は'],
+    [19.5, 22.0, 'ギガは{g:減らない}'],
+    [22.0, 24.5, '動画やアプリの更新は\n{g:Wi-Fiのときに}'],
+    [24.5, 27.0, '残りは{y:設定}や\n携帯会社のアプリで確認'],
+    [27.0, 30.0, '{y:ギガ}＝毎月のデータの量\n{c:Wi-Fi}を上手に使おう'],
+    [30.0, 33.0, '{y:保存}して\n月末に見返してね'],
+  ],
+};
+VERSIONS.w5 = {
+  no: '005', narration: true, stage: { tx: 0, ty: 150, s: 1 }, capY: 1420, duration: 32,
+  bigFirst: true, sticker: [7.6, 11.8],
+  scenes: seq([
+    [0, 4, 'w_hook'], [4, 7, 'w_def'], [7, 12, 'w_wifi'], [12, 17, 'w_mobile', 1.1], [17, 21, 'w_icons'],
+    [21, 26, 'w_free', 1.1], [26, 29, 'w_summary', 1.2], [29, 32, 'w_cta'],
+  ]),
+  captions: [
+    [0.0, 1.9, 'スマホのこの{c:扇形のマーク}\n何か知ってる？'],
+    [1.9, 4.0, '30秒で{c:Wi-Fi}と{y:モバイル通信}の\n違いがわかります'],
+    [4.0, 7.0, '{c:Wi-Fi}は家の水道\n{y:モバイル通信}は持ち歩く水筒'],
+    [7.0, 9.5, '{c:Wi-Fi}は 家のネット回線を\n電波で飛ばしたもの'],
+    [9.5, 12.0, '届くのは\n{c:家の中}くらいまで'],
+    [12.0, 14.5, '{y:モバイル通信}は\n携帯会社の{y:基地局}につなぐ'],
+    [14.5, 17.0, 'どこでも使えるけど\n{r:ギガを使う}'],
+    [17.0, 21.0, '画面の{c:扇形}がWi-Fi\n{y:棒のマーク}がモバイル通信'],
+    [21.0, 23.5, 'カフェなどの{r:フリーWi-Fi}は\nだれでも入れることも'],
+    [23.5, 26.0, '大事なパスワード入力は\n{r:さけると安心}'],
+    [26.0, 29.0, '家では{c:Wi-Fi}\n外では{y:モバイル通信}'],
+    [29.0, 32.0, '{y:保存}して\nギガの節約に役立ててね'],
+  ],
+};
