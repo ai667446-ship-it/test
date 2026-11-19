@@ -194,12 +194,12 @@ Object.assign(SCENES, {
       rect(-400, -150, 800, 300, C.white, 28) + hand(0, -80, 'Cookieを許可しますか？', 54) +
       rect(-330, 20, 300, 86, C.blue, 43, 5) + hand(-180, 64, '許可', 48, C.white) +
       rect(30, 20, 300, 86, '#e6e9ee', 43, 5) + hand(180, 64, '拒否', 48), `opacity="${clamp(up * 2)}"`);
-    return s + qMarks(lt, t, 2.2);
+    return s;
   },
   k_def(lt, t) {
     let s = g(`translate(540 90) scale(${pop(lt, 0)})`, marker(0, 0, 640, 100, '#ffc9d8') + hand(0, 4, 'Cookie ＝ 会員カード', 66));
     s += g(`translate(540 540) scale(${pop(lt, 0.4) * 2.3}) rotate(-6)`, card(0, 0, 1, 0, C.orange, '会員カード'));
-    s += g(`translate(820 300) scale(${pop(lt, 1.2)}) rotate(8)`, rect(-130, -50, 260, 100, C.white, 24) + hand(0, 4, '小さなメモ', 46));
+    s += g(`translate(810 225) scale(${pop(lt, 1.2)}) rotate(8)`, rect(-130, -50, 260, 100, C.white, 24) + hand(0, 4, '小さなメモ', 46));
     s += g(`translate(540 880) scale(${pop(lt, 2.4)})`, hand(0, 0, 'サイトがブラウザに預ける', 50, '#6b5d52'));
     return s;
   },
@@ -209,27 +209,27 @@ Object.assign(SCENES, {
     const p1 = easeInOut(prog(lt, 0.6, 1.8));
     if (lt < 3.6) {
       s += card(lerp(330, 820, p1), lerp(500, 620, p1) - Math.sin(p1 * Math.PI) * 160, 0.9, (1 - p1) * -20);
-      if (lt < 1.2) s += g(`translate(330 260) scale(${pop(lt, 0.2)})`, bubble(0, 0, 1, 'はじめまして！', 400));
+      if (lt < 1.2) s += g(`translate(290 195) scale(${pop(lt, 0.2)})`, bubble(0, 0, 1, 'はじめまして！', 400));
     } else {
       // 2 回目: カードを見せる → おかえりなさい
       const p2 = easeOut(prog(lt, 3.6, 4.3));
       s += card(lerp(820, 600, p2), lerp(620, 520, p2), 0.95, -6);
-      s += g(`translate(330 250) scale(${pop(lt, 4.4)})`, bubble(0, 0, 1, 'おかえりなさい！', 440));
+      s += g(`translate(290 195) scale(${pop(lt, 4.4)})`, bubble(0, 0, 1, 'おかえりなさい！', 440));
       s += sparkle(560, 420, 0.7 * pop(lt, 4.6));
     }
-    s += g(`translate(540 960) scale(${pop(lt, lt < 3.6 ? 0.2 : 3.6)})`, hand(0, 0, lt < 3.6 ? '1回目' : '2回目', 54, '#2f8fb0'));
+    s += g(`translate(820 960) scale(${pop(lt, lt < 3.6 ? 0.2 : 3.6)})`, rect(-90, -40, 180, 80, C.white, 40, 5) + hand(0, 3, lt < 3.6 ? '1回目' : '2回目', 48, '#2f8fb0'));
     return s;
   },
   k_benefit(lt, t) {
     let s = phoneBig(300, 540, 1.1,
       rect(-85, -170, 170, 60, C.blue, 30, 4) + hand(0, -138, 'ログイン中', 30, C.white) +
       circle(0, -40, 46, C.skin, 5) + path('M-70 70 Q0 10 70 70', C.blue, 5) + hand(0, 130, 'こんにちは！', 30));
-    s += g(`translate(300 120) scale(${pop(lt, 0.4)})`, check(-150, 0, 1) + hand(40, 4, 'ログインしたまま', 50));
+    s += g(`translate(300 120) scale(${pop(lt, 0.4)})`, check(-170, 0, 1) + hand(-110, 4, 'ログインしたまま', 50, INK, 'start'));
     if (lt > 3.3) {
       s += g(`translate(790 560) scale(${pop(lt, 3.5)})`,
         path('M-150 -90 L-110 -90 L-70 60 L120 60 L150 -50 L-90 -50', C.white, 9) + circle(-50, 110, 22, C.white, 7) + circle(100, 110, 22, C.white, 7) +
         rect(-60, -110, 70, 60, C.red, 8, 5) + rect(20, -100, 80, 50, C.yellow, 8, 5) + rect(-20, -150, 60, 50, C.green, 8, 5));
-      s += g(`translate(790 860) scale(${pop(lt, 3.9)})`, check(-200, 0, 1) + hand(30, 4, 'カートもそのまま', 50));
+      s += g(`translate(760 860) scale(${pop(lt, 3.9)})`, check(-230, 0, 1) + hand(-170, 4, 'カートもそのまま', 50, INK, 'start'));
     }
     return s;
   },
@@ -250,14 +250,14 @@ Object.assign(SCENES, {
   },
   k_choose(lt, t) {
     const off = lt > 1.4;
-    let s = g(`translate(540 520) scale(${pop(lt, 0)})`,
+    let s = g(`translate(540 470) scale(${pop(lt, 0) * 0.94})`,
       rect(-430, -420, 860, 840, C.white, 30) + hand(0, -350, 'Cookieの設定', 60) + path('M-380 -300 L380 -300', 'none', 3) +
       hand(-370, -200, '必須（サイトの動作）', 46, INK, 'start') + toggle(290, -200, true, true) +
       hand(-370, -60, '分析', 46, INK, 'start') + toggle(290, -60, !off) +
       hand(-370, 80, '広告', 46, INK, 'start') + toggle(290, 80, lt < 0.9) +
       rect(-300, 220, 600, 100, C.blue, 50, 6) + hand(0, 272, '選んだものを許可', 46, C.white));
-    if (lt > 0.9) s += g(`translate(830 535) scale(${pop(lt, 0.9)}) rotate(-4)`, hand(0, 0, 'オフ！', 46, C.red));
-    if (lt > 4.2) s += g(`translate(540 985) scale(${pop(lt, 4.2)})`, check(-300, 0, 0.9) + hand(20, 4, 'サイトはふつうに使える', 46, '#2f8f4e'));
+    if (lt > 0.9) s += g(`translate(812 482) scale(${pop(lt, 0.9)}) rotate(-4)`, hand(0, 0, 'オフ！', 46, C.red));
+    if (lt > 4.2) s += g(`translate(540 935) scale(${pop(lt, 4.2)})`, check(-300, 0, 0.9) + hand(20, 4, 'サイトはふつうに使える', 46, '#2f8f4e'));
     return s;
   },
   k_summary(lt, t) {
