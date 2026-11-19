@@ -3,6 +3,8 @@ import { Theseus } from "./Theseus";
 import { TimingCheck } from "./TimingCheck";
 import { Cover } from "./Cover";
 import { Socrates } from "./socrates/Socrates";
+import { SunkCost } from "./sunkcost/SunkCost";
+import { DURATION as SUNK_DURATION } from "./sunkcost/timeline";
 import { DURATION as SOC_DURATION } from "./socrates/timeline";
 import { Still } from "remotion";
 import { SONG_DURATION } from "./timeline";
@@ -32,6 +34,14 @@ export const RemotionRoot: React.FC = () => {
         id="Socrates"
         component={Socrates}
         durationInFrames={Math.round(SOC_DURATION * FPS)}
+        fps={FPS}
+        width={1080}
+        height={1920}
+      />
+      <Composition
+        id="SunkCost"
+        component={SunkCost}
+        durationInFrames={Math.round(SUNK_DURATION * FPS)}
         fps={FPS}
         width={1080}
         height={1920}
