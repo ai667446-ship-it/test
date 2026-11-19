@@ -570,3 +570,11 @@ VERSIONS.w5 = {
 VERSIONS.k3v = Object.assign({}, VERSIONS.k3s, {
   captions: VERSIONS.k3s.captions.map((c, i) => i === 1 ? [c[0], c[1], 'この動画で{y:許可していいか}\nわかるようになります'] : c),
 });
+
+// No.004 / No.005 ナレーション版
+VERSIONS.g4v = Object.assign({}, VERSIONS.g4, {
+  captions: VERSIONS.g4.captions.map((c, i) => i === 1 ? [c[0], c[1], 'この動画で{y:ギガの節約}が\nわかるようになります'] : c),
+});
+VERSIONS.w5v = Object.assign({}, VERSIONS.w5, {
+  captions: VERSIONS.w5.captions.map((c, i) => i === 1 ? [c[0], c[1], 'この動画で{c:Wi-Fi}と{y:モバイル通信}の\n違いがわかります'] : c),
+});
