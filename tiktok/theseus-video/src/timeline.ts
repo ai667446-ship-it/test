@@ -6,11 +6,12 @@ export const SONG_DURATION = 71.95;
 // Section boundaries (where the key changes in the edited song)
 export const SECTIONS = {
   intro: 0,
-  chorus1: 15.2, // vocals start
+  chorus1: 15.17, // chorus starts (counter appears)
   key1: 15.4, // +1 semitone
   key2: 31.26, // +2 semitones
   key3: 44.85, // +3 semitones (final chorus)
   outro: 62.92, // back to original key
+  outroScene: 55.73, // ships fade, figure appears
 };
 
 export type LyricKind = "lead" | "crowd" | "whisper";
@@ -24,43 +25,51 @@ export type Lyric = {
 };
 
 export const LYRICS: Lyric[] = [
-  // Chorus 1 — times from the user's listening notes
-  { start: 15.2, end: 18.1, text: "トンカン トンカン/いちまい かえて", kind: "lead", lineTimes: [15.2, 17.0] },
-  { start: 18.1, end: 19.2, text: "トンカン トンカン/まだ おなじ？", kind: "lead" },
-  { start: 19.2, end: 22.5, text: "おなじ？ おなじ？", kind: "crowd" },
-  { start: 22.5, end: 24.4, text: "トンカン トンカン/にまい かえて", kind: "lead" },
-  { start: 24.4, end: 26.3, text: "トンカン トンカン/まだ おなじ？", kind: "lead" },
-  { start: 26.3, end: 30.0, text: "おなじ？ おなじ？", kind: "crowd" },
+  // Times taken frame-accurately from the user's own captioned edit (CapCut)
+  // Intro chant
+  { start: 0.0, end: 4.2, text: "トンカン トンカン", kind: "lead" },
+  { start: 4.2, end: 8.1, text: "トンカン トンカン", kind: "lead" },
+  { start: 8.17, end: 11.17, text: "トンカン トンカン/トンカン トンカン", kind: "lead" },
+  // Chorus
+  { start: 15.17, end: 17.1, text: "トンカン トンカン/1枚 変えて", kind: "lead" },
+  { start: 17.1, end: 18.93, text: "トンカン トンカン/まだ おなじ？", kind: "lead" },
+  { start: 18.93, end: 22.7, text: "おなじ？ おなじ？", kind: "crowd" },
+  { start: 22.7, end: 24.43, text: "トンカン トンカン/2枚 変えて", kind: "lead" },
+  { start: 24.43, end: 26.33, text: "トンカン トンカン/まだ おなじ？", kind: "lead" },
+  { start: 26.33, end: 30.07, text: "おなじ？ おなじ？", kind: "crowd" },
   // Verse
-  { start: 30.0, end: 31.6, text: "ひゃくまい/かえたら？", kind: "lead" },
-  { start: 31.6, end: 33.4, text: "にひゃくまい/かえたら？", kind: "lead" },
-  { start: 33.4, end: 37.8, text: "さんびゃくまい/ぜんぶ かえたら？", kind: "lead" },
+  { start: 30.07, end: 31.03, text: "100枚/かえたら？", kind: "lead" },
+  { start: 31.03, end: 31.77, text: "おなじ？", kind: "crowd" },
+  { start: 31.77, end: 32.8, text: "200枚/かえたら？", kind: "lead" },
+  { start: 32.8, end: 33.53, text: "おなじ？", kind: "crowd" },
+  { start: 33.53, end: 37.73, text: "300枚/全部 変えたら？", kind: "lead" },
   // Break (instrumental)
-  { start: 37.8, end: 44.4, text: "これって まだ/テセウスの船？", kind: "whisper" },
-  // Final chorus — only the first start time is confirmed; the rest are estimates
-  { start: 44.5, end: 47.0, text: "トンカン トンカン/すてた いたで", kind: "lead" },
-  { start: 47.0, end: 49.5, text: "トンカン トンカン/もう いっせき", kind: "lead" },
-  { start: 49.5, end: 52.0, text: "どっち！ どっち！", kind: "crowd" },
-  { start: 52.0, end: 54.5, text: "トンカン トンカン/ほんもの どっち？", kind: "lead" },
-  { start: 54.5, end: 57.0, text: "トンカン トンカン/わからん わからん", kind: "lead" },
-  { start: 57.0, end: 59.6, text: "わからん！ わからん！", kind: "crowd" },
-  // Outro (estimated)
-  { start: 63.0, end: 66.0, text: "きのうの きみと/きょうの きみ", kind: "whisper" },
-  { start: 66.0, end: 69.0, text: "……まだ おなじ？", kind: "whisper" },
-  { start: 69.0, end: 71.95, text: "トン・カン", kind: "lead" },
+  { start: 38.0, end: 44.6, text: "これって まだ/テセウスの船？", kind: "whisper" },
+  // Final chorus
+  { start: 44.77, end: 46.6, text: "トンカン トンカン/捨てた 板で", kind: "lead" },
+  { start: 46.6, end: 48.43, text: "トンカン トンカン/もう いっせき", kind: "lead" },
+  { start: 48.47, end: 50.07, text: "どっち？ どっち？", kind: "crowd" },
+  { start: 50.07, end: 52.07, text: "トンカン トンカン/本物 どっち？", kind: "lead" },
+  { start: 52.1, end: 55.73, text: "トンカン トンカン/わからん わからん", kind: "lead" },
+  // Outro
+  { start: 55.73, end: 62.1, text: "きのうの きみと/きょうの きみ", kind: "whisper" },
+  { start: 62.1, end: 63.0, text: "まだ おなじ？", kind: "whisper" },
+  { start: 63.0, end: 64.07, text: "トンカン", kind: "lead" },
+  { start: 70.33, end: 71.23, text: "トンカン", kind: "lead" },
 ];
 
 // Plank counter keyframes: [time, planks replaced] (out of 300)
 export const PLANK_KEYS: [number, number][] = [
-  [15.2, 1],
-  [22.4, 1],
-  [22.5, 2],
-  [29.9, 2],
-  [30.0, 100],
-  [31.5, 100],
-  [31.6, 200],
-  [33.3, 200],
-  [33.4, 300],
+  [15.1, 0],
+  [15.17, 1],
+  [22.6, 1],
+  [22.7, 2],
+  [29.97, 2],
+  [30.07, 100],
+  [31.67, 100],
+  [31.77, 200],
+  [33.43, 200],
+  [33.53, 300],
 ];
 export const TOTAL_PLANKS = 300;
 

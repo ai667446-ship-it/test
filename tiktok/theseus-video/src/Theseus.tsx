@@ -130,7 +130,7 @@ const Crowd: React.FC<{ t: number; theme: Theme; cheering: boolean }> = ({ t, th
 // ---------- Outro figure ----------
 const Figure: React.FC<{ t: number; theme: Theme }> = ({ t, theme }) => {
   const segs = 6;
-  const n = Math.max(0, beatIndex(t) - beatIndex(SECTIONS.outro + 0.3));
+  const n = Math.max(0, beatIndex(t) - beatIndex(SECTIONS.outroScene + 0.3));
   return (
     <svg viewBox="0 0 400 600" style={{ width: 400, height: 600 }}>
       <circle cx={200} cy={90} r={62} fill={n % 2 === 0 ? theme.ink : theme.accent} />
@@ -164,14 +164,14 @@ export const Theseus: React.FC = () => {
 
   const planks = planksAt(t);
   const pieces = planks === 0 ? 0 : Math.min(PIECES, Math.ceil(planks / (TOTAL_PLANKS / PIECES)));
-  const singing = t >= SECTIONS.chorus1 && t < SECTIONS.outro;
+  const singing = t >= SECTIONS.chorus1 && t < SECTIONS.outroScene;
   const shake = singing ? beatPulse(t, 0.12) * 6 : 0;
   const lyric = LYRICS.find((l) => t >= l.start && t < l.end);
   const cheering = lyric?.kind === "crowd";
 
   // Two-ship phase
   const twoShips = interpolate(t, [SECTIONS.key3, SECTIONS.key3 + 1.2], [0, 1], { ...clamp, easing: out });
-  const shipsOut = interpolate(t, [SECTIONS.outro, SECTIONS.outro + 0.8], [1, 0], clamp);
+  const shipsOut = interpolate(t, [SECTIONS.outroScene, SECTIONS.outroScene + 0.8], [1, 0], clamp);
 
   // Key-change badge pop
   const keyStarts = [0, SECTIONS.key1, SECTIONS.key2, SECTIONS.key3, SECTIONS.outro];
@@ -211,12 +211,12 @@ export const Theseus: React.FC = () => {
 
       {/* ---- Top area ---- */}
       {t < SECTIONS.chorus1 ? (
-        <div style={{ position: "absolute", top: 170, left: 80, right: 80, textAlign: "center", color: theme.ink }}>
+        <div style={{ position: "absolute", top: 130, left: 80, right: 80, textAlign: "center", color: theme.ink }}>
           <div
             style={{
               fontFamily: mincho,
               fontWeight: 700,
-              fontSize: 60,
+              fontSize: 54,
               opacity: interpolate(t, [0.2, 0.8], [0, 1], clamp),
             }}
           >
@@ -224,8 +224,8 @@ export const Theseus: React.FC = () => {
           </div>
           <div
             style={{
-              fontSize: 112,
-              lineHeight: 1.15,
+              fontSize: 96,
+              lineHeight: 1.12,
               marginTop: 18,
               whiteSpace: "pre-line",
               opacity: interpolate(t, [0.9, 1.5], [0, 1], clamp),
@@ -233,6 +233,17 @@ export const Theseus: React.FC = () => {
             }}
           >
             {HOOK.big}
+          </div>
+          <div
+            style={{
+              fontSize: 76,
+              marginTop: 14,
+              color: theme.accent,
+              opacity: interpolate(t, [2.4, 3.0], [0, 1], clamp),
+              scale: String(interpolate(t, [2.4, 3.1], [1.25, 1], { ...clamp, easing: out }) + beatPulse(t) * 0.04),
+            }}
+          >
+            {HOOK.question}
           </div>
         </div>
       ) : null}
@@ -249,7 +260,7 @@ export const Theseus: React.FC = () => {
         </div>
       ) : null}
 
-      {t >= SECTIONS.key3 && t < SECTIONS.outro ? (
+      {t >= SECTIONS.key3 && t < SECTIONS.outroScene ? (
         <div
           style={{
             position: "absolute",
@@ -270,7 +281,7 @@ export const Theseus: React.FC = () => {
         </div>
       ) : null}
 
-      {t >= SECTIONS.key3 + 7.2 && t < SECTIONS.outro ? (
+      {t >= SECTIONS.key3 + 7.2 && t < SECTIONS.outroScene ? (
         <div
           style={{
             position: "absolute",
@@ -288,7 +299,7 @@ export const Theseus: React.FC = () => {
         </div>
       ) : null}
 
-      {t >= SECTIONS.outro ? (
+      {t >= SECTIONS.outroScene ? (
         <div
           style={{
             position: "absolute",
@@ -299,7 +310,7 @@ export const Theseus: React.FC = () => {
             fontSize: 44,
             lineHeight: 1.6,
             color: theme.ink,
-            opacity: interpolate(t, [SECTIONS.outro + 0.5, SECTIONS.outro + 1.5], [0, 1], clamp),
+            opacity: interpolate(t, [SECTIONS.outroScene + 0.5, SECTIONS.outroScene + 1.5], [0, 1], clamp),
           }}
         >
           {FACT}
@@ -376,38 +387,19 @@ export const Theseus: React.FC = () => {
         {singing && lyric?.kind !== "whisper" ? <Crowd t={t} theme={theme} cheering={cheering} /> : null}
 
         {/* Outro figure */}
-        {t >= SECTIONS.outro ? (
+        {t >= SECTIONS.outroScene ? (
           <div
             style={{
               position: "absolute",
               left: 340,
               top: 660,
-              opacity: interpolate(t, [SECTIONS.outro + 0.3, SECTIONS.outro + 1.2], [0, 1], clamp),
+              opacity: interpolate(t, [SECTIONS.outroScene + 0.3, SECTIONS.outroScene + 1.2], [0, 1], clamp),
             }}
           >
             <Figure t={t} theme={theme} />
           </div>
         ) : null}
       </div>
-
-      {/* Hook question (lyric area) during the intro */}
-      {t < SECTIONS.chorus1 ? (
-        <div
-          style={{
-            position: "absolute",
-            top: 1300,
-            left: 80,
-            right: 80,
-            textAlign: "center",
-            fontSize: 96,
-            color: theme.accent,
-            opacity: interpolate(t, [2.4, 3.0], [0, 1], clamp),
-            scale: String(interpolate(t, [2.4, 3.1], [1.25, 1], { ...clamp, easing: out }) + beatPulse(t) * 0.05),
-          }}
-        >
-          {HOOK.question}
-        </div>
-      ) : null}
 
       {lyric ? <LyricText key={lyric.start} lyric={lyric} t={t} theme={theme} /> : null}
     </AbsoluteFill>
