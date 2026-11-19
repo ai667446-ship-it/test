@@ -24,6 +24,7 @@ const VERSIONS = {
       [34.3, 37.5, '机の上は{r:片づく（消える）}\n本棚は{c:そのまま}'],
       [37.5, 41.0, '{y:メモリ}＝作業の{y:サクサク}さ\n{c:ストレージ}＝保存できる{c:量}'],
       [41.0, 44.0, 'これで店員さんの話も\n{g:こわくない！}'],
+      [44.0, 47.0, '次回は{c:キャッシュ}！\nフォローして図鑑を集めよう'],
     ],
     stage: { tx: 0, ty: 150, s: 1 },
     capY: 1420,
@@ -106,6 +107,10 @@ function renderAt(v, t) {
   let overlay = '';
   const cap = V.captions.find((c) => t >= c[0] && t < c[1]);
 
+  if (v === 'a') {
+    // 絵と字幕の間に図鑑（シリーズ番号）
+    ill += zukanBook(540, 1285, 0.5 * easeOut(prog(t, 0, 0.6)));
+  }
   if (v === 'b') {
     const sp = cap ? cap[3] : null;
     const mood = cap ? cap[4] : null;
