@@ -6,6 +6,15 @@ import numpy as np
 SR = 44100
 meta = json.load(open(sys.argv[1]))
 dur = meta['duration']
+WARP = meta.get('warp')          # [[新開始, 新終了, 元開始, 元終了], ...]
+if WARP: dur = WARP[-1][1]
+WARP_ON = False                  # True の間は add() の時刻を元の時間 → 新しい時間に変換
+def W(t):
+    if not WARP or not WARP_ON: return t
+    for n0, n1, o0, o1 in WARP:
+        if t < o1 or (n0, n1) == tuple(WARP[-1][:2]):
+            return n0 + (t - o0) / max(1e-6, o1 - o0) * (n1 - n0)
+    return t
 N = int(SR * dur)
 mix = np.zeros(N)
 rng = np.random.default_rng(1)
@@ -20,7 +29,7 @@ def pluck(freq, length=1.6, bright=0.5):
     return out * np.linspace(1, 0, n) ** 1.5
 
 def add(sig, t, gain):
-    i = int(t * SR)
+    i = int(W(t) * SR)
     if i >= N: return
     seg = sig[: N - i]
     mix[i:i + len(seg)] += seg * gain
@@ -51,6 +60,8 @@ while t < dur - 1:
 # 最後はフェードアウト
 fade = int(SR * 2.5)
 mix[-fade:] *= np.linspace(1, 0, fade)
+
+WARP_ON = True
 
 def pop_sfx():
     n = int(SR * 0.12); tt = np.arange(n) / SR
@@ -133,6 +144,19 @@ for s in meta['scenes'][1:]: add(swish(), s - 0.1, 0.12)
 win = int(SR * 0.5)
 rms = np.sqrt(np.array([np.mean(mix[i:i + win] ** 2) for i in range(0, N - win, win)]))
 mix = mix * (10 ** (-20 / 20) / max(1e-9, np.median(rms)))
+# ナレーション: 声の間は BGM・効果音を下げ、声を重ねる
+if meta.get('voice'):
+    voice = np.zeros(N); active = np.zeros(N)
+    for c in meta['voice']:
+        with wave.open(c['path']) as w:
+            sr = w.getframerate(); v = np.frombuffer(w.readframes(w.getnframes()), np.int16) / 32768
+        v = np.interp(np.arange(int(len(v) * SR / sr)) * sr / SR, np.arange(len(v)), v)
+        i = int(c['start'] * SR); v = v[: max(0, N - i)]
+        voice[i:i + len(v)] += v; active[i:i + len(v)] = 1
+    k = int(SR * 0.15); env = np.convolve(active, np.ones(k) / k, 'same')
+    mix = mix * (1 - 0.6 * env)                                   # BGM を約 -8dB
+    voice = voice * (10 ** (-14 / 20) / max(1e-9, np.sqrt(np.mean(voice[active > 0] ** 2))))
+    mix = mix + voice
 mix = np.tanh(mix * 1.1) / 1.1 * 0.95
 data = (mix * 32767).astype(np.int16)
 with wave.open(sys.argv[2], 'wb') as w:

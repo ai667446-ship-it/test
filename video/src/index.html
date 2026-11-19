@@ -15,7 +15,14 @@
   const params = new URLSearchParams(location.search);
   const V = params.get('v') || 'a';
   const handEl = document.getElementById('hand');
-  window.draw = (t) => {
+  window.WARP = null;
+  const unwarp = (T) => {
+    if (!window.WARP) return T;
+    for (const [n0, n1, o0, o1] of window.WARP) if (T < n1) return o0 + (T - n0) / (n1 - n0) * (o1 - o0);
+    const l = window.WARP[window.WARP.length - 1]; return l[3];
+  };
+  window.draw = (T) => {
+    const t = unwarp(T);
     document.getElementById('stage').innerHTML = renderAt(V, t);
     if (HAND && HAND.opacity > 0) {
       handEl.style.display = 'block';

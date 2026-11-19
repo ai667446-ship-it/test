@@ -4,7 +4,7 @@ const { chromium } = require('playwright');
 const path = require('path');
 const fs = require('fs');
 (async () => {
-  const [v, dir, fpsArg, budgetArg] = process.argv.slice(2);
+  const [v, dir, fpsArg, budgetArg, warpPath] = process.argv.slice(2);
   const fps = Number(fpsArg || 30), budget = Number(budgetArg || 240) * 1000, t0 = Date.now();
   fs.mkdirSync(dir, { recursive: true });
   const browser = await chromium.launch();
@@ -12,6 +12,11 @@ const fs = require('fs');
   await page.goto('file://' + path.resolve(__dirname, 'src/index.html') + '?v=' + v);
   await page.evaluate(() => prepareFonts());
   const meta = await page.evaluate(() => meta());
+  if (warpPath) {
+    const wj = JSON.parse(fs.readFileSync(warpPath, 'utf8'));
+    await page.evaluate((w) => { window.WARP = w; }, wj.warp);
+    meta.warp = wj.warp; meta.voice = wj.clips; meta.duration = wj.duration;
+  }
   fs.writeFileSync(path.join(dir, 'meta.json'), JSON.stringify(meta));
   const total = Math.round(meta.duration * fps);
   let done = 0;

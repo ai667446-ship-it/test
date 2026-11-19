@@ -565,3 +565,8 @@ VERSIONS.w5 = {
     [29.0, 32.0, '{y:保存}して\nギガの節約に役立ててね'],
   ],
 };
+
+// No.003 Cookie ナレーション版（k3s と同じ絵・字幕。時間は声に合わせて伸び縮み）
+VERSIONS.k3v = Object.assign({}, VERSIONS.k3s, {
+  captions: VERSIONS.k3s.captions.map((c, i) => i === 1 ? [c[0], c[1], 'この動画で{y:許可していいか}\nわかるようになります'] : c),
+});
