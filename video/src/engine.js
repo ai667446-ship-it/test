@@ -239,7 +239,7 @@ function activeAt(list, t) { return list.find((s) => t >= s.from && t < s.to) ||
 function sceneTransition(scenes, t) {
   const sc = activeAt(scenes, t);
   const lt = t - sc.from;
-  const inP = easeOut(prog(lt, 0, 0.35));
+  const inP = sc.from === 0 ? 1 : easeOut(prog(lt, 0, 0.35));   // 1 コマ目から絵を出す
   const dx = (1 - inP) * 120;
   return g(`translate(${dx} 0)`, sc.draw(lt, t), `opacity="${inP}"`);
 }

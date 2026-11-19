@@ -1,6 +1,8 @@
 // A版（ナレーション字幕）と B版（おばあちゃん×孫の掛け合い）の台本とタイミング
 
-const seq = (list) => list.map(([from, to, scene]) => ({ from, to, draw: SCENES[scene], name: scene }));
+// [開始, 終了, シーン名, 速さ(省略可), 途中から始める秒(省略可)]
+const seq = (list) => list.map(([from, to, scene, speed = 1, offset = 0]) =>
+  ({ from, to, name: scene, speed, offset, draw: (lt, t) => SCENES[scene](lt * speed + offset, t) }));
 
 const VERSIONS = {
   a: {
@@ -111,7 +113,7 @@ function renderAt(v, t) {
 
   if (V.narration) {
     // 絵と字幕の間に図鑑（シリーズ番号）
-    ill += zukanBook(540, 1285, 0.5 * easeOut(prog(t, 0, 0.6)), 'No.' + V.no);
+    ill += zukanBook(540, 1285, 0.5 * (V.bigFirst ? 1 : easeOut(prog(t, 0, 0.6))), 'No.' + V.no);
   }
   if (v === 'b') {
     const sp = cap ? cap[3] : null;
@@ -132,7 +134,19 @@ function renderAt(v, t) {
         `<text x="0" y="-15" text-anchor="middle" dominant-baseline="middle" font-family="Zen Maru Gothic" font-weight="900" font-size="40" fill="#fff">${nm}</text>`);
     }
   }
-  if (cap) overlay += captionSVG(cap[2], 540, V.capY, cap[2].includes('\n') ? 70 : 80, cap[0], t);
+  if (cap) {
+    const big = V.bigFirst && cap[0] === 0;          // 冒頭のつかみは大きく
+    overlay += captionSVG(cap[2], 540, V.capY, big ? 92 : (cap[2].includes('\n') ? 70 : 80), cap[0], t);
+  }
+  // 話を止めずに出す「保存」の札
+  if (V.sticker && t >= V.sticker[0] && t < V.sticker[1]) {
+    const k = pop(t, V.sticker[0]) * (1 - prog(t, V.sticker[1] - 0.3, V.sticker[1]));
+    overlay += g(`translate(770 300) scale(${k}) rotate(4)`,
+      `<rect x="-255" y="-62" width="510" height="124" rx="62" fill="#fffdf7" stroke="#2b2420" stroke-width="7"/>` +
+      `<path d="M-185 18 C-220 -6 -215 -46 -185 -26 C-155 -46 -150 -6 -185 18 Z" fill="${C.red}" stroke="#2b2420" stroke-width="5"/>` +
+      `<path d="M-135 -34 L-105 -34 L-105 22 L-120 10 L-135 22 Z" fill="${C.yellow}" stroke="#2b2420" stroke-width="5" stroke-linejoin="round"/>` +
+      `<text x="78" y="4" text-anchor="middle" dominant-baseline="middle" font-family="Zen Maru Gothic" font-weight="900" font-size="40" fill="#2b2420">保存しとくと便利</text>`);
+  }
   // 進行バー（最下部）
   overlay += `<rect x="0" y="${H - 14}" width="${W * (t / V.duration)}" height="14" fill="#e8664f" opacity="0.9"/>`;
   return frameSVG(t, ill, overlay);

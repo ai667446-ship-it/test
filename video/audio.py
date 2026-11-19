@@ -116,13 +116,15 @@ def switch_click():
     n = int(SR * 0.05); tt = np.arange(n) / SR
     return (rng.normal(0, 1, n) * np.exp(-tt * 400) + np.sin(2 * np.pi * 2600 * tt) * np.exp(-tt * 250)) * 0.6
 
-for start, name in zip(meta['scenes'], names):
+speeds = meta.get('speeds', [1] * len(names)); offsets = meta.get('offsets', [0] * len(names))
+for start, name, spd, off in zip(meta['scenes'], names, speeds, offsets):
+    L = lambda lt: start + (lt - off) / spd
     if name == 'c_clear':                                  # 控えをゴミ箱へ（8 枚）
         for i in range(8): add(page_flip(i + 10), start + 0.4 + i * 0.275 + 0.15, 0.45)
     if name == 'c_copy':                                   # 2 回目は一瞬
         add(chime(), start + 4.1, 0.3)
     if name == 'k_choose':                                 # スイッチをオフ
-        add(switch_click(), start + 0.9, 0.5); add(switch_click(), start + 1.4, 0.5)
+        add(switch_click(), L(0.9), 0.5); add(switch_click(), L(1.4), 0.5)
 
 for c in meta['cues']: add(pop_sfx(), c, 0.18)
 for s in meta['scenes'][1:]: add(swish(), s - 0.1, 0.12)
