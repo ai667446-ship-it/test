@@ -92,6 +92,8 @@ VERSIONS.b.noteAt = 5.4;
 insertBeat(VERSIONS.a, 13, 3.5, ['あとで見返せるように\n{p:いいね}と{y:保存}を忘れずに！']);
 insertBeat(VERSIONS.b, 18, 3.5, ['あとで見返せるように\n{p:いいね}と{y:保存}を忘れずにね！', 'b', 'point']);
 
+VERSIONS.a.narration = true;
+VERSIONS.a.no = '001';
 let HAND = null;
 let NOTE_AT = 99;
 const NAMES = { g: ['ばあちゃん', '#a487c9'], b: ['ソラ', '#5fa8d8'] };
@@ -107,9 +109,9 @@ function renderAt(v, t) {
   let overlay = '';
   const cap = V.captions.find((c) => t >= c[0] && t < c[1]);
 
-  if (v === 'a') {
+  if (V.narration) {
     // 絵と字幕の間に図鑑（シリーズ番号）
-    ill += zukanBook(540, 1285, 0.5 * easeOut(prog(t, 0, 0.6)));
+    ill += zukanBook(540, 1285, 0.5 * easeOut(prog(t, 0, 0.6)), 'No.' + V.no);
   }
   if (v === 'b') {
     const sp = cap ? cap[3] : null;
