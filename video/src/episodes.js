@@ -49,7 +49,7 @@ function summaryPage(lt, no, title, rows, note) {
   rows.forEach(([icon, label, desc, col], i) => {
     const y = -270 + rh * i + rh / 2 - 30;
     body += g(`translate(-330 ${y}) scale(${pop(lt, 0.3 + i * 0.35)})`, icon()) +
-      hand(-200, y - 38, label, 54, INK, 'start') + hand(-200, y + 40, desc, 48, col, 'start');
+      hand(-200, y - 38, label, Math.min(54, 620 / [...label].length), INK, 'start') + hand(-200, y + 40, desc, Math.min(48, 620 / [...desc].length), col, 'start');
     if (i < rows.length - 1) body += path(`M-420 ${y + rh / 2 + 18} L420 ${y + rh / 2 + 18}`, 'none', 3);
   });
   if (note) body += hand(0, 400, note, 40, '#6b5d52');
@@ -62,7 +62,7 @@ function ctaPage(lt, nextNo, nextTitle) {
   s += g(`translate(540 720) scale(${pop(lt, 0.6)})`,
     rect(-380, -130, 760, 260, C.white, 30) +
     rect(-340, -165, 320, 70, C.blue, 35) + hand(-180, -128, `次回 No.${nextNo}`, 46, C.white) +
-    hand(0, 20, nextTitle, 70));
+    hand(0, 20, nextTitle, Math.min(70, 680 / [...nextTitle].length)));
   return s + sparkle(170, 200, 0.8 * pop(lt, 0.9)) + sparkle(920, 470, 0.6 * pop(lt, 1.1));
 }
 const qMarks = (lt, t, at0) => [0, 1, 2].map((i) => {
@@ -772,5 +772,183 @@ VERSIONS.t7 = {
     [22.0, 26.0, '大事なアカウントは\n{g:設定でオン}にしておこう'],
     [26.0, 29.0, '{y:二段階認証}＝鍵＋合言葉\nコードは{r:だれにも教えない}'],
     [29.0, 32.0, '{y:保存}して\n家族にも教えてあげてね'],
+  ],
+};
+
+// ======================================================================
+// No.008 アップデート / No.009 フィッシング詐欺
+// ======================================================================
+const hammer = (x, y, s, r = 0) => g(at(x, y, s, r), rect(-12, -10, 24, 150, '#a8723f', 6, 6) + rect(-60, -50, 120, 50, '#9aa6b1', 10, 6));
+const holeWall = (x, y, s, patched) => g(at(x, y, s),
+  rect(-200, -150, 400, 300, '#f7ead2', 10) + [0, 1, 2].map((r) => path(`M-200 ${-75 + r * 75} L200 ${-75 + r * 75}`, 'none', 3)).join('') +
+  (patched ? rect(-70, -55, 140, 110, '#e0b77c', 10, 6) + path('M-50 -35 L50 35 M50 -35 L-50 35', 'none', 4)
+    : `<path d="M-60 -40 L-20 -55 L30 -35 L60 0 L40 45 L-10 55 L-55 30 Z" fill="${INK}"/>`));
+const plug = (x, y, s) => g(at(x, y, s), rect(-40, -30, 80, 60, '#e6e9ee', 12, 6) + path('M-15 -30 L-15 -60 M15 -30 L15 -60', 'none', 8) + path('M0 30 Q0 90 -60 110', 'none', 8));
+const popupAd = (x, y, s) => g(at(x, y, s),
+  rect(-230, -150, 460, 300, '#fff3f0', 20, 7) + rect(-230, -150, 460, 64, C.red, 18, 7) + hand(0, -116, '警告！', 40, C.white) +
+  hand(0, -30, 'ウイルスに感染', 40, C.red) + rect(-150, 40, 300, 76, C.red, 38, 6) + hand(0, 80, '今すぐ更新', 40, C.white));
+const fishHook = (x, y, s, bait = '当選！') => g(at(x, y, s),
+  path('M0 -150 L0 40 Q0 110 -60 110 Q-110 110 -110 60', 'none', 9) + path('M-110 60 L-125 30', 'none', 9) +
+  g('translate(-40 90)', rect(-90, -40, 180, 80, C.yellow, 40, 6) + hand(0, 3, bait, 40, C.red)));
+const urlBar = (x, y, s, url, bad) => g(at(x, y, s),
+  rect(-330, -40, 660, 80, C.white, 40) + lockIcon(-280, 8, 0.38, bad) + hand(-235, 3, url, 40, bad ? C.red : INK, 'start'));
+const formCard = (x, y, s) => g(at(x, y, s),
+  rect(-200, -190, 400, 380, C.white, 20) + hand(0, -150, 'ログイン', 40) +
+  [['ID', -80], ['パスワード', 10], ['カード番号', 100]].map(([lb, yy]) => hand(-170, yy - 28, lb, 26, '#6b5d52', 'start') + rect(-170, yy - 10, 340, 46, '#f0ede6', 8, 4) + hand(-155, yy + 14, '●●●●●', 26, INK, 'start')).join(''));
+const starIcon = (x, y, s, col = C.yellow) => g(at(x, y, s), path('M0 -60 L17 -18 L60 -18 L25 8 L38 52 L0 26 L-38 52 L-25 8 L-60 -18 L-17 -18 Z', col, 6));
+
+Object.assign(SCENES, {
+  // ---------- No.008 アップデート ----------
+  up_hook(lt, t) {
+    const press = lt > 1.2 && lt < 1.6;
+    let s = phoneBig(540, 470, 1.35,
+      hand(0, -160, 'ソフトウェア', 30, '#6b5d52') + hand(0, -120, 'アップデート', 30, '#6b5d52') +
+      rect(-95, -80, 190, 80, '#dff1fb', 14, 4) + hand(0, -40, 'iOS 新しい版', 26) +
+      rect(-90, 30, 180, 56, C.blue, 28, 4) + hand(0, 58, '今すぐ', 30, C.white) +
+      rect(-90, 105, 180, 56, press ? '#cfd6dd' : '#eee', 28, 4) + hand(0, 133, 'あとで', 30));
+    s += g(`translate(870 720) scale(${1 + (press ? 0.15 : 0)})`, hand(0, 0, 'ポチッ', 60, C.red));
+    s += hand(240, 260, '？', 110, C.orange);
+    return s;
+  },
+  up_def(lt, t) {
+    let s = g(`translate(540 90) scale(${pop(lt, 0)})`, marker(0, 0, 820, 100, C.yellow) + hand(0, 4, 'アップデート ＝ 防犯リフォーム', 58));
+    s += house(540, 600, 1.5);
+    s += g(`translate(820 420) rotate(${Math.sin(t * 8) * 18})`, hammer(0, 0, 1.0, 30));
+    s += sparkle(260, 360, 0.9 * pop(lt, 0.8)) + sparkle(820, 760, 0.7 * pop(lt, 1.2));
+    return s;
+  },
+  up_hole(lt, t) {
+    const patched = lt > 2.6;
+    let s = holeWall(560, 620, 1.3, patched);
+    if (!patched) s += g(`translate(${270 + Math.sin(t * 2) * 10} 600)`, thief(0, 0, 0.75));
+    if (patched) {
+      s += g(`translate(820 420) rotate(${Math.sin(t * 8) * 18})`, hammer(0, 0, 0.9, 30));
+      s += g(`translate(560 860) scale(${pop(lt, 2.6)})`, check(-150, 0, 1) + hand(-95, 4, '穴をふさいだ！', 50, '#2f8f4e', 'start'));
+    } else {
+      s += g(`translate(560 400) scale(${pop(lt, 0.4)})`, hand(0, 0, '防犯の穴', 54, C.red));
+    }
+    return s;
+  },
+  up_how(lt, t) {
+    let s = phoneBig(300, 560, 1.0, hand(0, -40, '更新中…', 34) + rect(-80, 10, 160, 26, '#eee', 13, 4) + `<rect x="-77" y="13" width="${154 * ((lt * 0.25) % 1)}" height="20" rx="10" fill="${C.green}"/>`);
+    s += plug(300, 900, 0.9);
+    s += g(`translate(760 360) scale(${pop(lt, 0.3)})`, wifiIcon(0, 0, 1.3, '#2f8fb0') + hand(0, 120, 'Wi-Fi', 50));
+    s += g(`translate(760 640) scale(${pop(lt, 0.7)})`, rect(-110, -50, 220, 100, '#fff3c4', 30) + hand(0, 4, '充電', 54));
+    if (lt > 2.4) s += g(`translate(760 850) scale(${pop(lt, 2.4)})`, cloud(0, 0, 0.8, 'バックアップ'));
+    return s;
+  },
+  up_fake(lt, t) {
+    let s = browserWin(110, 120, 860, 760) + g(`translate(540 520) scale(${pop(lt, 0.2)})`, popupAd(0, 0, 1.2));
+    if (lt > 0.9) s += g(`translate(820 330) scale(${pop(lt, 0.9) * 1.6})`, cross(0, 0, 1)) + g(`translate(540 790) scale(${pop(lt, 1.1)})`, hand(0, 0, 'ニセモノに注意！', 50, C.red));
+    if (lt > 2.4) s += g(`translate(540 960) scale(${pop(lt, 2.4)})`,
+      rect(-330, -55, 660, 110, C.white, 30) + check(-270, 0, 0.8) + hand(-225, 4, '設定・アプリストアから', 46, '#2f8f4e', 'start'));
+    return s;
+  },
+  up_summary(lt, t) {
+    return summaryPage(lt, '008', 'アップデート', [
+      [() => hammer(0, -20, 0.55, 30), 'アップデート＝防犯リフォーム', '新機能＋防犯の穴をふさぐ', '#c97a20'],
+      [() => wifiIcon(0, 0, 0.8, '#2f8fb0'), 'Wi-Fi＋充電で寝る前に', '心配なら先にバックアップ', '#2f8fb0'],
+      [() => warnSign(0, 0, 0.6), '広告の「今すぐ更新」は注意', '更新は設定やストアから', '#c4553f'],
+    ]);
+  },
+  up_cta(lt, t) { return ctaPage(lt, '009', 'フィッシング詐欺ってなに？'); },
+
+  // ---------- No.009 フィッシング詐欺 ----------
+  ph_hook(lt, t) {
+    let s = phoneBig(540, 470, 1.35,
+      hand(0, -165, 'SMS', 30, '#6b5d52') +
+      rect(-100, -135, 200, 170, '#f0ede6', 16, 4) + hand(0, -105, 'お荷物を', 26) + hand(0, -70, 'お届けできません', 22) + hand(0, -30, 'でした', 26) +
+      hand(0, 10, 'http://xx…', 22, '#2f6fd0') + rect(-90, 70, 180, 56, C.red, 28, 4) + hand(0, 98, '確認する', 28, C.white));
+    s += hand(230, 300, '？', 110, C.red) + hand(860, 260, '！', 110, C.orange);
+    return s;
+  },
+  ph_def(lt, t) {
+    let s = g(`translate(540 90) scale(${pop(lt, 0)})`, marker(0, 0, 820, 100, '#ffc9d8') + hand(0, 4, 'フィッシング ＝ ニセのエサで釣る', 56));
+    s += g(`translate(540 ${470 + Math.sin(t * 3) * 14}) scale(${pop(lt, 0.2)})`, fishHook(0, 0, 1.5));
+    s += g(`translate(540 920) scale(${pop(lt, 1.0)})`, hand(0, 0, '※ 魚＝あなた', 44, '#6b5d52'));
+    return s;
+  },
+  ph_fake(lt, t) {
+    let s = shop(300, 620, 1.05, '本物', C.blue) + shop(780, 620, 1.05, 'ニセモノ', C.blue);
+    s += g(`translate(540 420) scale(${pop(lt, 0.5)})`, hand(0, 0, 'そっくり！', 56, C.red));
+    if (lt > 2.4) s += g(`translate(780 870) scale(${pop(lt, 2.4)})`, rect(-260, -50, 520, 100, '#ffe1dc', 30) + hand(0, 4, '配達・未払い・停止…', 40, C.red));
+    return s;
+  },
+  ph_steal(lt, t) {
+    let s = formCard(320, 560, 1.15) + thief(800, 620, 0.85);
+    for (let i = 0; i < 3; i++) {
+      const p = ((lt * 0.5 + i / 3) % 1);
+      if (lt > 0.6) s += g(at(lerp(450, 740, p), 520 + i * 60 - Math.sin(p * Math.PI) * 60, 0.8), rect(-50, -22, 100, 44, C.yellow, 10, 4) + hand(0, 2, '●●●', 24));
+    }
+    s += g(`translate(800 340) scale(${pop(lt, 0.4)})`, hand(0, 0, 'いただき！', 52, C.red));
+    return s;
+  },
+  ph_check(lt, t) {
+    let s = urlBar(540, 260, 1.15, 'amaz0n-login.xyz', true);
+    s += g(`translate(${870 + Math.sin(t * 2) * 20} 400)`, circle(0, 0, 60, 'none', 10) + path('M42 42 L95 95', 'none', 16));
+    s += g(`translate(480 400) scale(${pop(lt, 0.4)})`, hand(0, 0, 'アドレスがちょっと変', 46, C.red));
+    if (lt > 2.4) {
+      s += g(`translate(540 720) scale(${pop(lt, 2.4)})`,
+        rect(-260, -120, 520, 240, C.white, 30) + hand(0, -60, 'でも一番は', 44) + hand(0, 20, 'リンクを押さない', 56, '#2f8f4e'));
+    }
+    return s;
+  },
+  ph_safe(lt, t) {
+    let s = g(`translate(300 520) scale(${pop(lt, 0)})`, rect(-200, -230, 400, 460, C.white, 30) + starIcon(0, -80, 1.4) + hand(0, 70, 'ブックマーク', 48) + check(0, 160, 0.9));
+    s += g(`translate(780 520) scale(${pop(lt, 0.5)})`, rect(-200, -230, 400, 460, C.white, 30) +
+      rect(-70, -150, 140, 140, C.blue, 32, 6) + hand(0, -80, 'App', 44, C.white) + hand(0, 70, '公式アプリ', 48) + check(0, 160, 0.9));
+    return s;
+  },
+  ph_summary(lt, t) {
+    return summaryPage(lt, '009', 'フィッシング詐欺', [
+      [() => fishHook(0, 70, 0.32, ''), 'フィッシング＝ニセのエサ', '本物そっくりのメール・SMS', '#c4553f'],
+      [() => cross(0, 0, 1.1), 'メッセージのリンクは押さない', 'ID・パスワード・カードを守る', '#c4553f'],
+      [() => starIcon(0, 0, 0.7), '公式アプリ・ブックマークから', '入力したらすぐパスワード変更', '#2f8f4e'],
+    ]);
+  },
+  ph_cta(lt, t) { return ctaPage(lt, '010', 'VPNってなに？'); },
+});
+
+VERSIONS.u8 = {
+  no: '008', narration: true, stage: { tx: 0, ty: 150, s: 1 }, capY: 1420, duration: 28,
+  bigFirst: true, sticker: [7.6, 11.8],
+  scenes: seq([
+    [0, 4, 'up_hook'], [4, 7, 'up_def'], [7, 12, 'up_hole'], [12, 17, 'up_how', 1.1], [17, 22, 'up_fake', 1.1],
+    [22, 25, 'up_summary', 1.2], [25, 28, 'up_cta'],
+  ]),
+  captions: [
+    [0.0, 1.9, '「アップデートしますか？」\nいつも「あとで」押してない？'],
+    [1.9, 4.0, 'この動画で{y:アップデートの大切さ}が\nわかるようになります'],
+    [4.0, 7.0, '{y:アップデート}は\nスマホやアプリの{y:防犯リフォーム}'],
+    [7.0, 9.5, '新しい機能だけじゃなく\n{y:防犯の穴}もふさいでくれる'],
+    [9.5, 12.0, '放っておくと\n{r:穴から入られる}ことも'],
+    [12.0, 14.5, '{g:Wi-Fi}と{g:充電}をつないで\n寝る前にするのがおすすめ'],
+    [14.5, 17.0, '心配なら\n先に{c:バックアップ}を'],
+    [17.0, 19.5, 'ネット広告の「今すぐ更新」は\n{r:ニセモノ}のことも'],
+    [19.5, 22.0, 'アップデートは\n{g:設定}や{g:アプリストア}から'],
+    [22.0, 25.0, '{y:アップデート}＝防犯リフォーム\n「あとで」より{g:今夜}'],
+    [25.0, 28.0, '{y:保存}して\n「あとで」を押す前に見返してね'],
+  ],
+};
+VERSIONS.p9 = {
+  no: '009', narration: true, stage: { tx: 0, ty: 150, s: 1 }, capY: 1420, duration: 31,
+  bigFirst: true, sticker: [7.6, 11.8],
+  scenes: seq([
+    [0, 4, 'ph_hook'], [4, 7, 'ph_def'], [7, 12, 'ph_fake'], [12, 17, 'ph_steal'], [17, 22, 'ph_check', 1.1],
+    [22, 25, 'ph_safe'], [25, 28, 'ph_summary', 1.2], [28, 31, 'ph_cta'],
+  ]),
+  captions: [
+    [0.0, 1.9, '「お荷物をお届けできませんでした」\nこのSMS 押したことある？'],
+    [1.9, 4.0, 'この動画で{r:フィッシング詐欺}の\n見分け方がわかります'],
+    [4.0, 7.0, '{r:フィッシング}は\nニセモノの{y:エサで釣る}サギ'],
+    [7.0, 9.5, '本物そっくりの\nメールやSMSが届く'],
+    [9.5, 12.0, '{y:配達}・{y:未払い}・{y:アカウント停止}など\nあせらせる内容が多い'],
+    [12.0, 14.5, 'リンク先は\n{r:ニセモノのサイト}'],
+    [14.5, 17.0, 'IDやパスワード\n{r:カード番号}を盗まれる'],
+    [17.0, 19.5, 'アドレスが{r:ちょっと変}なのも\n見分けるヒント'],
+    [19.5, 22.0, 'でも見分けるより\n{g:リンクを押さない}のが一番'],
+    [22.0, 25.0, '{g:公式アプリ}や{g:ブックマーク}から\n開けば安心'],
+    [25.0, 28.0, '{r:フィッシング}＝ニセモノのエサ\nメッセージのリンクは{g:押さない}'],
+    [28.0, 31.0, '{y:保存}して\n家族にもシェアしてね'],
   ],
 };

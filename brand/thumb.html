@@ -18,6 +18,8 @@ const THUMBS = {
   '004': { title: '{y:ギガ}', question: '何が減ってる？', answer: '水のタンクでわかる！', art: 'giga' },
   '006': { title: '{c:クラウド}', question: 'どこにあるの？', answer: '貸し倉庫でわかる！', art: 'cloud6' },
   '007': { title: '{y:二段階認証}', question: 'ってなに？', answer: '鍵と合言葉でわかる！', art: 'tfa7' },
+  '008': { title: '{y:アップデート}', question: '「あとで」で大丈夫？', answer: '防犯リフォームでわかる！', art: 'upd8' },
+  '009': { titleSize: 120, title: '{r:フィッシング}\n{r:詐欺}', question: '見分け方は？', answer: 'ニセのエサでわかる！', art: 'fish9' },
   '005': { titleSize: 128, title: '{c:Wi-Fi}と\n{y:モバイル通信}', question: 'なにが違う？', answer: '水道と水筒でわかる！', art: 'wifi' },
 };
 
@@ -46,6 +48,12 @@ const ART = {
   tfa7: () =>
     keyIcon(250, 60, 1.4, -20) + hand(250, 200, '① 鍵', 50) + hand(450, 60, '＋', 80, C.gray) +
     door(780, 90, 0.62) + g('translate(780 -150)', bubble(0, 0, 0.85, '合言葉は？', 320)) + hand(780, 260, '② 合言葉', 46),
+  upd8: () =>
+    house(330, 120, 1.05) + g('translate(530 -30) rotate(20)', hammer(0, 0, 0.9, 0)) +
+    holeWall(800, 110, 0.6, true) + check(800, -30, 0.9),
+  fish9: () =>
+    phoneBig(300, 110, 0.62, rect(-95, -120, 190, 150, '#f0ede6', 16, 4) + hand(0, -85, 'お荷物を', 26) + hand(0, -45, 'お届けできません', 22) + rect(-80, 50, 160, 56, C.red, 28, 4) + hand(0, 78, '確認', 28, C.white)) +
+    g('translate(760 60)', fishHook(0, 0, 1.0, 'クリック')),
   card: () =>
     g(at(330, 80, 1, -6), rect(-220, -140, 440, 280, C.white, 26, 7) + rect(-220, -140, 440, 70, C.orange, 20, 7) +
       hand(0, -104, '会員カード', 44, C.white) + [0, 1, 2, 3, 4].map((i) => circle(-160 + i * 80, 30, 28, i < 3 ? C.red : C.white, 5)).join('') +
@@ -68,11 +76,11 @@ function thumb(no) {
     // 絵
     g('translate(0 1090)', ART[d.art]()) +
     // たとえの帯
-    marker(540, 1612, 640, 92, C.yellow) + hand(540, 1614, d.answer, 60);
+    marker(540, 1612, Math.max(640, [...d.answer].length * 56 + 60), 92, C.yellow) + hand(540, 1614, d.answer, Math.min(60, 760 / [...d.answer].length));
   const lines = d.title.split('\n').length;
   const overlay =
     captionSVG(d.title, 540, lines > 1 ? 640 : 610, lines > 1 ? (d.titleSize || 150) : 190, 0, 10, { maxW: 860 }) +
-    g(`translate(540 ${lines > 1 ? 880 : 800}) rotate(-3)`, hand(0, 0, d.question, 110, C.red));
+    g(`translate(540 ${lines > 1 ? 880 : 800}) rotate(-3)`, hand(0, 0, d.question, Math.min(110, 840 / [...d.question].length), C.red));
   return frameSVG(0, ill, overlay).replace(/<rect x="0" y="1906"[^>]*\/>/, '');
 }
 window.show = (no) => { document.getElementById('s').innerHTML = thumb(no); };
