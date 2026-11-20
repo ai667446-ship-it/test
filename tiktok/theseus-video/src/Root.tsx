@@ -4,6 +4,7 @@ import { TimingCheck } from "./TimingCheck";
 import { Cover } from "./Cover";
 import { Socrates } from "./socrates/Socrates";
 import { SunkCost } from "./sunkcost/SunkCost";
+import { SunkTiming } from "./sunkcost/SunkTiming";
 import { DURATION as SUNK_DURATION } from "./sunkcost/timeline";
 import { DURATION as SOC_DURATION } from "./socrates/timeline";
 import { Still } from "remotion";
@@ -41,6 +42,14 @@ export const RemotionRoot: React.FC = () => {
       <Composition
         id="SunkCost"
         component={SunkCost}
+        durationInFrames={Math.round(SUNK_DURATION * FPS)}
+        fps={FPS}
+        width={1080}
+        height={1920}
+      />
+      <Composition
+        id="SunkTiming"
+        component={SunkTiming}
         durationInFrames={Math.round(SUNK_DURATION * FPS)}
         fps={FPS}
         width={1080}
