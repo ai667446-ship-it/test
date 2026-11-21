@@ -1125,3 +1125,198 @@ VERSIONS.b11 = {
     [25.0, 28.0, '{y:保存}して\nイヤホンがつながらないとき見返してね'],
   ],
 };
+
+// ======================================================================
+// No.012 QRコード / No.013 情報漏洩
+// ======================================================================
+// 見た目だけのQRコード風の模様（決定的）
+const qrCode = (x, y, s, seed = 1, col = INK) => {
+  let b = rect(-150, -150, 300, 300, C.white, 12, 6);
+  const cell = 240 / 21;
+  const finder = (cx, cy) => `<rect x="${cx}" y="${cy}" width="${cell * 7}" height="${cell * 7}" fill="${col}"/><rect x="${cx + cell}" y="${cy + cell}" width="${cell * 5}" height="${cell * 5}" fill="#fff"/><rect x="${cx + cell * 2}" y="${cy + cell * 2}" width="${cell * 3}" height="${cell * 3}" fill="${col}"/>`;
+  for (let r = 0; r < 21; r++) for (let c = 0; c < 21; c++) {
+    const inF = (r < 8 && c < 8) || (r < 8 && c > 12) || (r > 12 && c < 8);
+    if (!inF && rnd(r * 31 + c * 7 + seed * 101) > 0.52) b += `<rect x="${-120 + c * cell}" y="${-120 + r * cell}" width="${cell + 0.5}" height="${cell + 0.5}" fill="${col}"/>`;
+  }
+  b += finder(-120, -120) + finder(-120 + cell * 14, -120) + finder(-120, -120 + cell * 14);
+  return g(at(x, y, s), b);
+};
+const server = (x, y, s) => g(at(x, y, s), rect(-90, -150, 180, 300, '#5a6070', 12) +
+  [0, 1, 2, 3].map((i) => rect(-70, -130 + i * 68, 140, 50, '#3a3f4b', 6, 4) + circle(45, -105 + i * 68, 7, C.green, 3)).join(''));
+const tvNews = (x, y, s, head) => g(at(x, y, s),
+  rect(-330, -210, 660, 420, '#3a3f4b', 24) + rect(-300, -180, 600, 330, '#dff1fb', 10, 4) +
+  rect(-300, 60, 600, 90, C.red, 6, 4) + hand(0, 105, head, 46, C.white) + hand(-220, -140, 'NEWS', 36, C.red) +
+  rect(-40, 210, 80, 40, '#3a3f4b', 6, 5));
+const mail = (x, y, s, label = '', col = C.white, r = 0) => g(at(x, y, s, r),
+  rect(-70, -45, 140, 90, col, 8, 5) + path('M-70 -45 L0 10 L70 -45', 'none', 5) + (label ? hand(0, 28, label, 22, C.red) : ''));
+
+Object.assign(SCENES, {
+  // ---------- No.012 QRコード ----------
+  qr_hook(lt, t) {
+    let s = qrCode(540, 470, 1.6, 3);
+    s += g('translate(860 230) rotate(10)', rect(-110, -60, 220, 120, C.white, 16) + circle(0, 0, 36, C.red, 0) + `<rect x="-110" y="-60" width="220" height="120" rx="16" fill="none" stroke="${INK}" stroke-width="6"/>`);
+    s += hand(220, 230, '？', 110, C.orange);
+    return s;
+  },
+  qr_def(lt, t) {
+    let s = g(`translate(540 90) scale(${pop(lt, 0)})`, marker(0, 0, 720, 100, C.yellow) + hand(0, 4, 'QRコード ＝ 四角い住所メモ', 60));
+    s += g(`translate(300 520) scale(${pop(lt, 0.2)})`, qrCode(0, 0, 1.1, 5));
+    s += arrow(500, 520, 640, 520, C.gray, 9);
+    s += g(`translate(820 520) scale(${pop(lt, 0.9)})`, rect(-180, -70, 360, 140, C.white, 24) + hand(0, -20, 'サイトの住所', 38, '#2f8fb0') + hand(0, 30, 'https://…', 36, '#2f6fd0'));
+    return s;
+  },
+  qr_scan(lt, t) {
+    let s = qrCode(300, 600, 0.95, 7);
+    const scanY = 470 + ((lt * 1.2) % 1) * 260;
+    s += phoneBig(700, 560, 1.0, rect(-100, -190, 200, 300, '#3a3f4b', 10, 0) + qrCode(0, -40, 0.5, 7) +
+      `<rect x="-90" y="${scanY - 560 - 40}" width="180" height="6" fill="${C.green}" opacity="0.8"/>`);
+    if (lt > 2.4) s += g(`translate(700 880) scale(${pop(lt, 2.4)})`, rect(-180, -48, 360, 96, '#e6f4e8', 24) + hand(0, 4, 'https://…を開く', 34, '#2f6fd0'));
+    s += g(`translate(300 330) scale(${pop(lt, 0.3)})`, hand(0, 0, 'かざすだけ', 50, '#2f8f4e'));
+    return s;
+  },
+  qr_use(lt, t) {
+    const items = [
+      ['メニュー', (x, y) => rect(x - 70, y - 90, 140, 180, '#fffdf7', 10, 6) + path(`M${x - 45} ${y - 50} L${x + 45} ${y - 50} M${x - 45} ${y - 10} L${x + 30} ${y - 10} M${x - 45} ${y + 30} L${x + 40} ${y + 30}`, 'none', 5)],
+      ['支払い', (x, y) => phoneBig(x, y, 0.38, hand(0, 0, '¥', 120, C.red))],
+      ['Wi-Fi', (x, y) => wifiIcon(x, y, 1.1, '#2f8fb0')],
+      ['友だち追加', (x, y) => circle(x, y - 20, 50, C.skin) + path(`M${x - 70} ${y + 90} Q${x} ${y + 20} ${x + 70} ${y + 90}`, C.green, 6) + hand(x + 70, y - 70, '+', 60, '#2f8f4e')],
+    ];
+    let s = '';
+    items.forEach(([lb, draw], i) => {
+      const x = 290 + (i % 2) * 500, y = 350 + Math.floor(i / 2) * 400;
+      s += g(`translate(${x} ${y}) scale(${pop(lt, 0.2 + i * (i < 2 ? 0.4 : 0.5) + (i >= 2 ? 1.6 : 0))}) translate(${-x} ${-y})`,
+        rect(x - 200, y - 160, 400, 320, C.white, 24) + draw(x, y - 20) + hand(x, y + 120, lb, 44));
+    });
+    return s;
+  },
+  qr_fake(lt, t) {
+    let s = g('translate(540 520)', rect(-300, -380, 600, 760, '#fff3c4', 16) + hand(0, -310, '駐車場のお支払い', 46) + qrCode(0, 20, 1.1, 9));
+    const peel = easeOut(prog(lt, 0.6, 1.4));
+    s += g(`translate(${540 + (1 - peel) * 500} ${540 - (1 - peel) * 200}) rotate(${(1 - peel) * 30})`, qrCode(0, 0, 1.05, 21, '#7a2a20') + rect(-160, -160, 320, 320, 'none', 14, 5));
+    if (lt > 1.4) s += g(`translate(820 300) scale(${pop(lt, 1.4)})`, rect(-150, -50, 300, 100, '#ffe1dc', 30) + hand(0, 4, 'ニセのシール', 40, C.red));
+    if (lt > 2.6) s += g(`translate(540 945) scale(${pop(lt, 2.6)})`, hand(0, 0, '→ ニセのサイトへ…', 44, C.red));
+    return s;
+  },
+  qr_summary(lt, t) {
+    return summaryPage(lt, '012', 'QRコード', [
+      [() => qrCode(0, 0, 0.28, 5), 'QRコード＝四角い住所メモ', '実は日本生まれ', '#c97a20'],
+      [() => phoneBig(0, 0, 0.22), 'カメラでかざすだけ', 'メニュー・支払い・Wi-Fiなど', '#2f8f4e'],
+      [() => warnSign(0, 0, 0.6), 'ニセのQRコードに注意', '出てきた住所をチェック', '#c4553f'],
+    ]);
+  },
+  qr_cta(lt, t) { return ctaPage(lt, '013', '情報漏洩ってなに？'); },
+
+  // ---------- No.013 情報漏洩 ----------
+  lk_hook(lt, t) {
+    return tvNews(540, 450, 1.25, '個人情報が漏えい') + hand(870, 820, '自分には', 46) + hand(870, 880, '関係ない？', 46, C.red);
+  },
+  lk_def(lt, t) {
+    let s = g(`translate(540 90) scale(${pop(lt, 0)})`, marker(0, 0, 780, 100, '#ffc9d8') + hand(0, 4, '情報漏洩 ＝ 名簿が外に出る', 60));
+    s += shop(380, 600, 1.1, 'お店', C.blue);
+    s += g('translate(380 640)', rect(-60, -70, 120, 140, C.white, 8, 5) + hand(0, -30, '会員', 26) + hand(0, 10, '名簿', 26));
+    for (let i = 0; i < 4; i++) {
+      const p = ((lt * 0.5 + i / 4) % 1);
+      if (lt > 0.6) s += g(at(lerp(470, 920, p), 560 - Math.sin(p * Math.PI) * 200 + i * 30, 0.7, p * 200), rect(-40, -50, 80, 100, C.white, 6, 4) + path('M-25 -20 L25 -20 M-25 0 L25 0 M-25 20 L10 20', 'none', 3));
+    }
+    return s;
+  },
+  lk_cause(lt, t) {
+    const items = [
+      ['不正アクセス', (x, y) => server(x - 50, y, 0.45) + thief(x + 70, y + 10, 0.4)],
+      ['設定ミス', (x, y) => lockIcon(x, y, 1.0, true) + hand(x + 90, y - 40, '!', 70, C.red)],
+      ['持ち出し', (x, y) => rect(x - 70, y - 40, 140, 100, '#e0b77c', 8, 6) + path(`M${x - 70} ${y - 40} L${x - 40} ${y - 70} L${x + 100} ${y - 70} L${x + 70} ${y - 40}`, '#e9c99a', 6)],
+      ['紛失', (x, y) => laptop(x, y + 20, 0.35) + hand(x + 100, y - 60, '?', 70, C.red)],
+    ];
+    let s = '';
+    items.forEach(([lb, draw], i) => {
+      const x = 290 + (i % 2) * 500, y = 450 + Math.floor(i / 2) * 350;
+      const at0 = i < 2 ? 0.2 + i * 0.4 : 2.5 + (i - 2) * 0.4;
+      s += g(`translate(${x} ${y}) scale(${pop(lt, at0)}) translate(${-x} ${-y})`,
+        rect(x - 200, y - 140, 400, 280, C.white, 24) + draw(x, y - 25) + hand(x, y + 98, lb, 44, C.red));
+    });
+    return s;
+  },
+  lk_spam(lt, t) {
+    let s = phoneBig(320, 560, 1.0, hand(0, -150, '受信 99+', 30, C.red));
+    for (let i = 0; i < 6; i++) {
+      const p = clamp((lt - i * 0.3) / 1.2);
+      if (p > 0) s += mail(lerp(900, 340, easeOut(p)), lerp(200 + i * 60, 400 + (i % 3) * 120, easeOut(p)), 0.8, '', C.white, (rnd(i) - 0.5) * 30);
+    }
+    if (lt > 2.4) s += g(`translate(780 620) scale(${pop(lt, 2.4)})`, mail(0, 0, 2.0, '', '#ffe1dc') + hand(0, -10, '【お詫び】', 30, C.red) + hand(0, 140, 'これもニセモノかも', 40, C.red));
+    return s;
+  },
+  lk_reuse(lt, t) {
+    const good = lt > 2.4;
+    let s = '';
+    ['A', 'B', 'C'].forEach((nm, i) => {
+      const x = 560 + i * 200;
+      s += door(x, 560, 0.55, good ? 0 : clamp((lt - 0.6 - i * 0.3) * 2)) + hand(x, 380, nm, 46);
+      if (good) s += keyIcon(x, 800, 0.6, -20, [C.yellow, C.green, C.pink][i]);
+    });
+    if (!good) {
+      s += g('translate(220 560)', thief(0, 0, 0.7)) + keyIcon(260, 740, 0.9, -15);
+      s += g(`translate(700 880) scale(${pop(lt, 0.8)})`, hand(0, 0, '1本の鍵で全部開く！', 48, C.red));
+    } else {
+      s += g(`translate(250 560) scale(${pop(lt, 2.4)})`, check(0, 0, 1.4) + hand(0, 120, '鍵はバラバラに', 44, '#2f8f4e'));
+    }
+    return s;
+  },
+  lk_2fa(lt, t) {
+    let s = door(700, 560, 0.9) + keyIcon(350, 560, 1.2, -20);
+    s += g(`translate(760 230) scale(${pop(lt, 0.4)})`, bubble(0, 0, 1, '合言葉は？', 320));
+    s += g(`translate(540 930) scale(${pop(lt, 1.0)})`, hand(0, 0, '二段階認証で さらに安心', 46, '#2f8f4e'));
+    return s;
+  },
+  lk_summary(lt, t) {
+    return summaryPage(lt, '013', '情報漏洩', [
+      [() => server(0, 0, 0.35), '情報漏洩＝名簿が外に出る', 'だれにでも起こりうる', '#c4553f'],
+      [() => mail(0, 0, 0.7, '', '#ffe1dc'), 'サギのメールが増える', '「お詫び」メールも注意', '#c4553f'],
+      [() => keyIcon(0, 0, 0.7, -20), 'パスワードは使い回さない', '二段階認証でさらに安心', '#2f8f4e'],
+    ]);
+  },
+  lk_cta(lt, t) { return ctaPage(lt, '014', 'ランサムウェアってなに？'); },
+});
+
+VERSIONS.q12 = {
+  no: '012', narration: true, stage: { tx: 0, ty: 150, s: 1 }, capY: 1420, duration: 28, bgm: 'chip',
+  bigFirst: true, sticker: [7.6, 11.8],
+  scenes: seq([
+    [0, 4, 'qr_hook'], [4, 7, 'qr_def'], [7, 12, 'qr_scan'], [12, 17, 'qr_use'], [17, 22, 'qr_fake', 1.1],
+    [22, 25, 'qr_summary', 1.2], [25, 28, 'qr_cta'],
+  ]),
+  captions: [
+    [0.0, 1.9, '{y:QRコード}って\n実は{y:日本生まれ}って知ってる？'],
+    [1.9, 4.0, 'この動画で{y:QRコード}の\n使い方と注意点がわかります'],
+    [4.0, 7.0, '{y:QRコード}は\n情報をしまった{c:四角い住所メモ}'],
+    [7.0, 9.5, 'スマホのカメラで\n{g:かざすだけ}で読み取れる'],
+    [9.5, 12.0, '中に書かれた\n{c:サイトの住所}が出てくる'],
+    [12.0, 14.5, 'お店のメニューや\n{y:支払い}にも使われる'],
+    [14.5, 17.0, '{y:Wi-Fi}や{g:友だち追加}も\nQRコードでかんたん'],
+    [17.0, 19.5, 'でも中身は\n{r:見た目ではわからない}'],
+    [19.5, 22.0, '上から貼られた{r:ニセのQRコード}で\nニセサイトに飛ばされることも'],
+    [22.0, 25.0, '読み取ったら\n{g:出てきた住所}をチェック'],
+    [25.0, 28.0, '{y:保存}して\nQRコードを読む前に見返してね'],
+  ],
+};
+VERSIONS.l13 = {
+  no: '013', narration: true, stage: { tx: 0, ty: 150, s: 1 }, capY: 1420, duration: 31, bgm: 'musicbox',
+  bigFirst: true, sticker: [7.6, 11.8],
+  scenes: seq([
+    [0, 4, 'lk_hook'], [4, 7, 'lk_def'], [7, 12, 'lk_cause'], [12, 17, 'lk_spam', 1.1], [17, 22, 'lk_reuse', 1.1],
+    [22, 25, 'lk_2fa'], [25, 28, 'lk_summary', 1.2], [28, 31, 'lk_cta'],
+  ]),
+  captions: [
+    [0.0, 1.9, 'ニュースでよく聞く「{r:情報漏洩}」\n自分には関係ないと思ってない？'],
+    [1.9, 4.0, 'この動画で{r:情報漏洩}から\n身を守る方法がわかります'],
+    [4.0, 7.0, '{r:情報漏洩}は お店に預けた\n{y:会員名簿}が外に出ること'],
+    [7.0, 9.5, '原因は{r:不正アクセス}や\n{r:設定ミス}'],
+    [9.5, 12.0, '内部の人の持ち出しや\nパソコンの{r:紛失}も'],
+    [12.0, 14.5, '漏れたメールアドレスに\n{r:サギのメール}が届きやすくなる'],
+    [14.5, 17.0, '「お詫び」を名乗る\n{r:ニセメール}にも注意'],
+    [17.0, 19.5, '{g:パスワードの使い回し}は\nやめよう'],
+    [19.5, 22.0, '1つ漏れると\n{r:ほかのサービスも}開けられてしまう'],
+    [22.0, 25.0, '{g:二段階認証}をオンにしておけば\nさらに安心'],
+    [25.0, 28.0, '漏れても困らないように\n{g:使い回さない}・{g:二段階認証}'],
+    [28.0, 31.0, '{y:保存}して\n家族にもシェアしてね'],
+  ],
+};

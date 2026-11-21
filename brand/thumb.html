@@ -22,6 +22,8 @@ const THUMBS = {
   '009': { titleSize: 120, title: '{r:フィッシング}\n{r:詐欺}', question: '見分け方は？', answer: 'ニセのエサでわかる！', art: 'fish9' },
   '010': { title: '{c:VPN}', question: '何のためにある？', answer: '秘密のトンネルでわかる！', art: 'vpn10' },
   '011': { title: '{y:Bluetooth}', question: 'ってなに？', answer: '見えない糸電話でわかる！', art: 'bt11' },
+  '012': { title: '{y:QRコード}', question: '読む前に知ってる？', answer: '四角い住所メモでわかる！', art: 'qr12' },
+  '013': { title: '{r:情報漏洩}', question: '自分には関係ない？', answer: '漏れても困らない対策！', art: 'leak13' },
   '005': { titleSize: 128, title: '{c:Wi-Fi}と\n{y:モバイル通信}', question: 'なにが違う？', answer: '水道と水筒でわかる！', art: 'wifi' },
 };
 
@@ -61,6 +63,13 @@ const ART = {
   bt11: () =>
     phoneBig(260, 80, 0.62) + earbuds(800, 20, 1.0) + watch(840, 220, 0.6) +
     dashLink(360, 40, 690, 20, 0.3) + dashLink(360, 120, 790, 220, 0.3),
+  qr12: () =>
+    qrCode(320, 80, 0.85, 3) + arrow(470, 80, 600, 80, C.gray, 9) +
+    g('translate(800 80)', rect(-170, -70, 340, 140, C.white, 24) + hand(0, -20, 'サイトの住所', 36, '#2f8fb0') + hand(0, 30, 'https://…', 34, '#2f6fd0')),
+  leak13: () =>
+    shop(330, 120, 0.9, 'お店', C.blue) + g('translate(330 150)', rect(-50, -60, 100, 120, C.white, 8, 5) + hand(0, -20, '会員', 22) + hand(0, 15, '名簿', 22)) +
+    [0, 1, 2].map((i) => g(at(620 + i * 110, 20 + i * 50, 0.7, 20 + i * 25), rect(-40, -50, 80, 100, C.white, 6, 4) + path('M-25 -20 L25 -20 M-25 0 L25 0', 'none', 3))).join('') +
+    thief(900, 140, 0.55),
   card: () =>
     g(at(330, 80, 1, -6), rect(-220, -140, 440, 280, C.white, 26, 7) + rect(-220, -140, 440, 70, C.orange, 20, 7) +
       hand(0, -104, '会員カード', 44, C.white) + [0, 1, 2, 3, 4].map((i) => circle(-160 + i * 80, 30, 28, i < 3 ? C.red : C.white, 5)).join('') +
