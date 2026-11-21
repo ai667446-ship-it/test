@@ -952,3 +952,176 @@ VERSIONS.p9 = {
     [28.0, 31.0, '{y:保存}して\n家族にもシェアしてね'],
   ],
 };
+
+// ======================================================================
+// No.010 VPN / No.011 Bluetooth
+// ======================================================================
+const tunnel = (x, y, s, t) => g(at(x, y, s),
+  rect(-420, -40, 840, 200, '#a8723f', 0, 0) + path('M-420 -40 L420 -40', 'none', 7) +
+  `<path d="M-380 160 L-380 60 Q-380 0 -320 0 L320 0 Q380 0 380 60 L380 160 Z" fill="#5a4030" stroke="${INK}" stroke-width="7"/>` +
+  [0, 1, 2, 3, 4].map((i) => `<circle cx="${-300 + i * 150}" cy="40" r="10" fill="${C.yellow}" opacity="${0.6 + 0.4 * Math.sin(t * 4 + i)}"/>`).join(''));
+const envelope = (x, y, s, locked = false, r = 0) => g(at(x, y, s, r),
+  rect(-60, -40, 120, 80, C.white, 8, 5) + path('M-60 -40 L0 5 L60 -40', 'none', 5) + (locked ? lockIcon(40, 30, 0.35, false) : hand(0, 25, '中身', 22, '#6b5d52')));
+const binoculars = (x, y, s) => g(at(x, y, s), circle(-30, 0, 28, '#5a6070') + circle(30, 0, 28, '#5a6070') + rect(-12, -12, 24, 24, '#5a6070', 4, 5));
+const office = (x, y, s) => g(at(x, y, s),
+  rect(-120, -200, 240, 400, '#cfd6dd', 8) + [0, 1, 2, 3].map((r) => [0, 1, 2].map((c) => rect(-90 + c * 65, -170 + r * 85, 45, 50, '#dff1fb', 4, 4)).join('')).join('') +
+  rect(-40, 130, 80, 70, '#a8723f', 4, 5) + rect(-70, -250, 140, 46, C.white, 10, 5) + hand(0, -226, '会社', 30));
+const earbuds = (x, y, s) => g(at(x, y, s),
+  path('M-60 -30 Q-90 -30 -90 0 Q-90 30 -60 30 L-55 90', '#fffdf7', 7) + path('M60 -30 Q90 -30 90 0 Q90 30 60 30 L55 90', '#fffdf7', 7));
+const watch = (x, y, s) => g(at(x, y, s), rect(-30, -110, 60, 220, '#5a6070', 14, 6) + rect(-55, -60, 110, 120, '#3a3f4b', 22, 7) + rect(-42, -47, 84, 94, '#dff1fb', 14, 4) + hand(0, 2, '9:41', 26));
+const speaker = (x, y, s) => g(at(x, y, s), rect(-70, -100, 140, 200, '#5a6070', 24, 7) + circle(0, -35, 26, '#3a3f4b', 5) + circle(0, 45, 40, '#3a3f4b', 5));
+const btIcon = (x, y, s, col = '#2f6fd0') => g(at(x, y, s), rect(-55, -75, 110, 150, col, 40, 6) + path('M-22 -30 L22 18 L0 40 L0 -40 L22 -18 L-22 30', 'none', 8).replace(INK, '#fff'));
+const dashLink = (x1, y1, x2, y2, t, col = '#2f6fd0') =>
+  `<path d="M${x1} ${y1} L${x2} ${y2}" fill="none" stroke="${col}" stroke-width="7" stroke-dasharray="16 14" stroke-dashoffset="${-t * 60}" stroke-linecap="round"/>`;
+
+Object.assign(SCENES, {
+  // ---------- No.010 VPN ----------
+  vp_hook(lt, t) {
+    let s = phoneBig(540, 470, 1.35,
+      hand(0, -165, '設定', 32, '#6b5d52') + path('M-95 -135 L95 -135', 'none', 3) +
+      [['Wi-Fi', true], ['Bluetooth', true], ['VPN', false]].map(([lb, on], i) => {
+        const y = -90 + i * 75;
+        return (lb === 'VPN' ? rect(-100, y - 30, 200, 60, '#fff3c4', 12, 4) : '') + hand(-88, y, lb, 22, INK, 'start') + g(`translate(68 ${y}) scale(0.4)`, toggle(0, 0, on));
+      }).join(''));
+    s += hand(870, 560, '？', 130, C.red) + arrow(800, 640, 680, 600, C.red, 8);
+    return s;
+  },
+  vp_def(lt, t) {
+    let s = g(`translate(540 90) scale(${pop(lt, 0)})`, marker(0, 0, 720, 100, '#9be3e8') + hand(0, 4, 'VPN ＝ 秘密の地下トンネル', 60));
+    s += tunnel(540, 560, 1.0, t);
+    const p = (lt * 0.4) % 1;
+    s += envelope(lerp(220, 860, p), 620, 0.8, true);
+    s += phoneBig(110, 470, 0.45) + cloud(960, 420, 0.6, 'ネット');
+    return s;
+  },
+  vp_open(lt, t) {
+    let s = path('M60 380 L1020 380', 'none', 6) + hand(160, 330, 'フリーWi-Fi', 40, '#2f8fb0');
+    const p = (lt * 0.4) % 1;
+    s += envelope(lerp(120, 960, p), 450, 0.9, false);
+    s += thief(540, 640, 0.6) + binoculars(540, 560, 0.9);
+    if (lt < 2.4) s += g(`translate(820 600) scale(${pop(lt, 0.3)})`, hand(0, 0, 'のぞかれる…', 46, C.red));
+    if (lt > 2.4) {
+      s += tunnel(540, 830, 0.8, t);
+      s += envelope(lerp(260, 820, (lt * 0.4) % 1), 880, 0.7, true);
+      s += g(`translate(840 640) scale(${pop(lt, 2.5)})`, hand(0, -26, '暗号化して', 42, '#2f8f4e') + hand(0, 26, 'トンネルへ', 42, '#2f8f4e'));
+    }
+    return s;
+  },
+  vp_work(lt, t) {
+    let s = house(220, 640, 0.9) + office(860, 580, 1.0) + tunnel(540, 840, 0.55, t);
+    s += envelope(lerp(320, 760, (lt * 0.45) % 1), 880, 0.55, true);
+    s += g(`translate(220 380) scale(${pop(lt, 0.3)})`, hand(0, 0, '家から', 46));
+    if (lt > 2.4) s += g(`translate(540 260) scale(${pop(lt, 2.4)})`, rect(-200, -55, 400, 110, '#fff3c4', 30) + hand(0, 4, 'テレワーク', 54, '#c97a20'));
+    return s;
+  },
+  vp_limit(lt, t) {
+    let s = g(`translate(300 480) scale(${pop(lt, 0)})`, path('M0 -170 L150 -110 L150 20 Q150 140 0 200 Q-150 140 -150 20 L-150 -110 Z', '#dff1fb', 8) + hand(0, 0, 'VPN', 60, '#2f8fb0'));
+    s += g(`translate(760 330) scale(${pop(lt, 0.5)})`, fishHook(0, 60, 0.6, 'サギ') + hand(180, -40, '防げない', 40, C.red));
+    if (lt > 2.4) s += g(`translate(760 760) scale(${pop(lt, 2.4)})`,
+      rect(-230, -110, 460, 220, '#ffe1dc', 30) + rect(-60, -80, 120, 100, C.gray, 26, 6) + hand(0, -30, '無料', 32, C.white) +
+      hand(0, 60, '通信を見られる心配', 38, C.red));
+    return s;
+  },
+  vp_summary(lt, t) {
+    return summaryPage(lt, '010', 'VPN', [
+      [() => lockIcon(0, 10, 0.6, false), 'VPN＝秘密の地下トンネル', '通信を暗号化して運ぶ', '#2f8fb0'],
+      [() => wifiIcon(0, 0, 0.8, '#2f8fb0'), 'フリーWi-Fiや在宅勤務で', '通信を守ってくれる', '#2f8f4e'],
+      [() => warnSign(0, 0, 0.6), 'サギやウイルスは防げない', '無料アプリは慎重に', '#c4553f'],
+    ]);
+  },
+  vp_cta(lt, t) { return ctaPage(lt, '011', 'Bluetoothってなに？'); },
+
+  // ---------- No.011 Bluetooth ----------
+  bt_hook(lt, t) {
+    let s = phoneBig(540, 470, 1.35,
+      btIcon(0, -110, 0.6) + hand(0, -10, 'ペアリング', 32) + hand(0, 30, 'しますか？', 30) +
+      rect(-90, 80, 180, 56, C.blue, 28, 4) + hand(0, 108, 'ペアリング', 26, C.white));
+    s += earbuds(870, 520, 1.0) + hand(220, 280, '？', 120, C.red);
+    return s;
+  },
+  bt_def(lt, t) {
+    let s = g(`translate(540 90) scale(${pop(lt, 0)})`, marker(0, 0, 720, 100, '#c9d8ff') + hand(0, 4, 'Bluetooth ＝ 見えない糸電話', 58));
+    s += phoneBig(260, 560, 0.8) + earbuds(820, 560, 1.4) + dashLink(370, 560, 690, 560, t);
+    s += g(`translate(540 820) scale(${pop(lt, 0.8)})`, hand(0, 0, '近くの機器と 線なしでつなぐ', 44, '#2f6fd0'));
+    return s;
+  },
+  bt_use(lt, t) {
+    let s = phoneBig(540, 540, 0.75);
+    const items = [[earbuds(200, 320, 0.9), 200, 320], [watch(880, 330, 0.9), 880, 330], [speaker(200, 820, 0.9), 200, 820], [g('', path('M760 760 L1000 760 L960 860 L800 860 Z', '#cfd6dd', 7) + circle(820, 880, 30, '#5a6070', 6) + circle(940, 880, 30, '#5a6070', 6) + hand(880, 720, '車', 40)), 880, 800]];
+    items.forEach(([svg, x, y], i) => {
+      s += g(`translate(${x} ${y}) scale(${pop(lt, 0.2 + i * 0.4)}) translate(${-x} ${-y})`, svg);
+      if (lt > 0.4 + i * 0.4) s += dashLink(540, 540, x, y, t);
+    });
+    if (lt > 2.4) s += g(`translate(290 110) scale(${pop(lt, 2.4)})`, rect(-200, -45, 400, 90, '#fff3c4', 30) + hand(0, 4, '届くのは約10m', 46, '#c97a20'));
+    return s;
+  },
+  bt_pair(lt, t) {
+    let s = phoneBig(260, 560, 0.85) + earbuds(820, 600, 1.3);
+    s += g(`translate(330 260) scale(${pop(lt, 0.3)})`, bubble(0, 0, 1, 'はじめまして！', 400));
+    s += g(`translate(800 330) scale(${pop(lt, 0.9)})`, bubble(0, 0, 1, 'よろしく！', 320));
+    if (lt > 2.4) {
+      s += dashLink(380, 600, 700, 600, t);
+      s += g(`translate(540 860) scale(${pop(lt, 2.4)})`, check(-200, 0, 1) + hand(-145, 4, '次から自動でつながる', 46, '#2f8f4e', 'start'));
+    }
+    return s;
+  },
+  bt_vs(lt, t) {
+    let s = g(`translate(290 470) scale(${pop(lt, 0)})`, rect(-220, -260, 440, 520, C.white, 30) +
+      wifiIcon(0, -130, 1.3, '#2f8fb0') + hand(0, -20, 'Wi-Fi', 56) + hand(0, 70, '→ インターネットへ', 38, '#2f8fb0') + cloud(0, 170, 0.6, ''));
+    s += g(`translate(790 470) scale(${pop(lt, 0.5)})`, rect(-220, -260, 440, 520, C.white, 30) +
+      btIcon(0, -130, 0.8) + hand(0, -20, 'Bluetooth', 50) + hand(0, 70, '→ 機器どうし', 38, '#2f6fd0') + earbuds(-70, 180, 0.5) + watch(80, 180, 0.5));
+    if (lt > 2.4) s += g(`translate(540 920) scale(${pop(lt, 2.4)})`, rect(-330, -55, 660, 110, '#fff3c4', 30) + hand(0, 4, 'つながらない→登録を消して再ペアリング', 34, '#c97a20'));
+    return s;
+  },
+  bt_summary(lt, t) {
+    return summaryPage(lt, '011', 'Bluetooth', [
+      [() => btIcon(0, 0, 0.55), 'Bluetooth＝見えない糸電話', 'イヤホン・時計・車など', '#2f6fd0'],
+      [() => check(0, 0, 1.3), '最初にペアリング（自己紹介）', '次から自動でつながる', '#2f8f4e'],
+      [() => wifiIcon(0, 0, 0.8, '#2f8fb0'), 'Wi-Fiはネットへ', 'Bluetoothは機器どうし', '#2f8fb0'],
+    ]);
+  },
+  bt_cta(lt, t) { return ctaPage(lt, '012', 'QRコードってなに？'); },
+});
+
+VERSIONS.v10 = {
+  no: '010', narration: true, stage: { tx: 0, ty: 150, s: 1 }, capY: 1420, duration: 28, bgm: 'lofi',
+  bigFirst: true, sticker: [7.6, 11.8],
+  scenes: seq([
+    [0, 4, 'vp_hook'], [4, 7, 'vp_def'], [7, 12, 'vp_open'], [12, 17, 'vp_work'], [17, 22, 'vp_limit', 1.1],
+    [22, 25, 'vp_summary', 1.2], [25, 28, 'vp_cta'],
+  ]),
+  captions: [
+    [0.0, 1.9, '設定にある「{c:VPN}」\n何のためか知ってる？'],
+    [1.9, 4.0, 'この動画で{c:VPN}が\nわかるようになります'],
+    [4.0, 7.0, '{c:VPN}は\nネットの{y:秘密の地下トンネル}'],
+    [7.0, 9.5, '{r:フリーWi-Fi}だと\n通信をのぞかれることも'],
+    [9.5, 12.0, '{c:VPN}なら中身を{y:暗号化}して\nトンネルで運ぶ'],
+    [12.0, 14.5, '会社のネットワークに\n外から{g:安全につなぐ}ときにも'],
+    [14.5, 17.0, '{g:テレワーク}で\nよく使われている'],
+    [17.0, 19.5, 'ただし{r:サギやウイルス}までは\n防げない'],
+    [19.5, 22.0, '{r:無料のVPNアプリ}は\n通信を見られる心配も'],
+    [22.0, 25.0, '{c:VPN}＝秘密のトンネル\n使うなら{g:信頼できるもの}を'],
+    [25.0, 28.0, '{y:保存}して\nカフェのWi-Fiを使う前に見返してね'],
+  ],
+};
+VERSIONS.b11 = {
+  no: '011', narration: true, stage: { tx: 0, ty: 150, s: 1 }, capY: 1420, duration: 28, bgm: 'marimba',
+  bigFirst: true, sticker: [7.6, 11.8],
+  scenes: seq([
+    [0, 4, 'bt_hook'], [4, 7, 'bt_def'], [7, 12, 'bt_use'], [12, 17, 'bt_pair', 1.1], [17, 22, 'bt_vs', 1.1],
+    [22, 25, 'bt_summary', 1.2], [25, 28, 'bt_cta'],
+  ]),
+  captions: [
+    [0.0, 1.9, 'イヤホンの「{y:ペアリング}」\nって何か知ってる？'],
+    [1.9, 4.0, 'この動画で{y:Bluetooth}が\nわかるようになります'],
+    [4.0, 7.0, '{y:Bluetooth}は\n機器どうしの{c:見えない糸電話}'],
+    [7.0, 9.5, 'ワイヤレスイヤホンや\n{y:スマートウォッチ}をつなぐ'],
+    [9.5, 12.0, '届くのは\n{c:だいたい10m}くらい'],
+    [12.0, 14.5, '最初の{y:ペアリング}は\nおたがいの{y:自己紹介}'],
+    [14.5, 17.0, '一度すれば\n次から{g:自動でつながる}'],
+    [17.0, 19.5, '{c:Wi-Fi}はインターネットへ\n{y:Bluetooth}は機器どうし'],
+    [19.5, 22.0, 'つながらないときは\n{g:登録を消して}ペアリングし直す'],
+    [22.0, 25.0, '{y:Bluetooth}＝見えない糸電話\n最初に{y:ペアリング}'],
+    [25.0, 28.0, '{y:保存}して\nイヤホンがつながらないとき見返してね'],
+  ],
+};

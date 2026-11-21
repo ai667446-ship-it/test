@@ -20,6 +20,8 @@ const THUMBS = {
   '007': { title: '{y:二段階認証}', question: 'ってなに？', answer: '鍵と合言葉でわかる！', art: 'tfa7' },
   '008': { title: '{y:アップデート}', question: '「あとで」で大丈夫？', answer: '防犯リフォームでわかる！', art: 'upd8' },
   '009': { titleSize: 120, title: '{r:フィッシング}\n{r:詐欺}', question: '見分け方は？', answer: 'ニセのエサでわかる！', art: 'fish9' },
+  '010': { title: '{c:VPN}', question: '何のためにある？', answer: '秘密のトンネルでわかる！', art: 'vpn10' },
+  '011': { title: '{y:Bluetooth}', question: 'ってなに？', answer: '見えない糸電話でわかる！', art: 'bt11' },
   '005': { titleSize: 128, title: '{c:Wi-Fi}と\n{y:モバイル通信}', question: 'なにが違う？', answer: '水道と水筒でわかる！', art: 'wifi' },
 };
 
@@ -54,6 +56,11 @@ const ART = {
   fish9: () =>
     phoneBig(300, 110, 0.62, rect(-95, -120, 190, 150, '#f0ede6', 16, 4) + hand(0, -85, 'お荷物を', 26) + hand(0, -45, 'お届けできません', 22) + rect(-80, 50, 160, 56, C.red, 28, 4) + hand(0, 78, '確認', 28, C.white)) +
     g('translate(760 60)', fishHook(0, 0, 1.0, 'クリック')),
+  vpn10: () =>
+    tunnel(540, 60, 0.95, 0.5) + envelope(540, 120, 0.9, true) + phoneBig(150, -60, 0.4) + cloud(880, -70, 0.55, 'ネット'),
+  bt11: () =>
+    phoneBig(260, 80, 0.62) + earbuds(800, 20, 1.0) + watch(840, 220, 0.6) +
+    dashLink(360, 40, 690, 20, 0.3) + dashLink(360, 120, 790, 220, 0.3),
   card: () =>
     g(at(330, 80, 1, -6), rect(-220, -140, 440, 280, C.white, 26, 7) + rect(-220, -140, 440, 70, C.orange, 20, 7) +
       hand(0, -104, '会員カード', 44, C.white) + [0, 1, 2, 3, 4].map((i) => circle(-160 + i * 80, 30, 28, i < 3 ? C.red : C.white, 5)).join('') +

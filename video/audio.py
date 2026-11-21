@@ -45,17 +45,94 @@ def P(m, l=1.6, b=0.5):
     if k not in cache: cache[k] = pluck(note(m), l, b)
     return cache[k]
 
+# ---------------- BGM（種類は meta['bgm'] で選ぶ）----------------
+def env_exp(n, k): return np.exp(-np.arange(n) / SR * k)
+def epiano(f, l=1.8):
+    n = int(SR * l); tt = np.arange(n) / SR
+    s = np.sin(2*np.pi*f*tt) + 0.25*np.sin(2*np.pi*2*f*tt)*np.exp(-tt*6)
+    return s * np.exp(-tt*1.6) * (1 + 0.15*np.sin(2*np.pi*4.5*tt)) * np.minimum(tt/0.005, 1)
+def square(f, l=0.2):
+    n = int(SR * l); tt = np.arange(n) / SR
+    s = np.sign(np.sin(2*np.pi*f*tt)); s = np.convolve(s, np.ones(6)/6, 'same')
+    return s * np.exp(-tt*5) * np.minimum(tt/0.003, 1)
+def marimba(f, l=0.9):
+    n = int(SR * l); tt = np.arange(n) / SR
+    return (np.sin(2*np.pi*f*tt)*np.exp(-tt*7) + 0.35*np.sin(2*np.pi*3.9*f*tt)*np.exp(-tt*25)) * np.minimum(tt/0.002, 1)
+def bell(f, l=2.2):
+    n = int(SR * l); tt = np.arange(n) / SR
+    return (np.sin(2*np.pi*f*tt) + 0.45*np.sin(2*np.pi*2.76*f*tt)*np.exp(-tt*2) + 0.25*np.sin(2*np.pi*5.4*f*tt)*np.exp(-tt*4)) * np.exp(-tt*1.8) * np.minimum(tt/0.002, 1)
+def kick():
+    n = int(SR*0.3); tt = np.arange(n)/SR
+    return np.sin(2*np.pi*np.cumsum(55 + 90*np.exp(-tt*25))/SR) * np.exp(-tt*9)
+def hat(l=0.05):
+    n = int(SR*l); x = rng.normal(0, 1, n); x = np.diff(x, prepend=0)
+    return x * np.exp(-np.arange(n)/SR*70)
+def clap():
+    n = int(SR*0.12); x = rng.normal(0, 1, n); x = x - np.convolve(x, np.ones(20)/20, 'same')
+    return x * np.exp(-np.arange(n)/SR*30)
+SYN = {}
+def S(fn, m, *a):
+    k = (fn.__name__, m) + a
+    if k not in SYN: SYN[k] = fn(note(m), *a)
+    return SYN[k]
+
+style = meta.get('bgm', 'pluck')
 t, bar = 0.0, 0
-while t < dur - 1:
-    ch = chords[bar % 4]
-    add(P(ch[0] - 12, 2.4, 0.7), t, 0.22)
-    for k, idx in enumerate([1, 2, 3, 4, 3, 2, 3, 4]):
-        add(P(ch[idx], 1.2, 0.4), t + k * beat / 2, 0.10)
-    if bar % 8 >= 4:  # 後半はメロディも
-        for k in range(4):
-            m = melody[(bar % 4) * 4 + k]
-            if m: add(P(m, 1.4, 0.45), t + k * beat, 0.13)
-    t += beat * 4; bar += 1
+if style == 'pluck':
+    while t < dur - 1:
+        ch = chords[bar % 4]
+        add(P(ch[0] - 12, 2.4, 0.7), t, 0.22)
+        for k, idx in enumerate([1, 2, 3, 4, 3, 2, 3, 4]):
+            add(P(ch[idx], 1.2, 0.4), t + k * beat / 2, 0.10)
+        if bar % 8 >= 4:  # 後半はメロディも
+            for k in range(4):
+                m = melody[(bar % 4) * 4 + k]
+                if m: add(P(m, 1.4, 0.45), t + k * beat, 0.13)
+        t += beat * 4; bar += 1
+elif style == 'lofi':      # ゆったり lo-fi（エレピ＋軽いドラム）
+    b = 60 / 80
+    prog = [[53, 57, 60, 64], [52, 55, 59, 62], [50, 53, 57, 60], [48, 52, 55, 59]]
+    mel = [72, None, 69, None, 67, 69, None, None, 64, None, 67, None, 65, None, 64, None]
+    while t < dur - 1:
+        ch = prog[bar % 4]
+        for at_ in (0, 2.5):
+            for m in ch: add(S(epiano, m, 1.8), t + at_ * b, 0.06)
+        add(S(epiano, ch[0] - 12, 2.5), t, 0.14)
+        add(kick(), t, 0.35); add(kick(), t + 2.5 * b, 0.25)
+        for k in range(8): add(hat(), t + k * b / 2 + (0.03 if k % 2 else 0), 0.05 if k % 2 else 0.03)
+        if bar % 8 >= 4:
+            for k in range(4):
+                m = mel[(bar % 4) * 4 + k]
+                if m: add(S(epiano, m, 1.4), t + k * b, 0.09)
+        t += 4 * b; bar += 1
+elif style == 'chip':      # 元気な 8bit
+    b = 60 / 128
+    prog = [[60, 64, 67], [57, 60, 64], [53, 57, 60], [55, 59, 62]]
+    while t < dur - 1:
+        ch = prog[bar % 4]
+        for k in range(16): add(S(square, ch[k % 3] + 12, 0.12), t + k * b / 4, 0.035)
+        for k in range(4): add(S(square, ch[0] - 12, 0.25), t + k * b, 0.07)
+        for k in (1, 3): add(hat(0.08), t + k * b, 0.08)
+        t += 4 * b; bar += 1
+elif style == 'marimba':   # ポップなマリンバ
+    b = 60 / 112
+    prog = [[60, 64, 67], [65, 69, 72], [67, 71, 74], [60, 64, 67]]
+    pat = [0, None, 2, 1, None, 2, 0, None]
+    while t < dur - 1:
+        ch = prog[bar % 4]
+        for k, i in enumerate(pat):
+            if i is not None: add(S(marimba, ch[i], 0.9), t + k * b / 2, 0.12)
+        add(S(marimba, ch[0] - 24, 1.2), t, 0.22); add(S(marimba, ch[0] - 17, 1.2), t + 2 * b, 0.18)
+        for k in (1, 3): add(clap(), t + k * b, 0.06)
+        t += 4 * b; bar += 1
+elif style == 'musicbox':  # やさしいオルゴール
+    b = 60 / 76
+    prog = [[60, 64, 67, 72], [64, 67, 71, 76], [57, 60, 64, 69], [53, 57, 60, 65]]
+    while t < dur - 1:
+        ch = prog[bar % 4]
+        for k, i in enumerate([0, 1, 2, 3, 2, 1, 2, 3]): add(S(bell, ch[i] + 12, 2.2), t + k * b / 2, 0.07)
+        add(S(bell, ch[0] - 12, 3.0), t, 0.12)
+        t += 4 * b; bar += 1
 
 # 最後はフェードアウト
 fade = int(SR * 2.5)
