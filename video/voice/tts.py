@@ -9,7 +9,7 @@ API = 'http://127.0.0.1:50021'
 v, speaker = sys.argv[1], int(sys.argv[2])
 speed = float(sys.argv[3]) if len(sys.argv) > 3 else 1.15
 out = f'out/voice_{v}'; os.makedirs(out, exist_ok=True)
-meta = json.load(open(f'out/frames_{v}/meta.json')) if os.path.exists(f'out/frames_{v}/meta.json') else json.load(open(f'out/{v}.meta.json'))
+meta = json.load(open(f'out/{v}.meta.json'))  # 字幕の元のタイミング（render.js --stills で書き出し）
 
 def post(path, data=None, params=None):
     url = API + path + ('?' + urllib.parse.urlencode(params) if params else '')
