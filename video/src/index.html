@@ -5,6 +5,7 @@
 <style>html,body{margin:0;background:#000}#stage{width:1080px;height:1920px}#pre{position:absolute;left:-99999px;top:0;width:4000px}</style>
 </head><body>
 <div id="stage"></div>
+<div id="hosts" style="position:absolute;left:0;top:0"><img id="host_idle" src="../assets/host/host_idle.png" style="position:absolute;display:none;width:330px;height:330px"><img id="host_talk" src="../assets/host/host_talk.png" style="position:absolute;display:none;width:330px;height:330px"><img id="host_blink" src="../assets/host/host_blink.png" style="position:absolute;display:none;width:330px;height:330px"><img id="host_blinktalk" src="../assets/host/host_blinktalk.png" style="position:absolute;display:none;width:330px;height:330px"><img id="host_point" src="../assets/host/host_point.png" style="position:absolute;display:none;width:330px;height:330px"></div>
 <img id="hand" src="../assets/hand_point.png" style="position:absolute;left:0;top:0;transform-origin:255px 222px;display:none">
 <div id="pre"><span id="p1" style="font-family:'Yusei Magic'"></span><span id="p2" style="font-family:'Zen Maru Gothic';font-weight:900"></span></div>
 <script src="engine.js"></script>
@@ -24,7 +25,13 @@
   window.draw = (T) => {
     const t = unwarp(T);
     window.TALK = (window.VOICE || []).some((c) => T >= c.start && T < c.start + c.len);
+    window.TNOW = T;
     document.getElementById('stage').innerHTML = renderAt(V, t);
+    for (const n of ['idle', 'talk', 'blink', 'blinktalk', 'point']) {
+      const el = document.getElementById('host_' + n), h = window.HOSTSPR;
+      if (h && h.state === n) { el.style.display = 'block'; el.style.left = (h.x - h.size / 2) + 'px'; el.style.top = h.top + 'px'; el.style.width = el.style.height = h.size + 'px'; }
+      else el.style.display = 'none';
+    }
     if (HAND && HAND.opacity > 0) {
       handEl.style.display = 'block';
       handEl.style.opacity = HAND.opacity;
@@ -42,6 +49,7 @@
     await document.fonts.ready;
     await new Promise(r => setTimeout(r, 300));
     await handEl.decode();
+    for (const n of ['idle', 'talk', 'blink', 'blinktalk', 'point']) await document.getElementById('host_' + n).decode();
     await document.fonts.ready;
     return [...document.fonts].filter(f => f.status === 'loaded').length;
   };

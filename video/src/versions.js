@@ -111,9 +111,16 @@ function renderAt(v, t) {
   let overlay = '';
   const cap = V.captions.find((c) => t >= c[0] && t < c[1]);
 
+  window.HOSTSPR = null;
   if (V.narration && V.host) {
-    // 絵と字幕の間に案内役（図鑑を持った男の子）。ナレーション中は口が動く
-    ill += host(540, 1212, 0.7, t, !!window.TALK, 'No.' + V.no);
+    // 絵と字幕の間に案内役（画像素材）。HTML 側で画像を重ねる
+    const ci = V.captions.findIndex((c) => t >= c[0] && t < c[1]);
+    const talking = !!window.TALK;
+    const flap = talking && Math.floor((window.TNOW || t) * 8) % 2 === 0;
+    const blink = ((t + 0.7) % 3.4) < 0.12;
+    let state = (V.point || [1]).includes(ci) ? 'point' : (blink ? (flap ? 'blinktalk' : 'blink') : (flap ? 'talk' : 'idle'));
+    const bob = Math.sin(t * 2.2) * 4 + (talking ? Math.abs(Math.sin(t * 9)) * 3 : 0);
+    window.HOSTSPR = { x: 540, top: 978 + bob, size: 300, state };
   } else if (V.narration) {
     // 絵と字幕の間に図鑑（シリーズ番号）
     ill += zukanBook(540, 1285, 0.5 * (V.bigFirst ? 1 : easeOut(prog(t, 0, 0.6))), 'No.' + V.no);
