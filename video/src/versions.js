@@ -121,6 +121,7 @@ function renderAt(v, t) {
     let state = (V.point || [1]).includes(ci) ? 'point' : (blink ? (flap ? 'blinktalk' : 'blink') : (flap ? 'talk' : 'idle'));
     const bob = Math.sin(t * 2.2) * 4 + (talking ? Math.abs(Math.sin(t * 9)) * 3 : 0);
     window.HOSTSPR = { x: 540, top: (V.hostTop || 955) + bob, size: V.hostSize || 380, state };
+    if (V.hook && t < V.captions[0][1]) window.HOSTSPR = { x: 540, top: 1000 + bob, size: 800, state: 'point' };
   } else if (V.narration) {
     // 絵と字幕の間に図鑑（シリーズ番号）
     ill += zukanBook(540, 1285, 0.5 * (V.bigFirst ? 1 : easeOut(prog(t, 0, 0.6))), 'No.' + V.no);
@@ -144,7 +145,15 @@ function renderAt(v, t) {
         `<text x="0" y="-15" text-anchor="middle" dominant-baseline="middle" font-family="Zen Maru Gothic" font-weight="900" font-size="40" fill="#fff">${nm}</text>`);
     }
   }
-  if (cap) {
+  const hookOn = V.hook && t < V.captions[0][1];
+  if (hookOn) {
+    // 濃い色の全面カード＋太い一言（最初のコマから全部見える。ほんの少しだけ縮む動き）
+    const HK = V.hook, k = 1.08 - 0.08 * easeOut(prog(t, 0, 0.25));
+    overlay += `<rect width="${W}" height="${H}" fill="${HK.bg || '#1f2430'}"/>` +
+      `<g opacity="0.12">${[0, 1, 2, 3, 4, 5].map((i) => `<rect x="${-200 + i * 260}" y="0" width="120" height="${H}" fill="#fff" transform="skewX(-20)"/>`).join('')}</g>` +
+      `<text x="540" y="230" text-anchor="middle" font-family="Zen Maru Gothic" font-weight="900" font-size="42" fill="#ffffffcc">デジタルことば図鑑 No.${V.no}</text>` +
+      g(`translate(540 560) scale(${k})`, captionSVG(HK.text, 0, 0, 150, -1, 10, { maxW: 980, stroke: '#000' }));
+  } else if (cap) {
     const big = V.bigFirst && cap[0] === 0;          // 冒頭のつかみは大きく
     overlay += captionSVG(cap[2], 540, V.capY, big ? 92 : (cap[2].includes('\n') ? 70 : 80), cap[0], t);
   }

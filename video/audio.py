@@ -214,6 +214,13 @@ for start, name, spd, off in zip(meta['scenes'], names, speeds, offsets):
     if name == 'k_choose':                                 # スイッチをオフ
         add(switch_click(), L(0.9), 0.5); add(switch_click(), L(1.4), 0.5)
 
+def impact():
+    n = int(SR * 0.6); tt = np.arange(n) / SR
+    boom = np.sin(2 * np.pi * np.cumsum(45 + 120 * np.exp(-tt * 18)) / SR) * np.exp(-tt * 6)
+    hit = rng.normal(0, 1, n) * np.exp(-tt * 40) * 0.5
+    return boom + hit
+if meta.get('hook'): add(impact(), 0.0, 0.6)          # 冒頭の「ドン」
+
 for c in meta['cues']: add(pop_sfx(), c, 0.18)
 for s in meta['scenes'][1:]: add(swish(), s - 0.1, 0.12)
 

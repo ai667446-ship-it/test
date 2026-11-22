@@ -24,6 +24,8 @@ const THUMBS = {
   '011': { host: true, title: '{y:Bluetooth}', question: 'ってなに？', answer: '見えない糸電話でわかる！', art: 'bt11' },
   '012': { host: true, title: '{y:QRコード}', question: '読む前に知ってる？', answer: '四角い住所メモでわかる！', art: 'qr12' },
   '013': { host: true, title: '{r:情報漏洩}', question: '自分には関係ない？', answer: '漏れても困らない対策！', art: 'leak13' },
+  '014': { host: true, title: '{r:ランサムウェア}', question: 'データが人質に!?', answer: 'バックアップで守る！', art: 'rs14' },
+  '015': { host: true, title: '{r:サポート詐欺}', question: '電話しないで！', answer: 'ニセの警告に注意！', art: 'sp15' },
   '005': { titleSize: 128, title: '{c:Wi-Fi}と\n{y:モバイル通信}', question: 'なにが違う？', answer: '水道と水筒でわかる！', art: 'wifi' },
 };
 
@@ -70,6 +72,9 @@ const ART = {
     shop(330, 120, 0.9, 'お店', C.blue) + g('translate(330 150)', rect(-50, -60, 100, 120, C.white, 8, 5) + hand(0, -20, '会員', 22) + hand(0, 15, '名簿', 22)) +
     [0, 1, 2].map((i) => g(at(620 + i * 110, 20 + i * 50, 0.7, 20 + i * 25), rect(-40, -50, 80, 100, C.white, 6, 4) + path('M-25 -20 L25 -20 M-25 0 L25 0', 'none', 3))).join('') +
     thief(900, 140, 0.55),
+  rs14: () => laptop(440, 80, 1.0, chainLock(0, -30, 0.75)) + ransomNote(600, 210, 0.55, 8),
+  sp15: () => browserWin(80, -170, 620, 460) + g('translate(390 80)', rect(-250, -170, 500, 340, '#ffe1dc', 14, 6) + rect(-250, -170, 500, 64, C.red, 12, 6) + hand(0, -138, '警告！', 40, C.white) +
+    hand(0, -50, 'ウイルスに感染', 44, C.red) + rect(-170, 30, 340, 80, '#fff3c4', 20, 5) + hand(0, 72, '☎ 0120-XXX', 40)),
   card: () =>
     g(at(330, 80, 1, -6), rect(-220, -140, 440, 280, C.white, 26, 7) + rect(-220, -140, 440, 70, C.orange, 20, 7) +
       hand(0, -104, '会員カード', 44, C.white) + [0, 1, 2, 3, 4].map((i) => circle(-160 + i * 80, 30, 28, i < 3 ? C.red : C.white, 5)).join('') +

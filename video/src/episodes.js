@@ -1327,3 +1327,160 @@ VERSIONS.l13h = Object.assign({}, VERSIONS.l13, { host: true, stage: { tx: 86, t
 // 案内役つき（No.011 / No.012）
 VERSIONS.b11h = Object.assign({}, VERSIONS.b11, { host: true, stage: { tx: 86, ty: 100, s: 0.84 }, capY: 1485 });
 VERSIONS.q12h = Object.assign({}, VERSIONS.q12, { host: true, stage: { tx: 86, ty: 100, s: 0.84 }, capY: 1485 });
+
+// ======================================================================
+// No.014 ランサムウェア / No.015 サポート詐欺（新しい冒頭カードつき）
+// ======================================================================
+const chainLock = (x, y, s) => g(at(x, y, s),
+  path('M-170 -60 Q0 -10 170 -60 M-170 40 Q0 90 170 40', 'none', 12) + lockIcon(0, 0, 1.3, false));
+const ransomNote = (x, y, s, r = 0) => g(at(x, y, s, r),
+  rect(-170, -120, 340, 240, '#fffdf7', 6, 6) + path('M-170 -120 L-140 -95 L-110 -120 L-80 -95 L-50 -120', 'none', 0) +
+  hand(0, -60, 'データは', 40, C.red) + hand(0, -5, 'あずかった', 40, C.red) + hand(0, 60, '返してほしければ…', 32));
+const moneyBag = (x, y, s) => g(at(x, y, s),
+  path('M-80 -60 Q-110 70 0 90 Q110 70 80 -60 Q60 -90 30 -95 L-30 -95 Q-60 -90 -80 -60 Z', '#e0b77c', 7) +
+  path('M-30 -95 L-40 -125 L40 -125 L30 -95', '#e0b77c', 6) + hand(0, 15, '¥', 70, '#8b5a35'));
+const extDrive = (x, y, s) => g(at(x, y, s),
+  rect(-80, -110, 160, 220, '#5a6070', 22) + rect(-55, -80, 110, 40, '#3a3f4b', 8, 4) + circle(0, 50, 14, C.green, 4));
+const fileIcon = (x, y, s, locked, col = C.blue) => g(at(x, y, s),
+  path('M-50 -65 L25 -65 L50 -40 L50 65 L-50 65 Z', C.white, 6) + rect(-32, -30, 64, 36, col, 6, 4) + (locked ? lockIcon(25, 40, 0.42, false) : ''));
+
+Object.assign(SCENES, {
+  // ---------- No.014 ランサムウェア ----------
+  rs_def(lt, t) {
+    let s = g(`translate(540 90) scale(${pop(lt, 0)})`, marker(0, 0, 820, 100, '#ffc9d8') + hand(0, 4, 'ランサムウェア ＝ データの誘拐犯', 56));
+    s += laptop(420, 520, 1.25, chainLock(0, -30, 0.75));
+    s += g(`translate(820 560) scale(${pop(lt, 0.6)})`, ransomNote(0, 0, 0.9, 6));
+    return s;
+  },
+  rs_lock(lt, t) {
+    let s = '';
+    for (let i = 0; i < 6; i++) {
+      const x = 200 + (i % 3) * 340, y = 330 + Math.floor(i / 3) * 330;
+      s += fileIcon(x, y, 1.3, lt > 0.4 + i * 0.25, BOOK_COLORS[i]);
+      if (lt > 0.4 + i * 0.25 && lt < 0.7 + i * 0.25) s += g(`translate(${x + 30} ${y + 50}) scale(${pop(lt, 0.4 + i * 0.25, 0.3) * 1.6})`, '', '');
+    }
+    if (lt > 2.2) s += g(`translate(540 900) scale(${pop(lt, 2.2)})`, rect(-330, -55, 660, 110, '#ffe1dc', 30) + hand(0, 4, '開けない！', 56, C.red));
+    return s;
+  },
+  rs_entry(lt, t) {
+    let s = phoneBig(300, 560, 0.95, mail(0, -90, 1.1, '', C.white) + rect(-80, 0, 160, 60, '#f0ede6', 10, 4) + hand(0, 30, '請求書.zip', 26) + hand(0, 110, 'http://xx…', 24, '#2f6fd0'));
+    s += g(`translate(780 560) scale(${pop(lt, 0.3)})`, rect(-220, -60, 440, 120, C.white, 30) + hand(0, -14, '添付ファイル', 40) + hand(0, 32, '怪しいリンク', 40, C.red));
+    if (lt > 1.6) s += g(`translate(780 790) scale(${pop(lt, 1.6)})`, cross(-140, 0, 1) + hand(-90, 4, '開かない', 54, C.red, 'start'));
+    return s;
+  },
+  rs_pay(lt, t) {
+    let s = moneyBag(300, 560, 1.4) + arrow(440, 520, 700, 520, C.gray, 9) + thief(820, 600, 0.8);
+    if (lt > 1.2) s += g(`translate(540 260) scale(${pop(lt, 1.2)})`, rect(-300, -60, 600, 120, '#ffe1dc', 30) + hand(0, 4, '戻る保証はない', 56, C.red));
+    return s;
+  },
+  rs_backup(lt, t) {
+    let s = laptop(300, 480, 0.95, [0, 1, 2].map((i) => fileIcon(-90 + i * 90, -30, 0.55, false, BOOK_COLORS[i])).join(''));
+    const p = (lt * 0.5) % 1;
+    s += fileIcon(lerp(420, 720, p), 480 - Math.sin(p * Math.PI) * 120, 0.6, false, C.blue);
+    s += extDrive(820, 360, 0.9) + cloud(820, 700, 0.8, '');
+    s += g(`translate(820 860) scale(${pop(lt, 1.0)})`, hand(0, 0, '別の場所にコピー', 46, '#2f8f4e'));
+    return s;
+  },
+  rs_summary(lt, t) {
+    return summaryPage(lt, '014', 'ランサムウェア', [
+      [() => lockIcon(0, 10, 0.6, false), 'ランサムウェア＝データの誘拐犯', 'カギをかけてお金を要求', '#c4553f'],
+      [() => mail(0, 0, 0.7), '添付やリンクから入る', '怪しいものは開かない', '#c4553f'],
+      [() => extDrive(0, 0, 0.4), '一番の対策はバックアップ', 'パソコンとは別の場所に', '#2f8f4e'],
+    ]);
+  },
+  rs_cta(lt, t) { return ctaPage(lt, '015', 'サポート詐欺ってなに？'); },
+
+  // ---------- No.015 サポート詐欺 ----------
+  sp_def(lt, t) {
+    const blink = Math.floor(t * 4) % 2 === 0;
+    let s = g(`translate(540 90) scale(${pop(lt, 0)})`, marker(0, 0, 820, 100, '#ffc9d8') + hand(0, 4, 'サポート詐欺 ＝ ニセの警告', 58));
+    s += browserWin(110, 180, 860, 700) + g('translate(540 540)',
+      rect(-330, -230, 660, 460, blink ? '#fff3f0' : '#ffe1dc', 16, 6) + rect(-330, -230, 660, 80, C.red, 14, 6) + hand(0, -190, '警告！', 44, C.white) +
+      hand(0, -90, 'ウイルスに感染しました', 42, C.red) + hand(0, -20, 'サポートに電話してください', 36) +
+      rect(-200, 60, 400, 90, '#fff3c4', 20, 5) + hand(0, 106, '☎ 0120-XXX-XXX', 40));
+    return s;
+  },
+  sp_alarm(lt, t) {
+    let s = speaker(300, 520, 1.3);
+    [0, 1, 2].forEach((i) => { const r = 120 + ((t * 2 + i / 3) % 1) * 160; s += `<path d="M${300 + r * 0.6} ${520 - r * 0.8} A${r} ${r} 0 0 1 ${300 + r * 0.6} ${520 + r * 0.8}" fill="none" stroke="${C.red}" stroke-width="10" opacity="${1 - ((t * 2 + i / 3) % 1)}"/>`; });
+    s += g(`translate(780 420) scale(${pop(lt, 0.3)}) rotate(${Math.sin(t * 20) * 4})`, warnSign(0, 0, 1.6));
+    s += g(`translate(780 700) scale(${pop(lt, 0.8)})`, hand(0, 0, 'ピーピー！', 60, C.red));
+    return s;
+  },
+  sp_call(lt, t) {
+    let s = phoneBig(260, 560, 0.9, hand(0, -40, '☎', 90) + hand(0, 70, '通話中…', 32));
+    s += thief(800, 520, 0.85);
+    s += g(`translate(300 250) scale(${pop(lt, 0.4)})`, rect(-200, -60, 400, 120, C.white, 30) + hand(0, 4, '遠隔操作アプリを…', 38, C.red));
+    if (lt > 1.6) s += g(`translate(800 860) scale(${pop(lt, 1.6)})`, moneyBag(0, 0, 0.8) + hand(0, 120, 'お金を要求', 44, C.red));
+    return s;
+  },
+  sp_fake(lt, t) {
+    let s = browserWin(110, 150, 860, 620) + g('translate(540 470)', rect(-300, -180, 600, 360, '#ffe1dc', 16, 6) + hand(0, -60, '警告！', 60, C.red) + hand(0, 30, 'ウイルスに感染', 44, C.red));
+    s += g(`translate(540 470) scale(${pop(lt, 0.4) * 2.2})`, cross(0, 0, 1));
+    s += g(`translate(540 880) scale(${pop(lt, 1.0)})`, hand(0, 0, 'ただのWebページ', 60, '#2f8fb0'));
+    return s;
+  },
+  sp_close(lt, t) {
+    let s = g(`translate(300 480) scale(${pop(lt, 0)})`, rect(-210, -230, 420, 460, C.white, 30) +
+      rect(-80, -150, 160, 160, C.red, 30, 7) + path('M-40 -110 L40 -30 M40 -110 L-40 -30', 'none', 14).replace(INK, '#fff') +
+      hand(0, 80, 'ブラウザを閉じる', 40) + check(0, 170, 0.8));
+    s += g(`translate(780 480) scale(${pop(lt, 0.6)})`, rect(-210, -230, 420, 460, C.white, 30) + powerIcon(0, -70, 0.9, true) + hand(0, 80, '閉じられない時は', 34) + hand(0, 130, '再起動', 44, '#2f8f4e') + check(0, 195, 0.7));
+    return s;
+  },
+  sp_help(lt, t) {
+    let s = phoneBig(320, 540, 1.0, hand(0, -30, '188', 110, '#2f8fb0') + hand(0, 60, 'いやや', 34));
+    s += g(`translate(760 420) scale(${pop(lt, 0.3)})`, rect(-230, -110, 460, 220, '#fff3c4', 30) + hand(0, -45, '消費者ホットライン', 38) + hand(0, 30, '188', 90, '#c97a20'));
+    s += g(`translate(760 720) scale(${pop(lt, 1.0)})`, hand(0, 0, '電話してしまったら相談', 38, '#6b5d52'));
+    return s;
+  },
+  sp_summary(lt, t) {
+    return summaryPage(lt, '015', 'サポート詐欺', [
+      [() => warnSign(0, 0, 0.6), 'サポート詐欺＝ニセの警告', '音と画面であわてさせる', '#c4553f'],
+      [() => cross(0, 0, 1.1), '書いてある番号に電話しない', 'ただのWebページ', '#c4553f'],
+      [() => check(0, 0, 1.3), 'ブラウザを閉じる・再起動', '困ったら188に相談', '#2f8f4e'],
+    ]);
+  },
+  sp_cta(lt, t) { return ctaPage(lt, '016', 'バッテリーの最大容量'); },
+});
+
+const HOSTV = { narration: true, host: true, stage: { tx: 86, ty: 100, s: 0.84 }, capY: 1485, bigFirst: true, sticker: [7.6, 11.8] };
+VERSIONS.r14 = Object.assign({}, HOSTV, {
+  no: '014', duration: 26, bgm: 'lofi',
+  hook: { text: 'パソコンのデータが\n{r:人質}に!?', bg: '#1f2430' },
+  point: [1],
+  scenes: seq([
+    [0, 1.6, 'rs_def'], [1.6, 4.5, 'rs_def', 1, 1.6], [4.5, 7.5, 'rs_lock'], [7.5, 10.5, 'rs_entry'], [10.5, 13.5, 'rs_pay'],
+    [13.5, 20, 'rs_backup'], [20, 23, 'rs_summary', 1.2], [23, 26, 'rs_cta'],
+  ]),
+  captions: [
+    [0.0, 1.6, 'パソコンのデータが人質に!?'],
+    [1.6, 4.5, '{r:ランサムウェア}は\nデータを人質にとる{r:ウイルス}'],
+    [4.5, 7.5, 'ファイルに{r:カギ}をかけて\n「返してほしければお金を」'],
+    [7.5, 10.5, 'メールの添付や{r:怪しいリンク}から\n入ってくる'],
+    [10.5, 13.5, 'お金を払っても\n{r:戻る保証はない}'],
+    [13.5, 17.0, '一番の対策は\n{g:バックアップ}'],
+    [17.0, 20.0, '{g:パソコンとは別の場所}に\nデータのコピーを'],
+    [20.0, 23.0, '{r:ランサムウェア}＝データの誘拐犯\n{g:バックアップ}で守ろう'],
+    [23.0, 26.0, '{y:保存}して\n家族にもシェアしてね'],
+  ],
+});
+VERSIONS.s15 = Object.assign({}, HOSTV, {
+  no: '015', duration: 29, bgm: 'chip', sticker: [7.6, 10.8],
+  hook: { text: 'この画面が出ても\n{y:電話しないで！}', bg: '#7a1d17' },
+  point: [1],
+  scenes: seq([
+    [0, 1.6, 'sp_def'], [1.6, 5, 'sp_def', 1, 1.6], [5, 8, 'sp_alarm'], [8, 11, 'sp_call'], [11, 14, 'sp_fake'],
+    [14, 18, 'sp_close'], [18, 21.5, 'sp_help'], [21.5, 25, 'sp_summary', 1.2], [25, 29, 'sp_cta'],
+  ]),
+  captions: [
+    [0.0, 1.6, 'この画面が出ても電話しないで！'],
+    [1.6, 5.0, 'これは{r:サポート詐欺}\nニセの警告で電話させる手口'],
+    [5.0, 8.0, '大きな音や警告で\n{r:あわてさせる}のが特徴'],
+    [8.0, 11.0, '電話すると{r:遠隔操作}させられたり\n{r:お金}を払わされたり'],
+    [11.0, 14.0, '本物の警告じゃない\n{g:ただのWebページ}'],
+    [14.0, 18.0, '{g:ブラウザを閉じれば}大丈夫\n閉じられないときは{g:再起動}'],
+    [18.0, 21.5, '電話してしまったら\n{y:消費者ホットライン188}へ'],
+    [21.5, 25.0, '{r:サポート詐欺}＝ニセの警告\n{g:電話しない}・{g:閉じる}'],
+    [25.0, 29.0, '{y:保存}して\n家族にもシェアしてね'],
+  ],
+});

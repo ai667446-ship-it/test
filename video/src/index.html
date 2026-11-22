@@ -53,7 +53,7 @@
     await document.fonts.ready;
     return [...document.fonts].filter(f => f.status === 'loaded').length;
   };
-  window.meta = () => ({ duration: VERSIONS[V].duration, cues: VERSIONS[V].captions.map(c => c[0]), scenes: VERSIONS[V].scenes.map(s => s.from), names: VERSIONS[V].scenes.map(s => s.name), speeds: VERSIONS[V].scenes.map(s => s.speed), offsets: VERSIONS[V].scenes.map(s => s.offset), bgm: VERSIONS[V].bgm || 'pluck' });
+  window.meta = () => ({ duration: VERSIONS[V].duration, cues: VERSIONS[V].captions.map(c => c[0]), scenes: VERSIONS[V].scenes.map(s => s.from), names: VERSIONS[V].scenes.map(s => s.name), speeds: VERSIONS[V].scenes.map(s => s.speed), offsets: VERSIONS[V].scenes.map(s => s.offset), bgm: VERSIONS[V].bgm || 'pluck', hook: !!VERSIONS[V].hook });
   draw(Number(params.get('t') || 0));
 </script>
 </body></html>
