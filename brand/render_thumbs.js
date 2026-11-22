@@ -10,6 +10,7 @@ const { chromium } = require('playwright');
   await p.evaluate(() => prep());
   for (const no of nos) {
     await p.evaluate((n) => show(n), no);
+    await p.waitForTimeout(600);
     await p.screenshot({ path: path.join(__dirname, 'thumbs', `thumb_${no}.png`) });
   }
   await b.close();

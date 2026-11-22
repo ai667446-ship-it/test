@@ -21,9 +21,9 @@ const THUMBS = {
   '008': { title: '{y:アップデート}', question: '「あとで」で大丈夫？', answer: '防犯リフォームでわかる！', art: 'upd8' },
   '009': { titleSize: 120, title: '{r:フィッシング}\n{r:詐欺}', question: '見分け方は？', answer: 'ニセのエサでわかる！', art: 'fish9' },
   '010': { title: '{c:VPN}', question: '何のためにある？', answer: '秘密のトンネルでわかる！', art: 'vpn10' },
-  '011': { title: '{y:Bluetooth}', question: 'ってなに？', answer: '見えない糸電話でわかる！', art: 'bt11' },
-  '012': { title: '{y:QRコード}', question: '読む前に知ってる？', answer: '四角い住所メモでわかる！', art: 'qr12' },
-  '013': { title: '{r:情報漏洩}', question: '自分には関係ない？', answer: '漏れても困らない対策！', art: 'leak13' },
+  '011': { host: true, title: '{y:Bluetooth}', question: 'ってなに？', answer: '見えない糸電話でわかる！', art: 'bt11' },
+  '012': { host: true, title: '{y:QRコード}', question: '読む前に知ってる？', answer: '四角い住所メモでわかる！', art: 'qr12' },
+  '013': { host: true, title: '{r:情報漏洩}', question: '自分には関係ない？', answer: '漏れても困らない対策！', art: 'leak13' },
   '005': { titleSize: 128, title: '{c:Wi-Fi}と\n{y:モバイル通信}', question: 'なにが違う？', answer: '水道と水筒でわかる！', art: 'wifi' },
 };
 
@@ -89,15 +89,16 @@ function thumb(no) {
     zukanBook(150, 375, 0.42, '') +
     `<text x="225" y="325" font-family="Yusei Magic" font-size="58" fill="#fff" dominant-baseline="middle">デジタルことば図鑑</text>` +
     rect(800, 285, 180, 80, C.yellow, 40, 6) + hand(890, 327, 'No.' + no, 46) +
-    // 絵
-    g('translate(0 1090)', ART[d.art]()) +
+    // 絵（案内役つきの回は左に小さく寄せる）
+    (d.host ? g("translate(20 1110) scale(0.66)", ART[d.art]()) : g('translate(0 1090)', ART[d.art]())) +
     // たとえの帯
     marker(540, 1612, Math.max(640, [...d.answer].length * 56 + 60), 92, C.yellow) + hand(540, 1614, d.answer, Math.min(60, 760 / [...d.answer].length));
   const lines = d.title.split('\n').length;
   const overlay =
     captionSVG(d.title, 540, lines > 1 ? 640 : 610, lines > 1 ? (d.titleSize || 150) : 190, 0, 10, { maxW: 860 }) +
     g(`translate(540 ${lines > 1 ? 880 : 800}) rotate(-3)`, hand(0, 0, d.question, Math.min(110, 840 / [...d.question].length), C.red));
-  return frameSVG(0, ill, overlay).replace(/<rect x="0" y="1906"[^>]*\/>/, '');
+  const hostImg = d.host ? `<image href="../video/assets/host/host_point.png" x="590" y="1050" width="450" height="450"/>` : '';
+  return frameSVG(0, ill, overlay + hostImg).replace(/<rect x="0" y="1906"[^>]*\/>/, '');
 }
 window.show = (no) => { document.getElementById('s').innerHTML = thumb(no); };
 window.prep = async () => {
