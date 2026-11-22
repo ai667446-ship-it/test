@@ -111,7 +111,10 @@ function renderAt(v, t) {
   let overlay = '';
   const cap = V.captions.find((c) => t >= c[0] && t < c[1]);
 
-  if (V.narration) {
+  if (V.narration && V.host) {
+    // 絵と字幕の間に案内役（図鑑を持った男の子）。ナレーション中は口が動く
+    ill += host(540, 1212, 0.7, t, !!window.TALK, 'No.' + V.no);
+  } else if (V.narration) {
     // 絵と字幕の間に図鑑（シリーズ番号）
     ill += zukanBook(540, 1285, 0.5 * (V.bigFirst ? 1 : easeOut(prog(t, 0, 0.6))), 'No.' + V.no);
   }

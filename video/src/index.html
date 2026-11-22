@@ -23,6 +23,7 @@
   };
   window.draw = (T) => {
     const t = unwarp(T);
+    window.TALK = (window.VOICE || []).some((c) => T >= c.start && T < c.start + c.len);
     document.getElementById('stage').innerHTML = renderAt(V, t);
     if (HAND && HAND.opacity > 0) {
       handEl.style.display = 'block';

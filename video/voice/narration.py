@@ -153,3 +153,4 @@ NARRATION = {
         '保存して、家族にもシェアしてね。',
     ],
 }
+NARRATION['l13h'] = NARRATION['l13']

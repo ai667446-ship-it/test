@@ -14,7 +14,7 @@ const fs = require('fs');
   const meta = await page.evaluate(() => meta());
   if (warpPath) {
     const wj = JSON.parse(fs.readFileSync(warpPath, 'utf8'));
-    await page.evaluate((w) => { window.WARP = w; }, wj.warp);
+    await page.evaluate((w) => { window.WARP = w.warp; window.VOICE = w.clips; }, wj);
     meta.warp = wj.warp; meta.voice = wj.clips; meta.duration = wj.duration;
   }
   fs.writeFileSync(path.join(dir, 'meta.json'), JSON.stringify(meta));

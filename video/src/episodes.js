@@ -1320,3 +1320,6 @@ VERSIONS.l13 = {
     [28.0, 31.0, '{y:保存}して\n家族にもシェアしてね'],
   ],
 };
+
+// 案内役つきの見本（No.013 と同じ内容。絵を少し小さくして下に案内役）
+VERSIONS.l13h = Object.assign({}, VERSIONS.l13, { host: true, stage: { tx: 76, ty: 110, s: 0.86 } });

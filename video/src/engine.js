@@ -243,3 +243,49 @@ function sceneTransition(scenes, t) {
   const dx = (1 - inP) * 120;
   return g(`translate(${dx} 0)`, sc.draw(lt, t), `opacity="${inP}"`);
 }
+
+// ---------- 案内役のキャラクター（アイコンの男の子）----------
+// x,y = 胸元（本の下端あたり）の中央。talking で口が動く。
+function host(x, y, s, t, talking, no = '') {
+  const bob = Math.sin(t * 2.2) * 4 + (talking ? Math.abs(Math.sin(t * 9)) * 3 : 0);
+  const blink = ((t + 0.7) % 3.4) < 0.12;
+  const HAIR = '#4a3a30', SWEATER = '#f3e6d0', SKIN = '#fbe0c8';
+  const mouthOpen = talking && Math.floor(t * 9) % 2 === 0;
+  // 体（クリーム色のセーター）
+  let body = path('M-170 40 Q-170 -70 -60 -95 L60 -95 Q170 -70 170 40 Z', SWEATER, 6) +
+    path('M-120 -20 L-120 30 M120 -20 L120 30', 'none', 3);
+  // 頭
+  let head =
+    // 後ろ髪（くせっ毛のもこもこ）: 線つきの円を並べてから、線なしで同じ円を重ねて内側の線を消す
+    (() => {
+      const cs = [];
+      for (let i = 0; i <= 10; i++) { const a = Math.PI * (1.08 + i * 0.084); cs.push([Math.cos(a) * 100, -186 + Math.sin(a) * 96, 30 + (i % 3) * 7]); }
+      cs.push([-104, -150, 26], [106, -148, 24]);
+      return cs.map(([cx, cy, r]) => circle(cx, cy, r, HAIR, 6)).join('') + cs.map(([cx, cy, r]) => `<circle cx="${cx}" cy="${cy}" r="${r - 3}" fill="${HAIR}"/>`).join('') +
+        `<ellipse cx="0" cy="-200" rx="100" ry="86" fill="${HAIR}"/>`;
+    })() +
+    // 顔
+    `<ellipse cx="0" cy="-165" rx="98" ry="92" fill="${SKIN}" stroke="${INK}" stroke-width="6"/>` +
+    // 耳
+    circle(-98, -160, 18, SKIN, 5) + circle(98, -160, 18, SKIN, 5) +
+    // 前髪（くせっ毛）
+    path('M-110 -178 Q-118 -262 -20 -280 Q72 -290 112 -218 Q116 -190 106 -172 Q94 -210 62 -226 Q54 -198 22 -194 Q26 -222 0 -230 Q-22 -202 -52 -198 Q-42 -226 -72 -230 Q-94 -206 -110 -178 Z', HAIR, 6) + path('M-60 -268 Q-40 -240 -46 -214 M40 -272 Q58 -248 52 -222', 'none', 4) +
+    path('M-30 -282 Q-36 -318 -12 -330 M18 -284 Q40 -312 66 -306 M-112 -205 Q-140 -214 -150 -238 M112 -200 Q142 -206 152 -230', 'none', 6) +
+    // 目
+    (blink
+      ? path('M-58 -158 L-26 -158 M26 -158 L58 -158', 'none', 6)
+      : `<ellipse cx="-42" cy="-158" rx="13" ry="17" fill="${INK}"/><ellipse cx="42" cy="-158" rx="13" ry="17" fill="${INK}"/><circle cx="-37" cy="-164" r="4.5" fill="#fff"/><circle cx="47" cy="-164" r="4.5" fill="#fff"/>`) +
+    // 丸メガネ
+    `<circle cx="-42" cy="-158" r="33" fill="none" stroke="${INK}" stroke-width="6"/><circle cx="42" cy="-158" r="33" fill="none" stroke="${INK}" stroke-width="6"/>` +
+    path('M-9 -160 Q0 -168 9 -160 M-75 -160 L-96 -168 M75 -160 L96 -168', 'none', 5) +
+    // ほっぺ
+    `<ellipse cx="-68" cy="-118" rx="16" ry="9" fill="${C.pink}" opacity="0.85"/><ellipse cx="68" cy="-118" rx="16" ry="9" fill="${C.pink}" opacity="0.85"/>` +
+    // 口
+    (mouthOpen
+      ? `<path d="M-22 -112 Q0 -110 22 -112 Q18 -82 0 -80 Q-18 -82 -22 -112 Z" fill="#e8806a" stroke="${INK}" stroke-width="5" stroke-linejoin="round"/>`
+      : path('M-18 -108 Q0 -92 18 -108', 'none', 5));
+  // 図鑑と手
+  const book = g('translate(4 118) scale(0.66)', zukanBook(0, 0, 1, no));
+  const hands = circle(-62, 30, 24, SKIN, 5) + circle(66, 30, 24, SKIN, 5) + path('M-72 20 L-52 20 M56 20 L76 20', 'none', 3);
+  return g(`translate(${x} ${y + bob}) scale(${s})`, body + head + book + hands);
+}
