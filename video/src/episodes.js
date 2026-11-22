@@ -1322,8 +1322,8 @@ VERSIONS.l13 = {
 };
 
 // 案内役つきの見本（No.013 と同じ内容。絵を少し小さくして下に案内役）
-VERSIONS.l13h = Object.assign({}, VERSIONS.l13, { host: true, stage: { tx: 76, ty: 110, s: 0.86 } });
+VERSIONS.l13h = Object.assign({}, VERSIONS.l13, { host: true, stage: { tx: 86, ty: 100, s: 0.84 }, capY: 1485 });
 
 // 案内役つき（No.011 / No.012）
-VERSIONS.b11h = Object.assign({}, VERSIONS.b11, { host: true, stage: { tx: 76, ty: 110, s: 0.86 } });
-VERSIONS.q12h = Object.assign({}, VERSIONS.q12, { host: true, stage: { tx: 76, ty: 110, s: 0.86 } });
+VERSIONS.b11h = Object.assign({}, VERSIONS.b11, { host: true, stage: { tx: 86, ty: 100, s: 0.84 }, capY: 1485 });
+VERSIONS.q12h = Object.assign({}, VERSIONS.q12, { host: true, stage: { tx: 86, ty: 100, s: 0.84 }, capY: 1485 });

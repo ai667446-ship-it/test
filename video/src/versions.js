@@ -120,7 +120,7 @@ function renderAt(v, t) {
     const blink = ((t + 0.7) % 3.4) < 0.12;
     let state = (V.point || [1]).includes(ci) ? 'point' : (blink ? (flap ? 'blinktalk' : 'blink') : (flap ? 'talk' : 'idle'));
     const bob = Math.sin(t * 2.2) * 4 + (talking ? Math.abs(Math.sin(t * 9)) * 3 : 0);
-    window.HOSTSPR = { x: 540, top: 978 + bob, size: 300, state };
+    window.HOSTSPR = { x: 540, top: (V.hostTop || 955) + bob, size: V.hostSize || 380, state };
   } else if (V.narration) {
     // 絵と字幕の間に図鑑（シリーズ番号）
     ill += zukanBook(540, 1285, 0.5 * (V.bigFirst ? 1 : easeOut(prog(t, 0, 0.6))), 'No.' + V.no);
